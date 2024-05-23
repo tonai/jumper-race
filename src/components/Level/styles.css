@@ -1,0 +1,25 @@
+.level {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.level__block {
+  position: absolute;
+  background: blue;
+}
+
+.level__end {
+  position: absolute;
+  background: green;
+}
+
+.level__player {
+  position: absolute;
+  background: red;
+}
+
+.level__ghost {
+  opacity: 0.5;
+}

@@ -1,0 +1,117 @@
+.scores {
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 10%;
+  right: 10%;
+  background: rgba(0, 0, 0, 0.8);
+  scale: 0;
+  animation: 1s ease-in forwards scaleup;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 30px;
+}
+
+@keyframes scaleup {
+  from {
+    scale: 0;
+  }
+  to {
+    scale: 1;
+  }
+}
+
+.scores__player {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.scores__rank {
+  font-size: 3em;
+}
+
+.scores__avatar {
+  height: 100%;
+  background-size: contain;
+  aspect-ratio: 1;
+}
+
+.scores__data {
+  /* flex: 1; */
+}
+
+.scores__time {
+  font-size: 0.8em;
+}
+
+.scores__score {
+  font-size: 0.8em;
+}
+
+.scores__total {
+  font-size: 2em;
+  position: relative;
+}
+
+.scores__total-add {
+  animation: 2s ease-in 2s both movedown;
+}
+
+.scores__total-before {
+  display: flex;
+  position: absolute;
+  animation: 0.5s ease-in 4s both disapear;
+}
+
+.scores__total-after {
+  animation: 0.5s ease-in 4s both appear;
+}
+
+@keyframes movedown {
+  0% {
+    translate: 0 -100%;
+    opacity: 0;
+    scale: 1;
+  }
+  25% {
+    translate: 0 0;
+    opacity: 1;
+    scale: 1;
+  }
+  75% {
+    translate: 0 0;
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    translate: -100% 0;
+    opacity: 1;
+    scale: 0;
+  }
+}
+
+@keyframes disapear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 5;
+  }
+}

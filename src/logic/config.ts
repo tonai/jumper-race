@@ -1,0 +1,10 @@
+export const gravity = { x: 0.0, y: 20 };
+export const updatesPerSecond = 30;
+export const countdownDurationSeconds = 3;
+export const playerWidth = 10;
+export const playerHeight = 20;
+export const playerSpeed = 3;
+export const playerOffset = 0.01;
+export const physicsRatio = 100;
+export const jumpForce = 5;
+export const maxJumpTime = 200;
