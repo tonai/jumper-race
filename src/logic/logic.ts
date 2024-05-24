@@ -36,7 +36,7 @@ Rune.initLogic({
         { x: 850, width: 150, y: 30, height: 30 },
       ],
       end: { x: 940, y: 10, width: 20, height: 20 },
-      totalTime: 3, // 60,
+      totalTime: 20, // 60,
     },
     playerIds: allPlayerIds,
     stage: "gettingReady",
@@ -68,4 +68,21 @@ Rune.initLogic({
     if (game.stage === "playing") updatePlaying(game);
   },
   updatesPerSecond,
+  events: {
+    playerJoined: (playerId, { game }) => {
+      game.playerIds.push(playerId);
+      if (game.scores) {
+        game.scores[playerId] = {};
+        if (game.level.id) {
+          game.scores[playerId][game.level.id] = {};
+        }
+      }
+    },
+    playerLeft: (playerId, { game }) => {
+      game.playerIds.splice(game.playerIds.indexOf(playerId), 1);
+      if (game.scores) {
+        delete game.scores[playerId];
+      }
+    },
+  }
 });

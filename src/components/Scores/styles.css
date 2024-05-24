@@ -1,9 +1,9 @@
 .scores {
   position: absolute;
-  top: 10%;
-  bottom: 10%;
-  left: 10%;
-  right: 10%;
+  top: 8%;
+  bottom: 8%;
+  left: 8%;
+  right: 8%;
   background: rgba(0, 0, 0, 0.8);
   scale: 0;
   animation: 1s ease-in forwards scaleup;
@@ -12,8 +12,8 @@
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px 30px;
+  gap: 0.5em;
+  padding: 0.5em 3em 0.5em 1em;
 }
 
 @keyframes scaleup {
@@ -32,20 +32,35 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  transition: translate 400ms ease;
 }
 
 .scores__rank {
-  font-size: 3em;
+  font-size: 2em;
+  font-family: monospace;
 }
 
 .scores__avatar {
   height: 100%;
+  max-height: 80px;
   background-size: contain;
+  background-repeat: no-repeat;
   aspect-ratio: 1;
+  border: 0.2em solid transparent;
+}
+
+.scores__player--you .scores__avatar {
+  border-color: yellow;
+  border-radius: 50%;
 }
 
 .scores__data {
-  /* flex: 1; */
+  flex: 1;
+}
+
+.scores__name {
+  font-size: 0.8em;
+  font-weight: bold;
 }
 
 .scores__time {
@@ -59,6 +74,7 @@
 .scores__total {
   font-size: 2em;
   position: relative;
+  font-family: monospace;
 }
 
 .scores__total-add {

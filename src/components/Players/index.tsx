@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { GameState } from "../../logic/types";
 
 import "./styles.css";
+import { formatTime } from "../../helpers/format";
 
 interface IPlayersProps {
   game: GameState;
@@ -14,7 +15,7 @@ export default function Players(props: IPlayersProps) {
   const { level, playerIds, scores } = game;
 
   return (
-    <ul className="players">
+    <ul className="players" style={{ fontSize: `${(12 - playerIds.length) / 10}em` }}>
       {playerIds.map((playerId) => {
         const player = Rune.getPlayerInfo(playerId);
         const score = scores?.[playerId][level.id];
@@ -32,7 +33,7 @@ export default function Players(props: IPlayersProps) {
               {level && level.id && (
                 <div className="players__time">
                   race best:{" "}
-                  {score && score.bestTime ? score.bestTime / 1000 : "-"}
+                  {score && score.bestTime ? formatTime(score.bestTime) : "-"}
                 </div>
               )}
             </div>
