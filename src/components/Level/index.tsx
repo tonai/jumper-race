@@ -38,6 +38,7 @@ export default function Level(props: ILevelProps) {
     ...start,
     speed: playerSpeed,
     grounded: true,
+    wallJump: false,
   });
   const startCountdown = useRef(0);
   const startTime = useRef(0);
@@ -78,6 +79,7 @@ export default function Level(props: ILevelProps) {
               ...start,
               speed: playerSpeed,
               grounded: true,
+              wallJump: false,
             };
             playerPhysics.current.rigidBody.setTranslation(
               {
@@ -118,6 +120,11 @@ export default function Level(props: ILevelProps) {
     if (player.current.grounded) {
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
+    } else if (player.current.wallJump) {
+      console.log('wallJump');
+      jump.current = Rune.gameTime();
+      jumpVelocity.current = -jumpForce;
+      player.current.speed = -player.current.speed;
     }
   }
 

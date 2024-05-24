@@ -8,7 +8,7 @@ import {
   playerWidth,
   updatesPerSecond,
 } from "../logic/config";
-import { ILevel } from "../logic/types";
+import { BlockType, ILevel } from "../logic/types";
 import { MutableRefObject } from "react";
 
 export function initWorld(level: ILevel, worldRef: MutableRefObject<World | undefined>) {
@@ -27,9 +27,14 @@ export function initWorld(level: ILevel, worldRef: MutableRefObject<World | unde
     const colliderDesc = ColliderDesc.cuboid(
       block.width / 2 / physicsRatio,
       block.height / 2 / physicsRatio,
-    ); /*.setCollisionGroups(
-      2 ** 16 + 2 ** 17 + 2 ** 18 + 2 ** 19 + 2 ** 20 + 2 ** 21 + 63,
-    )*/
+    );
+    if (block.type === BlockType.WallJump) {
+      // colliderDesc.setCollisionGroups(2 ** 17 + 2 ** 1);
+      colliderDesc.setSolverGroups(2 ** 17 + 2 ** 1);
+    } else {
+      // colliderDesc.setCollisionGroups(2 ** 16 + 2 ** 0);
+      colliderDesc.setSolverGroups(2 ** 16 + 2 ** 0);
+    }
     const collider = world?.createCollider(colliderDesc, rigidBody);
     collider.userData = block;
   });
@@ -51,7 +56,7 @@ export function initWorld(level: ILevel, worldRef: MutableRefObject<World | unde
   const colliderDesc = ColliderDesc.cuboid(
     playerWidth / 2 / physicsRatio,
     playerHeight / 2 / physicsRatio,
-  ); /*.setCollisionGroups(2 ** (16 + i) + i + 1)*/
+  );
   const collider = world?.createCollider(colliderDesc, rigidBody);
   const controller = world?.createCharacterController(playerOffset);
   // controller.setApplyImpulsesToDynamicBodies(true);

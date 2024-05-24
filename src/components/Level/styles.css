@@ -10,20 +10,29 @@
   background: black;
 }
 
+/* Reverser */
 .level__block--0 {
   background: yellow;
 }
 
+/* Jumper */
 .level__block--1 {
   background: blue;
 }
 
+/* Spikes */
 .level__block--2 {
   background: red;
 }
 
+/* End */
 .level__block--3 {
   background: green;
+}
+
+/* Walljump */
+.level__block--4 {
+  background: magenta;
 }
 
 .level__player {

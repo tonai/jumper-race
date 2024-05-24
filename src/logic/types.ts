@@ -12,10 +12,11 @@ export interface IPosition {
 }
 
 export enum BlockType {
-  Reverse,
-  Jump,
+  Reverser,
+  Jumper,
   Spikes,
   End,
+  WallJump,
 }
 
 export interface IRectangle extends IPosition {
@@ -28,6 +29,7 @@ export interface IRectangle extends IPosition {
 export interface IPlayer extends IPosition {
   grounded: boolean;
   speed: number;
+  wallJump: boolean;
 }
 
 export interface IPlayerPhysics {

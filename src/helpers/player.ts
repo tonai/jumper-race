@@ -1,6 +1,12 @@
-import { World, Vector2 } from "@dimforge/rapier2d";
+import { World, Vector2, Collider } from "@dimforge/rapier2d";
 
-import { BlockType, ILevel, IPlayer, IPlayerPhysics, IPosition } from "../logic/types.ts";
+import {
+  BlockType,
+  ILevel,
+  IPlayer,
+  IPlayerPhysics,
+  IPosition,
+} from "../logic/types.ts";
 import {
   gravity,
   jumpForce,
@@ -33,17 +39,32 @@ export function getPlayerPosition(
     jumpVelocity.current = jumpForce;
   } else if (!isJumping) {
     // After maxJumpTime add gravity to the velocity vector for smooth curve jump
-    jumpVelocity.current += (gravity.y * (time - lastTime)) / 1000;
+    if (player.wallJump && jumpVelocity.current > 0) {
+      jumpVelocity.current += ((gravity.y / 4) * (time - lastTime)) / 1000;
+    } else {
+      jumpVelocity.current += (gravity.y * (time - lastTime)) / 1000;
+    }
   }
 
   // Player position
   world.step();
   const position = rigidBody.translation();
   const movement = new Vector2(
-    player.speed / physicsRatio,
+    player.grounded ? 0 : player.speed / physicsRatio,
     jumpVelocity.current / physicsRatio,
   );
-  controller.computeColliderMovement(collider, movement);
+  let isCollidingWallJump = false;
+  controller.computeColliderMovement(
+    collider,
+    movement,
+    undefined,
+    undefined,
+    (collider: Collider) => {
+      isCollidingWallJump = isCollidingWallJump || collider.userData?.type === BlockType.WallJump;
+      return collider.userData?.type !== BlockType.WallJump;
+    },
+  );
+  player.wallJump = isCollidingWallJump;
   player.grounded = controller.computedGrounded();
   const correctedMovement = controller.computedMovement();
   rigidBody.setNextKinematicTranslation({
@@ -56,12 +77,12 @@ export function getPlayerPosition(
   for (let i = 0; i < controller.numComputedCollisions(); i++) {
     const collision = controller.computedCollision(i);
     const block = collision?.collider?.userData;
-    switch(block?.type) {
-      case BlockType.Reverse:
+    switch (block?.type) {
+      case BlockType.Reverser:
         // Reverse speed
         player.speed = -player.speed;
         break;
-      case BlockType.Jump:
+      case BlockType.Jumper:
         // High jump
         jump.current = time;
         jumpVelocity.current = -(block?.force ?? 10);
@@ -85,16 +106,15 @@ export function getPlayerPosition(
       jumpVelocity.current = 0;
     }
   }
+
+  const playerPosition = {
+    x: newPosition.x * physicsRatio - playerWidth / 2,
+    y: newPosition.y * physicsRatio - playerHeight / 2,
+  };
   // Fall
-  if (newPosition.y + playerHeight > level.height) {
+  if (playerPosition.y + playerHeight > level.height) {
     restart = true;
   }
 
-  return [
-    {
-      x: newPosition.x * physicsRatio - playerWidth / 2,
-      y: newPosition.y * physicsRatio - playerHeight / 2,
-    },
-    restart,
-  ];
+  return [playerPosition, restart];
 }
