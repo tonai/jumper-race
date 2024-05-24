@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ColliderDesc, RigidBodyDesc, World } from "@dimforge/rapier2d";
+import { World } from "@dimforge/rapier2d";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
   countdownDurationSeconds,
-  gravity,
   jumpForce,
-  maxJumpTime,
   physicsRatio,
   playerHeight,
-  playerOffset,
   playerSpeed,
   playerWidth,
   updatesPerSecond,
@@ -19,6 +16,8 @@ import { GameState, IPlayer, IPlayerPhysics } from "../../logic/types";
 import "./styles.css";
 import { getPlayerPosition } from "../../helpers/player";
 import Countdown from "../Countdown";
+import classNames from "classnames";
+import { initWorld } from "../../helpers/world";
 
 interface ILevelProps {
   game: GameState;
@@ -28,7 +27,7 @@ interface ILevelProps {
 export default function Level(props: ILevelProps) {
   const { game, yourPlayerId } = props;
   const { level } = game;
-  const { width, height, blocks, end, start } = level;
+  const { width, height, blocks, start } = level;
   const { bounds, ref } = useBounds();
   const world = useRef<World>();
   const playerPhysics = useRef<IPlayerPhysics>();
@@ -50,49 +49,8 @@ export default function Level(props: ILevelProps) {
   }px`;
 
   useEffect(() => {
-    // World physics
-    world.current = new World(gravity);
-    world.current.timestep = 1 / updatesPerSecond;
-    game.level.blocks.forEach((block) => {
-      const rigidBodyDesc = RigidBodyDesc.fixed().setTranslation(
-        (block.x + block.width / 2) / physicsRatio,
-        (block.y + block.height / 2) / physicsRatio,
-      );
-      const rigidBody = world.current?.createRigidBody(rigidBodyDesc);
-      const colliderDesc = ColliderDesc.cuboid(
-        block.width / 2 / physicsRatio,
-        block.height / 2 / physicsRatio,
-      ); /*.setCollisionGroups(
-        2 ** 16 + 2 ** 17 + 2 ** 18 + 2 ** 19 + 2 ** 20 + 2 ** 21 + 63,
-      )*/
-      world.current?.createCollider(colliderDesc, rigidBody);
-    });
-
-    // Player physics
-    const rigidBodyDesc = RigidBodyDesc.kinematicPositionBased().setTranslation(
-      (start.x + playerWidth / 2) / physicsRatio,
-      (start.y + playerHeight / 2) / physicsRatio,
-    );
-    // const rigidBodyDesc = RigidBodyDesc.dynamic().setTranslation(
-    //   (start.x + playerWidth / 2) / physicsRatio,
-    //   (start.y + playerHeight / 2) / physicsRatio,
-    // );
-    const rigidBody = world.current?.createRigidBody(rigidBodyDesc);
-    // const colliderDesc = ColliderDesc.capsule(
-    //   playerHeight / 4 / physicsRatio,
-    //   playerWidth / 2 / physicsRatio,
-    // );
-    const colliderDesc = ColliderDesc.cuboid(
-      playerWidth / 2 / physicsRatio,
-      playerHeight / 2 / physicsRatio,
-    ); /*.setCollisionGroups(2 ** (16 + i) + i + 1)*/
-    const collider = world.current?.createCollider(colliderDesc, rigidBody);
-    const controller = world.current?.createCharacterController(playerOffset);
-    // controller.setApplyImpulsesToDynamicBodies(true);
-    controller.enableSnapToGround(playerOffset);
-    // controller.setCharacterMass(1);
-    controller.setUp({ x: 0.0, y: -1.0 });
-    playerPhysics.current = { collider, controller, rigidBody };
+    // Init physics
+    playerPhysics.current = initWorld(game.level, world);
   }, [game.level, game.playerIds, start]);
 
   useEffect(() => {
@@ -101,41 +59,21 @@ export default function Level(props: ILevelProps) {
       const interval = setInterval(() => {
         if (world.current && playerPhysics.current) {
           const time = Rune.gameTime();
-          const isJumping = Boolean(
-            jump.current && time - jump.current < maxJumpTime,
-          );
-          if (isJumping) {
-            // Old the jump to jump higher
-            jumpVelocity.current = -jumpForce;
-          } else {
-            // After maxJumpTime add gravity to the velocity vector for smooth curve jump
-            jumpVelocity.current +=
-              (gravity.y * (time - lastTime.current)) / 1000;
-          }
-          const position = getPlayerPosition(
+          const [position, restart] = getPlayerPosition(
+            level,
+            yourPlayerId,
+            time,
+            lastTime.current,
+            startTime.current,
             player.current,
             world.current,
             playerPhysics.current,
-            isJumping
-              ? jumpVelocity.current
-              : player.current.grounded
-              ? jumpForce
-              : jumpVelocity.current,
+            jump,
+            jumpVelocity,
           );
           setPosition(position);
-          let restart = false;
-          if (
-            position.x < end.x + end.width &&
-            position.x + playerWidth > end.x &&
-            position.y < end.y + end.height &&
-            position.y + playerHeight > end.y
-          ) {
-            Rune.actions.sendTime({ playerId: yourPlayerId, time: time - startTime.current })
-            restart = true;
-          } else if (position.y + playerHeight > height) {
-            restart = true;
-          }
           if (restart) {
+            // Reset player position...etc.
             player.current = {
               ...start,
               speed: playerSpeed,
@@ -158,10 +96,11 @@ export default function Level(props: ILevelProps) {
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);
     }
-  }, [end, height, game.stage, play, start, yourPlayerId]);
+  }, [game.stage, level, play, start, yourPlayerId]);
 
   useEffect(() => {
     if (countdown) {
+      // Manage countdown when player restart level
       const interval = setInterval(() => {
         const timePassed = (Rune.gameTime() - startCountdown.current) / 1000;
         if (timePassed > countdownDurationSeconds) {
@@ -178,6 +117,7 @@ export default function Level(props: ILevelProps) {
   function startJump() {
     if (player.current.grounded) {
       jump.current = Rune.gameTime();
+      jumpVelocity.current = -jumpForce;
     }
   }
 
@@ -199,7 +139,10 @@ export default function Level(props: ILevelProps) {
           {blocks.map((block, i) => (
             <div
               key={i}
-              className="level__block"
+              className={classNames(
+                "level__block",
+                `level__block--${block.type ?? "ground"}`,
+              )}
               style={{
                 left: block.x,
                 top: block.y,
@@ -208,15 +151,6 @@ export default function Level(props: ILevelProps) {
               }}
             />
           ))}
-          <div
-            className="level__end"
-            style={{
-              left: end.x,
-              top: end.y,
-              width: end.width,
-              height: end.height,
-            }}
-          />
           <div
             className="level__player"
             style={{

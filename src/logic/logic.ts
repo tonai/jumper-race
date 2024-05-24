@@ -6,7 +6,7 @@ import {
   playerHeight,
   updatesPerSecond,
 } from "./config";
-import { GameActions, GameState, ISendTimeData } from "./types";
+import { BlockType, GameActions, GameState, ISendTimeData } from "./types";
 import { updateCountdown } from "./updateCountdown";
 import { newRound } from "./newRound";
 import { updatePlaying } from "./updateplaying";
@@ -23,20 +23,27 @@ Rune.initLogic({
     countdownTimer: countdownDurationSeconds,
     level: {
       id: 1,
-      width: 1000,
+      width: 1200,
       height: 200,
       start: { x: 10, y: 180 - playerHeight - jumpForce },
       blocks: [
-        { x: 0, width: 1000, y: 180, height: 20 },
-        { x: 500, width: 500, y: 160, height: 20 },
-        { x: 600, width: 400, y: 140, height: 20 },
-        { x: 700, width: 300, y: 120, height: 20 },
-        { x: 750, width: 250, y: 90, height: 30 },
-        { x: 800, width: 200, y: 60, height: 30 },
-        { x: 850, width: 150, y: 30, height: 30 },
+        { x: 0, width: 1200, y: 180, height: 20 },
+        { x: 200, width: 500, y: 160, height: 20 },
+        { x: 300, width: 400, y: 140, height: 20 },
+        { x: 400, width: 300, y: 120, height: 20 },
+        { x: 450, width: 250, y: 90, height: 30 },
+        { x: 500, width: 200, y: 60, height: 30 },
+        { x: 550, width: 250, y: 30, height: 30 },
+        { x: 900, width: 50, y: 0, height: 150 },
+        { x: 800, width: 100, y: 90, height: 30 },
+        { x: 1000, width: 200, y: 30, height: 150 },
+        { x: 650, width: 50, y: 20, height: 10, type: BlockType.Spikes },
+        { x: 899, width: 1, y: 60, height: 30, type: BlockType.Reverse },
+        { x: 700, width: 1, y: 120, height: 20, type: BlockType.Reverse },
+        { x: 980, width: 20, y: 179, height: 1, type: BlockType.Jump, force: 12 },
+        { x: 1165, y: 10, width: 20, height: 20, type: BlockType.End },
       ],
-      end: { x: 940, y: 10, width: 20, height: 20 },
-      totalTime: 20, // 60,
+      totalTime: 60,
     },
     playerIds: allPlayerIds,
     stage: "gettingReady",

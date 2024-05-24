@@ -11,9 +11,18 @@ export interface IPosition {
   y: number;
 }
 
+export enum BlockType {
+  Reverse,
+  Jump,
+  Spikes,
+  End,
+}
+
 export interface IRectangle extends IPosition {
   width: number;
   height: number;
+  type?: BlockType;
+  force?: number;
 }
 
 export interface IPlayer extends IPosition {
@@ -31,7 +40,6 @@ export interface ILevel {
   id: number;
   width: number;
   height: number;
-  end: IRectangle;
   start: IPosition;
   blocks: IRectangle[];
   totalTime: number;
@@ -63,3 +71,9 @@ export type GameActions = {
   sendTime: (data: ISendTimeData) => void;
   setReady: () => void;
 };
+
+declare module "@dimforge/rapier2d" {
+  export interface Collider {
+    userData?: IRectangle;
+  }
+}

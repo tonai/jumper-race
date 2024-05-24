@@ -7,17 +7,28 @@
 
 .level__block {
   position: absolute;
+  background: black;
+}
+
+.level__block--0 {
+  background: yellow;
+}
+
+.level__block--1 {
   background: blue;
 }
 
-.level__end {
-  position: absolute;
+.level__block--2 {
+  background: red;
+}
+
+.level__block--3 {
   background: green;
 }
 
 .level__player {
   position: absolute;
-  background: red;
+  background: white;
 }
 
 .level__ghost {
