@@ -8,12 +8,14 @@ export function getBackground(level: ILevel) {
   for (let i = 0; i < width / assetSize; i++) {
     table[i] = new Array(level.height / assetSize).fill(false);
   }
+  console.log(table);
 
   blocks.forEach((block) => {
     const { height, type, x, y, width } = block;
     if (type === undefined) {
       for (let i = x / assetSize; i < (x + width) / assetSize; i++) {
         for (let j = y / assetSize; j < (y + height) / assetSize; j++) {
+          console.log(i, j);
           table[i][j] = true;
         }
       }
