@@ -44,7 +44,7 @@
 
 /* End */
 .level__block--3 {
-  background: green;
+  background: center / 32px 64px url("end.png");
 }
 
 /* Walljump */
