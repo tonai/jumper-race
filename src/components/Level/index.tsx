@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { World } from "@dimforge/rapier2d";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
+  assetSize,
   countdownDurationSeconds,
   jumpForce,
   physicsRatio,
@@ -12,12 +13,13 @@ import {
   updatesPerSecond,
 } from "../../logic/config";
 import { GameState, IPlayer, IPlayerPhysics } from "../../logic/types";
-
-import "./styles.css";
 import { getPlayerPosition } from "../../helpers/player";
 import Countdown from "../Countdown";
 import classNames from "classnames";
 import { initWorld } from "../../helpers/world";
+import { getBackground } from "../../helpers/background";
+
+import "./styles.css";
 
 interface ILevelProps {
   game: GameState;
@@ -45,9 +47,10 @@ export default function Level(props: ILevelProps) {
   const [play, setPlay] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const [position, setPosition] = useState({ ...start });
-  const translate = `${(bounds?.width ?? 0) / 2 - position.x}px ${
-    (bounds?.height ?? 0) / 2 - position.y
+  const translate = `${(bounds?.width ?? 0) / 2 - position.x - playerWidth / 2 - 2 * assetSize}px ${
+    (bounds?.height ?? 0) / 2 - position.y - playerHeight / 2 - 2 * assetSize
   }px`;
+  const background = useMemo(() => getBackground(level), [level]);
 
   useEffect(() => {
     // Init physics
@@ -121,7 +124,6 @@ export default function Level(props: ILevelProps) {
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
     } else if (player.current.wallJump) {
-      console.log('wallJump');
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
       player.current.speed = -player.current.speed;
@@ -142,7 +144,15 @@ export default function Level(props: ILevelProps) {
         onTouchEnd={endJump}
         ref={ref}
       >
-        <div style={{ width, height, translate }}>
+        <div
+          className="level__map"
+          style={{
+            background,
+            width: width + 4 * assetSize,
+            height: height + 4 * assetSize,
+            translate,
+          }}
+        >
           {blocks.map((block, i) => (
             <div
               key={i}
@@ -151,8 +161,8 @@ export default function Level(props: ILevelProps) {
                 `level__block--${block.type ?? "ground"}`,
               )}
               style={{
-                left: block.x,
-                top: block.y,
+                left: block.x + 2 * assetSize,
+                top: block.y + 2 * assetSize,
                 width: block.width,
                 height: block.height,
               }}
@@ -161,14 +171,16 @@ export default function Level(props: ILevelProps) {
           <div
             className="level__player"
             style={{
-              left: position.x,
-              top: position.y,
+              left: position.x + 2 * assetSize,
+              top: position.y + 2 * assetSize,
               width: playerWidth,
               height: playerHeight,
               // borderRadius: playerWidth / 2,
             }}
           />
         </div>
+        {/* <div style={{ backgroundColor: 'white', width: '100%', height: '2px', position: 'absolute', top: '50%' }}></div>
+        <div style={{ backgroundColor: 'white', width: '2px', height: '100%', position: 'absolute', left: '50%', top: 0 }}></div> */}
       </div>
       {countdown > 0 && <Countdown countdownTimer={countdown} />}
     </>

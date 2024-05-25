@@ -5,9 +5,12 @@
   position: relative;
 }
 
+.level__map {}
+
 .level__block {
   position: absolute;
-  background: black;
+  /* background: black; */
+  opacity: 0.5;
 }
 
 /* Reverser */

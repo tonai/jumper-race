@@ -1,28 +1,9 @@
-# Getting Started with Rune
+# Jumper race
 
-### `npm run dev`
+This is the repository for the Open Source "Jumper race" Rune game.
 
-Runs the game in Dev UI.
+This game was made using Rune.
 
-The page will reload when you make changes.
+It was developed During the React Jam Spring 2014.
 
-### `npm run upload`
-
-Builds the game and starts upload process to Rune.
-
-### `npm run build`
-
-Builds the game. You can then upload it to Rune using `npx rune-games-cli@latest upload`.
-
-### `npm run lint`
-
-Runs the validation rules. You can read about them in the [docs on server-side logic](https://developers.rune.ai/docs/advanced/server-side-logic).
-
-### `npm run typecheck`
-
-Verifies that TypeScript is valid.
-
-
-## Learn More
-
-See the [Rune docs](https://developers.rune.ai/docs/quick-start) for more info. You can also ask any questions in the [Rune Discord](https://discord.gg/rune-devs), we're happy to help!
+You can play it here or on the Rune app.
