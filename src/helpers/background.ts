@@ -110,6 +110,5 @@ export function getBackground(level: ILevel) {
     }
   }
 
-  console.log(backgrounds);
   return backgrounds.join(",");
 }

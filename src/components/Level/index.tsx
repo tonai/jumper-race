@@ -47,9 +47,14 @@ export default function Level(props: ILevelProps) {
   const [play, setPlay] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const [position, setPosition] = useState({ ...start });
-  const translate = `${(bounds?.width ?? 0) / 2 - position.x - playerWidth / 2 - 2 * assetSize}px ${
+  const translate = `${
+    (bounds?.width ?? 0) / 2 - position.x - playerWidth / 2 - 2 * assetSize
+  }px ${
     (bounds?.height ?? 0) / 2 - position.y - playerHeight / 2 - 2 * assetSize
   }px`;
+  const parallaxTranslate = `${
+    (bounds?.width ?? 0) / 2 - position.x / 10 - playerWidth / 2 - 2 * assetSize
+  }px 0px`;
   const background = useMemo(() => getBackground(level), [level]);
 
   useEffect(() => {
@@ -145,9 +150,14 @@ export default function Level(props: ILevelProps) {
         ref={ref}
       >
         <div
+          className="level__parallax"
+          style={{
+            translate: parallaxTranslate,
+          }}
+        />
+        <div
           className="level__map"
           style={{
-            background,
             width: width + 4 * assetSize,
             height: height + 4 * assetSize,
             translate,
@@ -161,13 +171,22 @@ export default function Level(props: ILevelProps) {
                 `level__block--${block.type ?? "ground"}`,
               )}
               style={{
-                left: block.x + 2 * assetSize,
+                left:
+                  block.x + 2 * assetSize - (block.type === undefined ? 1 : 0),
                 top: block.y + 2 * assetSize,
-                width: block.width,
-                height: block.height,
+                width: block.width + (block.type === undefined ? 2 : 0),
+                height: block.height - (block.type === undefined ? 2 : 0),
               }}
             />
           ))}
+          <div
+            className="level__background"
+            style={{
+              background,
+              width: width + 4 * assetSize,
+              height: height + 4 * assetSize,
+            }}
+          />
           <div
             className="level__player"
             style={{
@@ -175,7 +194,6 @@ export default function Level(props: ILevelProps) {
               top: position.y + 2 * assetSize,
               width: playerWidth,
               height: playerHeight,
-              // borderRadius: playerWidth / 2,
             }}
           />
         </div>

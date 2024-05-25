@@ -14,4 +14,5 @@ main {
   height: 100vh;
   align-items: center;
   justify-content: space-around;
+  background: center / contain no-repeat url('background01.png');
 }

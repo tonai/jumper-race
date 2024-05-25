@@ -5,12 +5,23 @@
   position: relative;
 }
 
-.level__map {}
+.level__parallax {
+  position: absolute;
+  inset: 0;
+  background: center / contain no-repeat url('background02.png')
+}
+
+.level__map {
+  position: absolute;
+}
+
+.level__background {
+  position: relative;
+}
 
 .level__block {
   position: absolute;
-  /* background: black; */
-  opacity: 0.5;
+  background: #8d4a23;
 }
 
 /* Reverser */
