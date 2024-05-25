@@ -7,11 +7,8 @@
 
 .level__parallax {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -100%;
-  width: 300%;
-  background: center / contain repeat url("background02.png");
+  inset: 0;
+  background: center / contain no-repeat url('background02.png');
 }
 
 .level__map {
@@ -39,7 +36,7 @@
 
 /* Spikes */
 .level__block--2 {
-  background: center / 64px 16px url("spikes.png");
+  background: center / 64px 16px url('spikes.png');
 }
 
 /* End */

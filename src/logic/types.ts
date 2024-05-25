@@ -11,6 +11,13 @@ export interface IPosition {
   y: number;
 }
 
+export interface IDetail {
+  src: string;
+  width: number;
+  height: number;
+  offset?: number;
+}
+
 export enum BlockType {
   Reverser,
   Jumper,
@@ -20,6 +27,7 @@ export enum BlockType {
 }
 
 export interface IRectangle extends IPosition {
+  details?: { x: number; detail: number }[];
   width: number;
   height: number;
   type?: BlockType;

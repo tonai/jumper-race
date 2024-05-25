@@ -3,11 +3,11 @@ import { PlayerId } from "rune-games-sdk/multiplayer";
 
 import { GameState } from "../../logic/types.ts";
 import Players from "../Players/index.tsx";
-import Level from "../Level/index.tsx";
 import Start from "../Start/index.tsx";
 import Countdown from "../Countdown/index.tsx";
 import Timer from "../Timer/index.tsx";
 import Scores from "../Scores/index.tsx";
+import Game from "../Game/index.tsx";
 
 function App() {
   const [game, setGame] = useState<GameState>();
@@ -32,7 +32,7 @@ function App() {
       <Players game={game} yourPlayerId={yourPlayerId} />
       {game.stage === "gettingReady" && <Start />}
       {game.stage !== "gettingReady" && (
-        <Level game={game} yourPlayerId={yourPlayerId} />
+        <Game game={game} yourPlayerId={yourPlayerId} />
       )}
       {game.stage === "countdown" && (
         <Countdown countdownTimer={game.countdownTimer} />

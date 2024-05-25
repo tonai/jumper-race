@@ -1,22 +1,42 @@
-import { ground, groundBottom, groundLeft, groundLeftBottom, groundLeftTop, groundLeftTopBottom, groundRight, groundRightBottom, groundRightTop, groundRightTopBottom, groundTop, groundTopBottom } from "../logic/assets";
-import { assetSize } from "../logic/config";
-import { ILevel } from "../logic/types";
+import {
+  allDetails,
+  details,
+  ground,
+  groundBottom,
+  groundLeft,
+  groundLeftBottom,
+  groundLeftTop,
+  groundLeftTopBottom,
+  groundRight,
+  groundRightBottom,
+  groundRightTop,
+  groundRightTopBottom,
+  groundTop,
+  groundTopBottom,
+} from "../logic/assets";
+import { assetSize, randomDetails } from "../logic/config";
+import { IDetail, ILevel, IRectangle } from "../logic/types";
+import { randomInt } from "./utils";
+
+export function getDetailBackground(detail: IDetail, x: number, y: number) {
+  return `url(${detail.src}) ${(x - detail.width + 3) * assetSize}px ${
+    (y - detail.height + 2) * assetSize + (detail.offset ?? 0)
+  }px / ${assetSize * detail.width}px ${assetSize * detail.height}px no-repeat`;
+}
 
 export function getBackground(level: ILevel) {
   const { blocks, width } = level;
-  const table: boolean[][] = [];
+  const table: (null | IRectangle)[][] = [];
   for (let i = 0; i < width / assetSize; i++) {
-    table[i] = new Array(level.height / assetSize).fill(false);
+    table[i] = new Array(level.height / assetSize).fill(null);
   }
-  console.log(table);
 
   blocks.forEach((block) => {
     const { height, type, x, y, width } = block;
     if (type === undefined) {
       for (let i = x / assetSize; i < (x + width) / assetSize; i++) {
         for (let j = y / assetSize; j < (y + height) / assetSize; j++) {
-          console.log(i, j);
-          table[i][j] = true;
+          table[i][j] = block;
         }
       }
     }
@@ -25,32 +45,33 @@ export function getBackground(level: ILevel) {
   const backgrounds: string[] = [];
   for (let i = 0; i < table.length; i++) {
     for (let j = 0; j < table[0].length; j++) {
-      if (table[i][j]) {
+      const block = table[i][j];
+      if (block) {
         // Left side
         if (!table[i - 1] || !table[i - 1][j]) {
           if (table[i][j + 1] && table[i][j - 1]) {
             backgrounds.push(
-              `url(${groundLeft}) ${(i - 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundLeft}) ${(i + 1) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           } else if (table[i][j + 1]) {
             backgrounds.push(
-              `url(${groundLeftTop}) ${(i - 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundLeftTop}) ${(i + 1) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           } else if (table[i][j - 1]) {
             backgrounds.push(
-              `url(${groundLeftBottom}) ${(i - 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundLeftBottom}) ${(i + 1) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           } else {
             backgrounds.push(
-              `url(${groundLeftTopBottom}) ${(i - 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundLeftTopBottom}) ${(i + 1) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           }
         }
@@ -58,59 +79,94 @@ export function getBackground(level: ILevel) {
         if (!table[i + 1] || !table[i + 1][j]) {
           if (table[i][j + 1] && table[i][j - 1]) {
             backgrounds.push(
-              `url(${groundRight}) ${(i + 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundRight}) ${(i + 3) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           } else if (table[i][j + 1]) {
             backgrounds.push(
-              `url(${groundRightTop}) ${(i + 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundRightTop}) ${(i + 3) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           } else if (table[i][j - 1]) {
             backgrounds.push(
-              `url(${groundRightBottom}) ${(i + 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundRightBottom}) ${(i + 3) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           } else {
             backgrounds.push(
-              `url(${groundRightTopBottom}) ${(i + 1) * assetSize + 2 * assetSize}px ${
-                j * assetSize + 2 * assetSize
-              }px / ${assetSize}px ${assetSize}px no-repeat`,
+              `url(${groundRightTopBottom}) ${(i + 3) * assetSize}px ${
+                (j + 2) * assetSize
+              }px / ${assetSize}px ${assetSize}px no-repeat`
             );
           }
         }
         // Ground
         if (table[i][j + 1] && table[i][j - 1]) {
           backgrounds.push(
-            `url(${ground}) ${i * assetSize + 2 * assetSize}px ${
-              j * assetSize + 2 * assetSize
-            }px / ${assetSize}px ${assetSize}px no-repeat`, //  #8d4a23
+            `url(${ground}) ${(i + 2) * assetSize}px ${
+              (j + 2) * assetSize
+            }px / ${assetSize}px ${assetSize}px no-repeat` //  #8d4a23
           );
         } else if (table[i][j + 1]) {
           backgrounds.push(
-            `url(${groundTop}) ${i * assetSize + 2 * assetSize}px ${
-              j * assetSize + 2 * assetSize
-            }px / ${assetSize}px ${assetSize}px no-repeat`,
+            `url(${groundTop}) ${(i + 2) * assetSize}px ${
+              (j + 2) * assetSize
+            }px / ${assetSize}px ${assetSize}px no-repeat`
           );
         } else if (table[i][j - 1]) {
           backgrounds.push(
-            `url(${groundBottom}) ${i * assetSize + 2 * assetSize}px ${
-              j * assetSize + 2 * assetSize
-            }px / ${assetSize}px ${assetSize}px no-repeat`,
+            `url(${groundBottom}) ${(i + 2) * assetSize}px ${
+              (j + 2) * assetSize
+            }px / ${assetSize}px ${assetSize}px no-repeat`
           );
         } else {
           backgrounds.push(
-            `url(${groundTopBottom}) ${i * assetSize + 2 * assetSize}px ${
-              j * assetSize + 2 * assetSize
-            }px / ${assetSize}px ${assetSize}px no-repeat`,
+            `url(${groundTopBottom}) ${(i + 2) * assetSize}px ${
+              (j + 2) * assetSize
+            }px / ${assetSize}px ${assetSize}px no-repeat`
           );
+        }
+        // Details
+        if (!block.details && randomInt(randomDetails) === 0) {
+          const index = randomInt(details.length - 1);
+          const detail = details[index];
+          let k = 0;
+          while (
+            k < detail.width &&
+            table[i - k][j] !== null &&
+            table[i - k][j - 1] === null
+          ) {
+            k++;
+          }
+          console.log(k, detail);
+          if (k === detail.width) {
+            const background = getDetailBackground(detail, i, j);
+            backgrounds.push(background);
+          }
         }
       }
     }
   }
+
+  blocks.forEach((block) => {
+    const { details, x, y } = block;
+    if (details) {
+      for (const { detail: index, x: offset } of details) {
+        const detail = allDetails[index];
+        console.log(detail);
+        const background = getDetailBackground(
+          detail,
+          x / assetSize + offset,
+          y / assetSize
+        );
+        console.log(background);
+        backgrounds.push(background);
+      }
+    }
+  });
 
   return backgrounds.join(",");
 }
