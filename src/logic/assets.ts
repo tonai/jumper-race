@@ -26,10 +26,13 @@ import detail12 from "../assets/12.png";
 import detail13 from "../assets/13.png";
 import PanelDead from "../assets/PanelDead.png";
 import PanelExcalamation from "../assets/PanelExcalamation.png";
-import PanelForward from "../assets/PanelForward.png";
+import PanelLeft from "../assets/PanelLeft.png";
+import PanelLeftDown from "../assets/PanelLeftDown.png";
+import PanelLeftUp from "../assets/PanelLeftUp.png";
 import PanelQuestion from "../assets/PanelQuestion.png";
-import PanelUp from "../assets/PanelUp.png";
-import PanelDown from "../assets/PanelDown.png";
+import PanelRight from "../assets/PanelRight.png";
+import PanelRightDown from "../assets/PanelRightDown.png";
+import PanelRightUp from "../assets/PanelRightUp.png";
 
 import { IDetail } from "./types";
 
@@ -62,10 +65,13 @@ export const allDetails: IDetail[] = [
   { src: detail13, width: 5, height: 7, offset: 22 },
   { src: PanelDead, width: 2, height: 2, offset: 2 },
   { src: PanelExcalamation, width: 2, height: 2, offset: 2 },
-  { src: PanelForward, width: 2, height: 2, offset: 2 },
-  { src: PanelQuestion, width: 2, height: 2, offset: 2 },
-  { src: PanelUp, width: 2, height: 2, offset: 2 },
-  { src: PanelDown, width: 2, height: 2, offset: 2 },
+  { src: PanelLeft, width: 2, height: 2, offset: 2 }, // 15
+  { src: PanelLeftDown, width: 2, height: 2, offset: 2 }, // 16
+  { src: PanelLeftUp, width: 2, height: 2, offset: 2 }, // 17
+  { src: PanelQuestion, width: 2, height: 2, offset: 2 }, // 18
+  { src: PanelRight, width: 2, height: 2, offset: 2 }, // 19
+  { src: PanelRightDown, width: 2, height: 2, offset: 2 }, // 20
+  { src: PanelRightUp, width: 2, height: 2, offset: 2 }, // 21
 ];
 
-export const details = allDetails.slice(0, 13);
+export const randomDetails = allDetails.slice(0, 13);

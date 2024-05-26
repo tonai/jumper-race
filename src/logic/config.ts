@@ -12,7 +12,7 @@ export const jumpForce = 6;
 export const maxJumpTime = 300;
 export const assetSize = 32;
 export const parallax = 8;
-export const randomDetails = 7;
+export const randomChance = 7;
 
 export const levels: ILevel[] = [
   {
@@ -27,7 +27,7 @@ export const levels: ILevel[] = [
         y: 416,
         height: 32,
         details: [
-          { x: 4, detail: 15 },
+          { x: 4, detail: 21 },
           { x: 39, detail: 14 },
         ],
       },
@@ -79,7 +79,13 @@ export const levels: ILevel[] = [
       },
       { x: 256, width: 64, y: 992, height: 192 },
       { x: 256, width: 640, y: 960, height: 32 },
-      { x: 832, width: 64, y: 704, height: 256 },
+      {
+        x: 832,
+        width: 64,
+        y: 704,
+        height: 256,
+        details: [{ x: 1, detail: 15 }],
+      },
       {
         x: 768,
         width: 64,
@@ -99,7 +105,13 @@ export const levels: ILevel[] = [
         force: 12,
       },
       { x: 128, width: 320, y: 640, height: 32 },
-      { x: 128, width: 64, y: 384, height: 256 },
+      {
+        x: 128,
+        width: 64,
+        y: 384,
+        height: 256,
+        details: [{ x: 1, detail: 19 }],
+      },
       {
         x: 192,
         width: 64,
@@ -111,7 +123,13 @@ export const levels: ILevel[] = [
       { x: 192, width: 8, y: 384, height: 128, type: BlockType.WallJump },
       { x: 320, width: 128, y: 448, height: 32 },
       { x: 512, width: 256, y: 448, height: 32 },
-      { x: 704, width: 64, y: 192, height: 256 },
+      {
+        x: 704,
+        width: 64,
+        y: 192,
+        height: 256,
+        details: [{ x: 1, detail: 15 }],
+      },
       {
         x: 640,
         width: 64,

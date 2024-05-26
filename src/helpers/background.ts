@@ -1,6 +1,5 @@
 import {
   allDetails,
-  details,
   ground,
   groundBottom,
   groundLeft,
@@ -13,8 +12,9 @@ import {
   groundRightTopBottom,
   groundTop,
   groundTopBottom,
+  randomDetails,
 } from "../logic/assets";
-import { assetSize, randomDetails } from "../logic/config";
+import { assetSize, randomChance } from "../logic/config";
 import { IDetail, ILevel, IRectangle } from "../logic/types";
 import { randomInt } from "./utils";
 
@@ -129,41 +129,44 @@ export function getBackground(level: ILevel) {
             }px / ${assetSize}px ${assetSize}px no-repeat`
           );
         }
-        // Details
-        if (!block.details && randomInt(randomDetails) === 0) {
-          const index = randomInt(details.length - 1);
-          const detail = details[index];
-          let k = 0;
-          while (
-            k < detail.width &&
-            table[i - k][j] !== null &&
-            table[i - k][j - 1] === null
-          ) {
-            k++;
-          }
-          console.log(k, detail);
-          if (k === detail.width) {
-            const background = getDetailBackground(detail, i, j);
-            backgrounds.push(background);
-          }
-        }
       }
     }
   }
 
+  // Details
   blocks.forEach((block) => {
-    const { details, x, y } = block;
+    const { details, x, y, width } = block;
     if (details) {
       for (const { detail: index, x: offset } of details) {
         const detail = allDetails[index];
-        console.log(detail);
         const background = getDetailBackground(
           detail,
           x / assetSize + offset,
           y / assetSize
         );
-        console.log(background);
         backgrounds.push(background);
+      }
+    } else {
+      const j = y / assetSize;
+      for (let i = x / assetSize; i < (x + width) / assetSize; i++) {
+        if (randomInt(randomChance) === 0) {
+          const index = randomInt(randomDetails.length - 1);
+          const detail = randomDetails[index];
+          let k = 0;
+          console.log(i, j, k);
+          while (
+            k < detail.width &&
+            table[i - k] &&
+            table[i - k][j] !== null &&
+            table[i - k][j - 1] === null
+          ) {
+            k++;
+          }
+          if (k === detail.width) {
+            const background = getDetailBackground(detail, i, j);
+            backgrounds.push(background);
+          }
+        }
       }
     }
   });
