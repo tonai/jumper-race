@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { MutableRefObject, memo, useMemo } from "react";
 
 import {
   assetSize,
@@ -15,12 +15,14 @@ import "./styles.css";
 interface ILevelProps {
   bounds?: DOMRect;
   level: ILevel;
+  playerRef: MutableRefObject<HTMLDivElement | null>;
   x: number;
   y: number;
+  z: number;
 }
 
 function Level(props: ILevelProps) {
-  const { bounds, level, x, y } = props;
+  const { bounds, level, playerRef, x, y, z } = props;
   const { width, height, blocks } = level;
   const translate = `${
     (bounds?.width ?? 0) / 2 - x - playerWidth / 2 - 2 * assetSize
@@ -90,13 +92,17 @@ function Level(props: ILevelProps) {
           ))}
         <div
           className="level__player"
+          ref={playerRef}
           style={{
             left: x + 2 * assetSize,
             top: y + 2 * assetSize,
             width: playerWidth,
             height: playerHeight,
+            rotate: `${z}deg`,
           }}
-        />
+        >
+          <div className="level__player-eye" />
+        </div>
       </div>
     </>
   );

@@ -11,6 +11,10 @@ export interface IPosition {
   y: number;
 }
 
+export interface IPositionWithRotation extends IPosition {
+  z: number;
+}
+
 export interface IDetail {
   src: string;
   width: number;

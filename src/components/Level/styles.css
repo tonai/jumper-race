@@ -54,9 +54,59 @@
 
 .level__player {
   position: absolute;
-  background: white;
+  background: #b442df;
+  border-radius: 8px;
+  border: 3px solid #6c2994;
+  box-sizing: border-box;
 }
 
-.level__ghost {
-  opacity: 0.5;
+.level__player-eye {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  translate: -50% -50%;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.level__player-eye::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 70%;
+  translate: -50% -50%;
+  width: 4px;
+  height: 4px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.level__player--reverse .level__player-eye {
+  left: 40%;
+}
+
+.level__player--reverse .level__player-eye::before {
+  left: 30%;
+}
+
+.level__player--jump {
+  animation: 0.5s ease-in jump;
+}
+
+@keyframes jump {
+  0% {
+    scale: 1 1;
+  }
+  10% {
+    scale: 1 0.5;
+  }
+  50% {
+    scale: 0.8 1.2;
+  }
+  100% {
+    scale: 1 1;
+  }
 }

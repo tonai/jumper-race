@@ -153,7 +153,6 @@ export function getBackground(level: ILevel) {
           const index = randomInt(randomDetails.length - 1);
           const detail = randomDetails[index];
           let k = 0;
-          console.log(i, j, k);
           while (
             k < detail.width &&
             table[i - k] &&

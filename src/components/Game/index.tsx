@@ -11,7 +11,12 @@ import {
   playerWidth,
   updatesPerSecond,
 } from "../../logic/config";
-import { GameState, IPlayer, IPlayerPhysics } from "../../logic/types";
+import {
+  GameState,
+  IPlayer,
+  IPlayerPhysics,
+  IPositionWithRotation,
+} from "../../logic/types";
 import { getPlayerPosition } from "../../helpers/player";
 import { initWorld } from "../../helpers/world";
 
@@ -34,6 +39,7 @@ export default function Game(props: IGameProps) {
   const jump = useRef<false | number>(false);
   const jumpVelocity = useRef<number>(0);
   const lastTime = useRef<number>(0);
+  const playerRef = useRef<HTMLDivElement>(null);
   const player = useRef<IPlayer>({
     ...start,
     speed: playerSpeed,
@@ -44,7 +50,10 @@ export default function Game(props: IGameProps) {
   const startTime = useRef(0);
   const [play, setPlay] = useState(true);
   const [countdown, setCountdown] = useState(0);
-  const [position, setPosition] = useState({ ...start });
+  const [position, setPosition] = useState<IPositionWithRotation>({
+    ...start,
+    z: 0,
+  });
 
   useEffect(() => {
     // Init physics
@@ -66,12 +75,14 @@ export default function Game(props: IGameProps) {
             player.current,
             world.current,
             playerPhysics.current,
+            playerRef.current,
             jump,
             jumpVelocity
           );
           setPosition(nextPosition);
           if (restart) {
             // Reset player position...etc.
+            playerRef.current?.classList.remove("level__player--reverse");
             player.current = {
               ...start,
               speed: playerSpeed,
@@ -85,7 +96,7 @@ export default function Game(props: IGameProps) {
               },
               true
             );
-            setPosition({ ...start });
+            setPosition({ ...start, z: 0 });
             setPlay(false);
             setCountdown(countdownDurationSeconds);
             startCountdown.current = time;
@@ -117,10 +128,17 @@ export default function Game(props: IGameProps) {
     if (player.current.grounded) {
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
+      playerRef.current?.classList.add("level__player--jump");
     } else if (player.current.wallJump) {
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
       player.current.speed = -player.current.speed;
+      if (player.current.speed < 0) {
+        playerRef.current?.classList.add("level__player--reverse");
+      } else {
+        playerRef.current?.classList.remove("level__player--reverse");
+      }
+      playerRef.current?.classList.add("level__player--jump");
     }
   }
 
@@ -138,7 +156,14 @@ export default function Game(props: IGameProps) {
         onTouchEnd={endJump}
         ref={ref}
       >
-        <Level bounds={bounds} level={level} x={position.x} y={position.y} />
+        <Level
+          bounds={bounds}
+          level={level}
+          playerRef={playerRef}
+          x={position.x}
+          y={position.y}
+          z={position.z}
+        />
       </div>
       {countdown > 0 && <Countdown countdownTimer={countdown} />}
     </>

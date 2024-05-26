@@ -16,7 +16,7 @@ Rune.initLogic({
   maxPlayers: 6,
   setup: (allPlayerIds) => ({
     countdownTimer: countdownDurationSeconds,
-    level: levels[0],
+    level: levels[1],
     playerIds: allPlayerIds,
     stage: "gettingReady",
     timer: 0,

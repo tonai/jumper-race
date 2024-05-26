@@ -5,7 +5,7 @@ import {
   ILevel,
   IPlayer,
   IPlayerPhysics,
-  IPosition,
+  IPositionWithRotation,
 } from "../logic/types.ts";
 import {
   gravity,
@@ -17,6 +17,8 @@ import {
 } from "../logic/config.ts";
 import { MutableRefObject } from "react";
 
+export const radianOffset = (90 * Math.PI) / 180;
+
 export function getPlayerPosition(
   level: ILevel,
   playerId: string,
@@ -26,9 +28,10 @@ export function getPlayerPosition(
   player: IPlayer,
   world: World,
   playerPhysics: IPlayerPhysics,
+  playerRef: HTMLDivElement | null,
   jump: MutableRefObject<false | number>,
-  jumpVelocity: MutableRefObject<number>,
-): [IPosition, boolean] {
+  jumpVelocity: MutableRefObject<number>
+): [IPositionWithRotation, boolean] {
   let restart = false;
   const { collider, controller, rigidBody } = playerPhysics;
 
@@ -51,7 +54,7 @@ export function getPlayerPosition(
   const position = rigidBody.translation();
   const movement = new Vector2(
     player.grounded ? 0 : player.speed / physicsRatio,
-    jumpVelocity.current / physicsRatio,
+    jumpVelocity.current / physicsRatio
   );
   let isCollidingWallJump = false;
   controller.computeColliderMovement(
@@ -60,17 +63,29 @@ export function getPlayerPosition(
     undefined,
     undefined,
     (collider: Collider) => {
-      isCollidingWallJump = isCollidingWallJump || collider.userData?.type === BlockType.WallJump;
+      isCollidingWallJump =
+        isCollidingWallJump || collider.userData?.type === BlockType.WallJump;
       return collider.userData?.type !== BlockType.WallJump;
-    },
+    }
   );
   player.wallJump = isCollidingWallJump;
   player.grounded = controller.computedGrounded();
+  if (player.grounded) {
+    playerRef?.classList.remove("level__player--jump");
+  }
   const correctedMovement = controller.computedMovement();
   rigidBody.setNextKinematicTranslation({
     x: position.x + correctedMovement.x,
     y: position.y + correctedMovement.y,
   });
+  let z = 0;
+  if (!player.grounded) {
+    const angle =
+      (Math.atan(correctedMovement.y / correctedMovement.x) * 180) / Math.PI;
+    if (angle < 80 && angle > -80) {
+      z = Math.min(Math.max(angle, -20), 20);
+    }
+  }
   const newPosition = rigidBody.translation();
 
   // Collisions
@@ -81,6 +96,11 @@ export function getPlayerPosition(
       case BlockType.Reverser:
         // Reverse speed
         player.speed = -player.speed;
+        if (player.speed < 0) {
+          playerRef?.classList.add("level__player--reverse");
+        } else {
+          playerRef?.classList.remove("level__player--reverse");
+        }
         break;
       case BlockType.Jumper:
         // High jump
@@ -110,6 +130,7 @@ export function getPlayerPosition(
   const playerPosition = {
     x: newPosition.x * physicsRatio - playerWidth / 2,
     y: newPosition.y * physicsRatio - playerHeight / 2,
+    z,
   };
   // Fall
   if (playerPosition.y + playerHeight > level.height) {
