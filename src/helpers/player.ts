@@ -1,4 +1,4 @@
-import { World, Vector2, Collider } from "@dimforge/rapier2d";
+import type { Collider, World } from "@dimforge/rapier2d-compat";
 
 import {
   BlockType,
@@ -21,6 +21,7 @@ import { playSound } from "./sounds.ts";
 export const radianOffset = (90 * Math.PI) / 180;
 
 export function getPlayerPosition(
+  rapier: typeof import("@dimforge/rapier2d-compat/rapier"),
   level: ILevel,
   playerId: string,
   time: number,
@@ -33,6 +34,7 @@ export function getPlayerPosition(
   jump: MutableRefObject<false | number>,
   jumpVelocity: MutableRefObject<number>
 ): [IPositionWithRotation, boolean] {
+  const { Vector2 } = rapier;
   let restart = false;
   const { collider, controller, rigidBody } = playerPhysics;
 

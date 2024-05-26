@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { World } from "@dimforge/rapier2d";
+import type { World } from "@dimforge/rapier2d-compat";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
@@ -29,11 +29,12 @@ import "./styles.css";
 
 interface IGameProps {
   game: GameState;
+  rapier: typeof import("@dimforge/rapier2d-compat/rapier");
   yourPlayerId: string;
 }
 
 export default function Game(props: IGameProps) {
-  const { game, yourPlayerId } = props;
+  const { game, rapier, yourPlayerId } = props;
   const { levelIndex } = game;
   const level = levels[levelIndex];
   const { start } = level;
@@ -75,8 +76,8 @@ export default function Game(props: IGameProps) {
 
   useEffect(() => {
     // Init physics
-    playerPhysics.current = initWorld(level, world);
-  }, [level, game.playerIds, start]);
+    playerPhysics.current = initWorld(rapier, level, world);
+  }, [level, game.playerIds, rapier, start]);
 
   useEffect(() => {
     if (game.stage === "playing" && play) {
@@ -85,6 +86,7 @@ export default function Game(props: IGameProps) {
         if (world.current && playerPhysics.current) {
           const time = Rune.gameTime();
           const [nextPosition, restart] = getPlayerPosition(
+            rapier,
             level,
             yourPlayerId,
             time,
@@ -124,7 +126,7 @@ export default function Game(props: IGameProps) {
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);
     }
-  }, [game.stage, level, play, start, yourPlayerId]);
+  }, [game.stage, level, play, rapier, start, yourPlayerId]);
 
   useEffect(() => {
     if (countdown) {

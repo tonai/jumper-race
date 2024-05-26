@@ -12,6 +12,8 @@ import Game from "../Game/index.tsx";
 function App() {
   const [game, setGame] = useState<GameState>();
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
+  const [rapier, setRapier] =
+    useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
 
   useEffect(() => {
     Rune.initClient({
@@ -22,7 +24,14 @@ function App() {
     });
   }, []);
 
-  if (!game || !yourPlayerId) {
+  useEffect(() => {
+    import("@dimforge/rapier2d-compat").then((module) => {
+      module.init();
+      setRapier(module);
+    });
+  }, []);
+
+  if (!game || !yourPlayerId || !rapier) {
     // Rune only shows your game after an onChange() so no need for loading screen
     return;
   }
@@ -32,7 +41,12 @@ function App() {
       <Players game={game} yourPlayerId={yourPlayerId} />
       {game.stage === "gettingReady" && <Start />}
       {game.stage !== "gettingReady" && (
-        <Game key={game.levelIndex} game={game} yourPlayerId={yourPlayerId} />
+        <Game
+          key={game.levelIndex}
+          game={game}
+          rapier={rapier}
+          yourPlayerId={yourPlayerId}
+        />
       )}
       {game.stage === "countdown" && (
         <Countdown countdownTimer={game.countdownTimer} />

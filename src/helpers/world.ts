@@ -1,4 +1,4 @@
-import { ColliderDesc, RigidBodyDesc, World } from "@dimforge/rapier2d";
+import type { World } from "@dimforge/rapier2d-compat";
 
 import {
   gravity,
@@ -11,7 +11,12 @@ import {
 import { BlockType, ILevel } from "../logic/types";
 import { MutableRefObject } from "react";
 
-export function initWorld(level: ILevel, worldRef: MutableRefObject<World | undefined>) {
+export function initWorld(
+  rapier: typeof import("@dimforge/rapier2d-compat/rapier"),
+  level: ILevel,
+  worldRef: MutableRefObject<World | undefined>
+) {
+  const { ColliderDesc, RigidBodyDesc, World } = rapier;
   const { start } = level;
 
   // World physics
@@ -20,13 +25,13 @@ export function initWorld(level: ILevel, worldRef: MutableRefObject<World | unde
   level.blocks.forEach((block) => {
     const rigidBodyDesc = RigidBodyDesc.fixed().setTranslation(
       (block.x + block.width / 2) / physicsRatio,
-      (block.y + block.height / 2) / physicsRatio,
+      (block.y + block.height / 2) / physicsRatio
     );
     const rigidBody = world?.createRigidBody(rigidBodyDesc);
     // rigidBody.userData = block.type;
     const colliderDesc = ColliderDesc.cuboid(
       block.width / 2 / physicsRatio,
-      block.height / 2 / physicsRatio,
+      block.height / 2 / physicsRatio
     );
     if (block.type === BlockType.WallJump) {
       // colliderDesc.setCollisionGroups(2 ** 17 + 2 ** 1);
@@ -42,7 +47,7 @@ export function initWorld(level: ILevel, worldRef: MutableRefObject<World | unde
   // Player physics
   const rigidBodyDesc = RigidBodyDesc.kinematicPositionBased().setTranslation(
     (start.x + playerWidth / 2) / physicsRatio,
-    (start.y + playerHeight / 2) / physicsRatio,
+    (start.y + playerHeight / 2) / physicsRatio
   );
   // const rigidBodyDesc = RigidBodyDesc.dynamic().setTranslation(
   //   (start.x + playerWidth / 2) / physicsRatio,
@@ -55,7 +60,7 @@ export function initWorld(level: ILevel, worldRef: MutableRefObject<World | unde
   // );
   const colliderDesc = ColliderDesc.cuboid(
     playerWidth / 2 / physicsRatio,
-    playerHeight / 2 / physicsRatio,
+    playerHeight / 2 / physicsRatio
   );
   const collider = world?.createCollider(colliderDesc, rigidBody);
   const controller = world?.createCharacterController(playerOffset);

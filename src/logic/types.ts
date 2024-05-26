@@ -1,10 +1,10 @@
-import { PlayerId } from "rune-games-sdk";
-import {
+import type { PlayerId } from "rune-games-sdk";
+import type {
   Collider,
   KinematicCharacterController,
   RigidBody,
   World,
-} from "@dimforge/rapier2d";
+} from "@dimforge/rapier2d-compat";
 
 export interface IPosition {
   x: number;
@@ -88,7 +88,7 @@ export type GameActions = {
   setReady: () => void;
 };
 
-declare module "@dimforge/rapier2d" {
+declare module "@dimforge/rapier2d-compat" {
   export interface Collider {
     userData?: IRectangle;
   }
