@@ -16,6 +16,7 @@ import {
   playerWidth,
 } from "../logic/config.ts";
 import { MutableRefObject } from "react";
+import { playSound } from "./sounds.ts";
 
 export const radianOffset = (90 * Math.PI) / 180;
 
@@ -106,10 +107,12 @@ export function getPlayerPosition(
         // High jump
         jump.current = time;
         jumpVelocity.current = -(block?.force ?? 10);
+        playSound("jumper");
         break;
       case BlockType.Spikes:
         // Dead
         restart = true;
+        playSound("spikes");
         break;
       case BlockType.End:
         // Finish
@@ -118,6 +121,7 @@ export function getPlayerPosition(
           time: time - startTime,
         });
         restart = true;
+        playSound("end");
         break;
     }
     if (collision?.normal1.y === 1) {

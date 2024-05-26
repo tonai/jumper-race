@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     Rune.initClient({
-      onChange: ({ game, action, yourPlayerId }) => {
+      onChange: ({ game, yourPlayerId }) => {
         setGame(game);
         setYourPlayerId(yourPlayerId);
       },

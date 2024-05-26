@@ -1,4 +1,4 @@
-import './styles.css';
+import "./styles.css";
 
 interface ITimer {
   timer: number;
@@ -6,5 +6,6 @@ interface ITimer {
 
 export default function Timer(props: ITimer) {
   const { timer } = props;
+
   return <div className="timer">{timer}</div>;
 }

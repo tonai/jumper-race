@@ -23,6 +23,7 @@ import { initWorld } from "../../helpers/world";
 import "./styles.css";
 import Level from "../Level";
 import Countdown from "../Countdown";
+import { playSound, sounds } from "../../helpers/sounds";
 
 interface IGameProps {
   game: GameState;
@@ -54,6 +55,20 @@ export default function Game(props: IGameProps) {
     ...start,
     z: 0,
   });
+
+  useEffect(() => {
+    const audio = sounds.music;
+    audio.loop = true;
+    audio.volume = 0.5;
+    audio.play();
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (game.stage === "playing" && play) {
+      playSound("go");
+    }
+  }, [game.stage, play]);
 
   useEffect(() => {
     // Init physics
@@ -129,6 +144,7 @@ export default function Game(props: IGameProps) {
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
       playerRef.current?.classList.add("level__player--jump");
+      playSound("jump");
     } else if (player.current.wallJump) {
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
@@ -139,6 +155,7 @@ export default function Game(props: IGameProps) {
         playerRef.current?.classList.remove("level__player--reverse");
       }
       playerRef.current?.classList.add("level__player--jump");
+      playSound("jump");
     }
   }
 

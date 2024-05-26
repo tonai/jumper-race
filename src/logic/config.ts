@@ -48,14 +48,14 @@ export const levels: ILevel[] = [
       { x: 1408, width: 192, y: 160, height: 256 },
       { x: 832, width: 64, y: 112, height: 16, type: BlockType.Spikes },
       {
-        x: 1152 - 8,
+        x: 1152 - 12,
         width: 16,
         y: 0,
-        height: 320,
+        height: 288,
         type: BlockType.Reverser,
         direction: "left",
       },
-      { x: 896 - 8, width: 16, y: 192, height: 224, type: BlockType.Reverser },
+      { x: 896 - 4, width: 16, y: 192, height: 224, type: BlockType.Reverser },
       {
         x: 1280,
         width: 64,
@@ -65,7 +65,7 @@ export const levels: ILevel[] = [
         force: 15,
       },
       {
-        x: 1408 - 8,
+        x: 1408 - 12,
         width: 16,
         y: 288,
         height: 128,
@@ -135,8 +135,8 @@ export const levels: ILevel[] = [
         force: 12,
       },
       { x: 192 - 4, width: 16, y: 384, height: 128, type: BlockType.WallJump },
-      { x: 320, width: 128, y: 448, height: 32 },
-      { x: 512, width: 256, y: 448, height: 32 },
+      { x: 320, width: 96, y: 448, height: 32 },
+      { x: 544, width: 224, y: 448, height: 32 },
       {
         x: 704,
         width: 64,
