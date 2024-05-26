@@ -20,6 +20,8 @@
   gap: 0.5em;
   padding: 0.5em 3em 0.5em 1em;
   z-index: 2;
+  border-radius: 2vw;
+  border: 2px solid black;
 }
 
 @keyframes scaleup {
@@ -171,18 +173,26 @@
   }
 }
 
-.scores__button span {
+.scores__arrow {
+  width: 0;
+  height: 0;
+  border-width: 0.3em 0 0.3em 0.3em;
+  border-style: solid;
+  border-color: transparent transparent transparent white;
   animation: 1s ease-in infinite slide;
 }
 
 @keyframes slide {
   0% {
-    translate: -0.1em;
+    translate: -0.2em;
+    scale: 0.9;
   }
-  90% {
-    translate: 0.1em;
+  10% {
+    translate: 0.2em;
+    scale: 1.1;
   }
   100% {
-    translate: -0.1em;
+    translate: -0.2em;
+    scale: 0.9;
   }
 }

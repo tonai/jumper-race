@@ -74,7 +74,7 @@ export const levels: ILevel[] = [
       },
       { x: 1536, width: 32, y: 96, height: 64, type: BlockType.End },
     ],
-    totalTime: 30, // 60
+    totalTime: 90,
   },
   {
     id: 2,
@@ -165,6 +165,6 @@ export const levels: ILevel[] = [
       },
       { x: 304, width: 32, y: 0, height: 64, type: BlockType.End },
     ],
-    totalTime: 30, // 60
+    totalTime: 90,
   },
 ];

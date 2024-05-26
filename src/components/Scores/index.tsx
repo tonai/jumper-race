@@ -155,7 +155,7 @@ export default function Scores(props: IScores) {
           className="scores__button"
           onClick={() => Rune.actions.nextRound()}
         >
-          <span>⭢</span>
+          <div className="scores__arrow" />
         </button>
       )}
     </div>

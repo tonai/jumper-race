@@ -1,11 +1,14 @@
+import { levels } from "../../logic/config";
 import "./styles.css";
 
 interface ITimer {
+  levelIndex: number;
   timer: number;
 }
 
 export default function Timer(props: ITimer) {
-  const { timer } = props;
+  const { levelIndex, timer } = props;
+  const level = levels[levelIndex];
 
-  return <div className="timer">{timer}</div>;
+  return <div className="timer">{level.totalTime - timer}</div>;
 }

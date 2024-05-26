@@ -51,7 +51,9 @@ function App() {
       {game.stage === "countdown" && (
         <Countdown countdownTimer={game.countdownTimer} />
       )}
-      {game.stage === "playing" && <Timer timer={game.timer} />}
+      {game.stage === "playing" && (
+        <Timer levelIndex={game.levelIndex} timer={game.timer} />
+      )}
       {game.stage === "endOfRound" && (
         <Scores game={game} yourPlayerId={yourPlayerId} />
       )}

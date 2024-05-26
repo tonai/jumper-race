@@ -9,21 +9,25 @@
 
 .level {
   position: absolute;
-  animation: 1.5s ease-in both opening;
+  animation: 1.5s ease-in both opening-translate,
+    0.2s ease-in both opening-opacity;
   opacity: 0;
 }
 
-@keyframes opening {
+@keyframes opening-translate {
   0% {
     translate: 0 100%;
-    opacity: 0;
-  }
-  20% {
-    translate: 0 80%;
-    opacity: 1;
   }
   100% {
     translate: 0 0;
+  }
+}
+
+@keyframes opening-opacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
