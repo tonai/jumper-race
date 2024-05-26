@@ -4,6 +4,11 @@
   bottom: 8%;
   left: 8%;
   right: 8%;
+}
+
+.scores__list {
+  position: absolute;
+  inset: 0;
   background: rgba(0, 0, 0, 0.8);
   scale: 0;
   animation: 1s ease-in forwards scaleup;
@@ -130,5 +135,54 @@
   }
   100% {
     opacity: 5;
+  }
+}
+
+.scores__button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 3;
+  translate: 50% -50%;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  font-size: 2em;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  background: #b442df;
+  border: 3px solid #6c2994;
+  color: white;
+  box-shadow: 0px 0px 5px white;
+  scale: 0;
+  animation: 1s ease-in 5s forwards scale;
+}
+
+@keyframes scale {
+  0% {
+    scale: 0;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+.scores__button span {
+  animation: 1s ease-in infinite slide;
+}
+
+@keyframes slide {
+  0% {
+    translate: -0.1em;
+  }
+  90% {
+    translate: 0.1em;
+  }
+  100% {
+    translate: -0.1em;
   }
 }

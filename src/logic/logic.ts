@@ -16,22 +16,28 @@ Rune.initLogic({
   maxPlayers: 6,
   setup: (allPlayerIds) => ({
     countdownTimer: countdownDurationSeconds,
-    level: levels[0],
+    levelIndex: 0,
     playerIds: allPlayerIds,
     stage: "gettingReady",
     timer: 0,
     timerStartedAt: 0,
   }),
   actions: {
+    nextRound: (_, { game }) => {
+      if (game.stage !== "endOfRound") throw Rune.invalidAction();
+      game.levelIndex++;
+      newRound(game);
+    },
     sendTime({ playerId, time }: ISendTimeData, { game }) {
       if (game.scores?.[playerId]) {
-        const playerScore = game.scores[playerId][game.level.id];
+        const level = levels[game.levelIndex];
+        const playerScore = game.scores[playerId][level.id];
         if (playerScore && playerScore.bestTime) {
           if (time < playerScore.bestTime) {
             playerScore.bestTime = time;
           }
         } else {
-          game.scores[playerId][game.level.id] = {
+          game.scores[playerId][level.id] = {
             bestTime: time,
           };
         }
@@ -52,8 +58,9 @@ Rune.initLogic({
       game.playerIds.push(playerId);
       if (game.scores) {
         game.scores[playerId] = {};
-        if (game.level.id) {
-          game.scores[playerId][game.level.id] = {};
+        const level = levels[game.levelIndex];
+        if (level.id) {
+          game.scores[playerId][level.id] = {};
         }
       }
     },

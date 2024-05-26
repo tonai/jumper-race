@@ -4,6 +4,7 @@ import { GameState } from "../../logic/types";
 
 import "./styles.css";
 import { formatTime } from "../../helpers/format";
+import { levels } from "../../logic/config";
 
 interface IPlayersProps {
   game: GameState;
@@ -12,7 +13,8 @@ interface IPlayersProps {
 
 export default function Players(props: IPlayersProps) {
   const { game, yourPlayerId } = props;
-  const { level, playerIds, scores } = game;
+  const { levelIndex, playerIds, scores } = game;
+  const level = levels[levelIndex];
 
   return (
     <div

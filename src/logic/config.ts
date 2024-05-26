@@ -46,7 +46,7 @@ export const levels: ILevel[] = [
       { x: 1152, width: 64, y: 0, height: 288 },
       { x: 1024, width: 192, y: 288, height: 32 },
       { x: 1408, width: 192, y: 160, height: 256 },
-      { x: 832, width: 64, y: 112, height: 16, type: BlockType.Spikes },
+      { x: 864, width: 64, y: 112, height: 16, type: BlockType.Spikes },
       {
         x: 1152 - 12,
         width: 16,
@@ -74,7 +74,7 @@ export const levels: ILevel[] = [
       },
       { x: 1536, width: 32, y: 96, height: 64, type: BlockType.End },
     ],
-    totalTime: 60,
+    totalTime: 30, // 60
   },
   {
     id: 2,
@@ -165,6 +165,6 @@ export const levels: ILevel[] = [
       },
       { x: 304, width: 32, y: 0, height: 64, type: BlockType.End },
     ],
-    totalTime: 60,
+    totalTime: 30, // 60
   },
 ];

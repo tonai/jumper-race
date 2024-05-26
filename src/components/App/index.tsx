@@ -32,7 +32,7 @@ function App() {
       <Players game={game} yourPlayerId={yourPlayerId} />
       {game.stage === "gettingReady" && <Start />}
       {game.stage !== "gettingReady" && (
-        <Game game={game} yourPlayerId={yourPlayerId} />
+        <Game key={game.levelIndex} game={game} yourPlayerId={yourPlayerId} />
       )}
       {game.stage === "countdown" && (
         <Countdown countdownTimer={game.countdownTimer} />

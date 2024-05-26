@@ -68,7 +68,7 @@ export interface IScore {
 
 export interface GameState {
   countdownTimer: number;
-  level: ILevel;
+  levelIndex: number;
   playerIds: PlayerId[];
   scores?: Record<string, Record<number, IScore>>;
   stage: "gettingReady" | "countdown" | "playing" | "endOfRound";
@@ -83,6 +83,7 @@ export interface ISendTimeData {
 }
 
 export type GameActions = {
+  nextRound: () => void;
   sendTime: (data: ISendTimeData) => void;
   setReady: () => void;
 };

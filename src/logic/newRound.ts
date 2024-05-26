@@ -1,4 +1,4 @@
-import { countdownDurationSeconds } from "./config.ts";
+import { countdownDurationSeconds, levels } from "./config.ts";
 import { GameState } from "./types.ts";
 
 export function newRound(game: GameState) {
@@ -7,13 +7,11 @@ export function newRound(game: GameState) {
   game.timerStartedAt = Rune.gameTime();
   if (!game.scores) {
     game.scores = Object.fromEntries(
-      game.playerIds.map((playerId) => [
-        playerId,
-        {},
-      ]),
+      game.playerIds.map((playerId) => [playerId, {}])
     );
   }
+  const level = levels[game.levelIndex];
   Object.values(game.scores).forEach((score) => {
-    score[game.level.id] = {};
+    score[level.id] = {};
   });
 }

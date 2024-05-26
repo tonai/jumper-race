@@ -1,59 +1,6 @@
-.level {
+.game {
   flex: 1;
   width: 100%;
   overflow: hidden;
   position: relative;
-}
-
-.level__parallax {
-  position: absolute;
-  inset: 0;
-  background: center / contain no-repeat url('background02.png');
-}
-
-.level__map {
-  position: absolute;
-}
-
-.level__background {
-  position: relative;
-}
-
-.level__block {
-  position: absolute;
-  background: #8d4a23;
-}
-
-/* Reverser */
-.level__block--0 {
-  background: yellow;
-}
-
-/* Jumper */
-.level__block--1 {
-  background: blue;
-}
-
-/* Spikes */
-.level__block--2 {
-  background: center / 64px 16px url('spikes.png');
-}
-
-/* End */
-.level__block--3 {
-  background: green;
-}
-
-/* Walljump */
-.level__block--4 {
-  background: magenta;
-}
-
-.level__player {
-  position: absolute;
-  background: white;
-}
-
-.level__ghost {
-  opacity: 0.5;
 }

@@ -102,6 +102,7 @@ export function getPlayerPosition(
         } else {
           playerRef?.classList.remove("level__player--reverse");
         }
+        playSound("walljump");
         break;
       case BlockType.Jumper:
         // High jump

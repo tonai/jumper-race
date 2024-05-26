@@ -5,6 +5,7 @@ import { useBounds } from "../../hooks/useBounds";
 import {
   countdownDurationSeconds,
   jumpForce,
+  levels,
   physicsRatio,
   playerHeight,
   playerSpeed,
@@ -20,10 +21,11 @@ import {
 import { getPlayerPosition } from "../../helpers/player";
 import { initWorld } from "../../helpers/world";
 
-import "./styles.css";
 import Level from "../Level";
 import Countdown from "../Countdown";
 import { playSound, sounds } from "../../helpers/sounds";
+
+import "./styles.css";
 
 interface IGameProps {
   game: GameState;
@@ -32,7 +34,8 @@ interface IGameProps {
 
 export default function Game(props: IGameProps) {
   const { game, yourPlayerId } = props;
-  const { level } = game;
+  const { levelIndex } = game;
+  const level = levels[levelIndex];
   const { start } = level;
   const { bounds, ref } = useBounds();
   const world = useRef<World>();
@@ -155,7 +158,7 @@ export default function Game(props: IGameProps) {
         playerRef.current?.classList.remove("level__player--reverse");
       }
       playerRef.current?.classList.add("level__player--jump");
-      playSound("jump");
+      playSound("walljump");
     }
   }
 
@@ -166,7 +169,7 @@ export default function Game(props: IGameProps) {
   return (
     <>
       <div
-        className="level"
+        className="game"
         onMouseDown={startJump}
         onMouseUp={endJump}
         onTouchStart={startJump}
