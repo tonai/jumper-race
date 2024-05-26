@@ -80,7 +80,8 @@ function Level(props: ILevelProps) {
               key={i}
               className={classNames(
                 "level__block",
-                `level__block--${block.type ?? "ground"}`
+                `level__block--${block.type ?? "ground"}`,
+                { [`level__block--${block.direction}`]: block.direction }
               )}
               style={{
                 left: block.x + 2 * assetSize,

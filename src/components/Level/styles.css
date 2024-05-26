@@ -29,12 +29,65 @@
 
 /* Reverser */
 .level__block--0 {
-  background: yellow;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.level__block--0::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: -100%;
+  opacity: 0.8;
+  box-sizing: border-box;
+  background-image: radial-gradient(
+    circle at 0% center,
+    #00008e,
+    #00008e 50%,
+    #00d4ff 70%,
+    #ffffff 75%,
+    #00008e 75%
+  );
+  background-size: 16px 20px;
+  animation: 1s linear infinite reverser-right;
+}
+
+@keyframes reverser-right {
+  0% {
+    translate: -33.3% 0px;
+  }
+  100% {
+    translate: 33.3% 0px;
+  }
+}
+
+.level__block--0.level__block--left::before {
+  background-image: radial-gradient(
+    circle at 100% center,
+    #00008e,
+    #00008e 50%,
+    #00d4ff 70%,
+    #ffffff 75%,
+    #00008e 75%
+  );
+  animation: 1s linear infinite reverser-left;
+}
+
+@keyframes reverser-left {
+  0% {
+    translate: 33.3% 0px;
+  }
+  100% {
+    translate: -33.3% 0px;
+  }
 }
 
 /* Jumper */
 .level__block--1 {
-  background: blue;
+  background: center / 64px 16px url("jumper.png");
 }
 
 /* Spikes */
@@ -49,7 +102,37 @@
 
 /* Walljump */
 .level__block--4 {
-  background: magenta;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.level__block--4::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  opacity: 0.8;
+  background-image: radial-gradient(
+    circle at center 0%,
+    orange,
+    orange 50%,
+    #ffffff 75%,
+    orange 75%
+  );
+  background-size: 16px 20px;
+  animation: 1s linear infinite reverser-down;
+}
+
+@keyframes reverser-down {
+  0% {
+    translate: 0 -10px;
+  }
+  100% {
+    translate: 0 10px;
+  }
 }
 
 .level__player {

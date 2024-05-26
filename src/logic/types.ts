@@ -32,6 +32,7 @@ export enum BlockType {
 
 export interface IRectangle extends IPosition {
   details?: { x: number; detail: number }[];
+  direction?: "left" | "right";
   width: number;
   height: number;
   type?: BlockType;
