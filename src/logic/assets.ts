@@ -25,7 +25,7 @@ import detail11 from "../assets/11.png";
 import detail12 from "../assets/12.png";
 import detail13 from "../assets/13.png";
 import PanelDead from "../assets/PanelDead.png";
-import PanelExcalamation from "../assets/PanelExcalamation.png";
+import PanelExclamation from "../assets/PanelExclamation.png";
 import PanelLeft from "../assets/PanelLeft.png";
 import PanelLeftDown from "../assets/PanelLeftDown.png";
 import PanelLeftUp from "../assets/PanelLeftUp.png";
@@ -78,8 +78,8 @@ export const allDetails: IDetail[] = [
   { src: detail11, width: 1, height: 1, offset: 12 },
   { src: detail12, width: 5, height: 6, offset: 22 },
   { src: detail13, width: 5, height: 7, offset: 22 },
-  { src: PanelDead, width: 2, height: 2, offset: 2 },
-  { src: PanelExcalamation, width: 2, height: 2, offset: 2 },
+  { src: PanelDead, width: 2, height: 2, offset: 2 }, // 13
+  { src: PanelExclamation, width: 2, height: 2, offset: 2 }, // 14
   { src: PanelLeft, width: 2, height: 2, offset: 2 }, // 15
   { src: PanelLeftDown, width: 2, height: 2, offset: 2 }, // 16
   { src: PanelLeftUp, width: 2, height: 2, offset: 2 }, // 17

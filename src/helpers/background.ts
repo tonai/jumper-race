@@ -36,7 +36,11 @@ export function getBackground(level: ILevel) {
     if (type === undefined) {
       for (let i = x / assetSize; i < (x + width) / assetSize; i++) {
         for (let j = y / assetSize; j < (y + height) / assetSize; j++) {
-          table[i][j] = block;
+          try {
+            table[i][j] = block;
+          } catch(_) {
+            console.error('error with block', block)
+          }
         }
       }
     }
