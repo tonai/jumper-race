@@ -1,14 +1,14 @@
 .scores {
   position: absolute;
-  top: 8%;
-  bottom: 8%;
-  left: 8%;
-  right: 8%;
+  inset: 0;
 }
 
 .scores__list {
   position: absolute;
-  inset: 0;
+  top: 8%;
+  bottom: 8%;
+  left: 8%;
+  right: 8%;
   background: rgba(0, 0, 0, 0.8);
   scale: 0;
   animation: 1s ease-in forwards scaleup;
@@ -93,7 +93,7 @@
 .scores__button {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 8%;
   z-index: 3;
   translate: 50% -50%;
   width: 3rem;

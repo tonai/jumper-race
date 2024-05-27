@@ -1,6 +1,7 @@
 .timer {
   position: absolute;
-  bottom: 0;
+  bottom: 2vw;
   pointer-events: none;
   font-size: 4vw;
+  text-shadow: 0 0 4px black;
 }

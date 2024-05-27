@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { World } from "@dimforge/rapier2d-compat";
 
 import { useBounds } from "../../hooks/useBounds";
@@ -60,6 +60,28 @@ export default function Game(props: IGameProps) {
     z: 0,
   });
 
+  const restart = useCallback((time: number) => {
+    // Reset player position...etc.
+    playerRef.current?.classList.remove("level__player--reverse");
+    player.current = {
+      ...start,
+      speed: playerSpeed,
+      grounded: true,
+      wallJump: false,
+    };
+    playerPhysics.current?.rigidBody.setTranslation(
+      {
+        x: (start.x + playerWidth / 2) / physicsRatio,
+        y: (start.y + playerHeight / 2) / physicsRatio,
+      },
+      true
+    );
+    setPosition({ ...start, z: 0 });
+    setPlay(false);
+    setCountdown(countdownDurationSeconds);
+    startCountdown.current = time;
+  }, [start])
+
   useEffect(() => {
     const audio = sounds.music;
     audio.loop = true;
@@ -85,7 +107,7 @@ export default function Game(props: IGameProps) {
       const interval = setInterval(() => {
         if (world.current && playerPhysics.current) {
           const time = Rune.gameTime();
-          const [nextPosition, restart] = getPlayerPosition(
+          const [nextPosition, shouldRestart] = getPlayerPosition(
             rapier,
             level,
             yourPlayerId,
@@ -100,33 +122,15 @@ export default function Game(props: IGameProps) {
             jumpVelocity
           );
           setPosition(nextPosition);
-          if (restart) {
-            // Reset player position...etc.
-            playerRef.current?.classList.remove("level__player--reverse");
-            player.current = {
-              ...start,
-              speed: playerSpeed,
-              grounded: true,
-              wallJump: false,
-            };
-            playerPhysics.current.rigidBody.setTranslation(
-              {
-                x: (start.x + playerWidth / 2) / physicsRatio,
-                y: (start.y + playerHeight / 2) / physicsRatio,
-              },
-              true
-            );
-            setPosition({ ...start, z: 0 });
-            setPlay(false);
-            setCountdown(countdownDurationSeconds);
-            startCountdown.current = time;
+          if (shouldRestart) {
+            restart(time);
           }
           lastTime.current = time;
         }
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);
     }
-  }, [game.stage, level, play, rapier, start, yourPlayerId]);
+  }, [game.stage, level, play, rapier, restart, yourPlayerId]);
 
   useEffect(() => {
     if (countdown) {
@@ -168,10 +172,13 @@ export default function Game(props: IGameProps) {
     jump.current = false;
   }
 
+  function handleRestart() {
+    restart(Rune.gameTime());
+  }
+
   return (
-    <>
-      <div
-        className="game"
+    <div className="game">
+      <div className="game__level"
         onMouseDown={startJump}
         onMouseUp={endJump}
         onTouchStart={startJump}
@@ -188,6 +195,7 @@ export default function Game(props: IGameProps) {
         />
       </div>
       {countdown > 0 && <Countdown countdownTimer={countdown} />}
-    </>
+      <button className="game__restart" onClick={handleRestart}><div className="game__arrow">↺</div></button>
+    </div>
   );
 }

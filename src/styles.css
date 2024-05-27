@@ -166,3 +166,21 @@ button {
     scale: 0.9;
   }
 }
+
+@keyframes slide-up {
+  0% {
+    translate: 0 200%;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: -360deg;
+  }
+}
