@@ -21,6 +21,21 @@ export function updatePlaying(game: GameState) {
         score[level.id].rank = i + 1;
         score[level.id].points = scores.length - i;
       });
+      if (game.levelIndex === levels.length - 1) {
+        const totals = Object.fromEntries(
+          Object.entries(game.scores).map(([playerId, score]) => [
+            playerId,
+            Object.entries(score).reduce(
+              (acc, [, score]) => acc + (score.points ?? 0),
+              0,
+            ),
+          ]),
+        );
+        Rune.gameOver({
+          delayPopUp: true,
+          players: totals,
+        });
+      }
     }
   } else {
     game.timer = Math.floor(timePassed);
