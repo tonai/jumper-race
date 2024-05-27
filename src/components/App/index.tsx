@@ -10,6 +10,7 @@ import Scores from "../Scores/index.tsx";
 import Game from "../Game/index.tsx";
 import { loadImage } from "../../helpers/image.ts";
 import { allDetails, tiles } from "../../logic/assets.ts";
+import Help from "../Help/index.tsx";
 
 function App() {
   const [game, setGame] = useState<GameState>();
@@ -54,6 +55,7 @@ function App() {
     <>
       <Players game={game} yourPlayerId={yourPlayerId} />
       {game.stage === "gettingReady" && <Start />}
+      {game.stage === "gettingReady" && <Help />}
       {game.stage !== "gettingReady" && (
         <Game
           key={game.levelIndex}

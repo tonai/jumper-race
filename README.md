@@ -2,8 +2,8 @@
 
 This is the repository for the Open Source "Jumper race" Rune game.
 
-This game was made using Rune.
+This game was made using [Rune](https://www.rune.ai/).
 
-It was developed During the React Jam Spring 2014.
+It was developed During the [React Jam Spring 2014](https://reactjam.com/).
 
-You can play it here or on the Rune app.
+You can play it on the Rune app.

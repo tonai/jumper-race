@@ -17,6 +17,7 @@
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #6c2994;
   line-height: 10vw;
+  margin: 0;
 }
 
 .start__title--squish {

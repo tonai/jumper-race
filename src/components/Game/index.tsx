@@ -60,27 +60,30 @@ export default function Game(props: IGameProps) {
     z: 0,
   });
 
-  const restart = useCallback((time: number) => {
-    // Reset player position...etc.
-    playerRef.current?.classList.remove("level__player--reverse");
-    player.current = {
-      ...start,
-      speed: playerSpeed,
-      grounded: true,
-      wallJump: false,
-    };
-    playerPhysics.current?.rigidBody.setTranslation(
-      {
-        x: (start.x + playerWidth / 2) / physicsRatio,
-        y: (start.y + playerHeight / 2) / physicsRatio,
-      },
-      true
-    );
-    setPosition({ ...start, z: 0 });
-    setPlay(false);
-    setCountdown(countdownDurationSeconds);
-    startCountdown.current = time;
-  }, [start])
+  const restart = useCallback(
+    (time: number) => {
+      // Reset player position...etc.
+      playerRef.current?.classList.remove("level__player--reverse");
+      player.current = {
+        ...start,
+        speed: playerSpeed,
+        grounded: true,
+        wallJump: false,
+      };
+      playerPhysics.current?.rigidBody.setTranslation(
+        {
+          x: (start.x + playerWidth / 2) / physicsRatio,
+          y: (start.y + playerHeight / 2) / physicsRatio,
+        },
+        true,
+      );
+      setPosition({ ...start, z: 0 });
+      setPlay(false);
+      setCountdown(countdownDurationSeconds);
+      startCountdown.current = time;
+    },
+    [start],
+  );
 
   useEffect(() => {
     const audio = sounds.music;
@@ -119,7 +122,7 @@ export default function Game(props: IGameProps) {
             playerPhysics.current,
             playerRef.current,
             jump,
-            jumpVelocity
+            jumpVelocity,
           );
           setPosition(nextPosition);
           if (shouldRestart) {
@@ -178,7 +181,8 @@ export default function Game(props: IGameProps) {
 
   return (
     <div className="game">
-      <div className="game__level"
+      <div
+        className="game__level"
         onMouseDown={startJump}
         onMouseUp={endJump}
         onTouchStart={startJump}
@@ -195,7 +199,9 @@ export default function Game(props: IGameProps) {
         />
       </div>
       {countdown > 0 && <Countdown countdownTimer={countdown} />}
-      <button className="game__restart" onClick={handleRestart}><div className="game__arrow">↺</div></button>
+      <button className="game__restart" onClick={handleRestart} type="button">
+        <div className="game__arrow">↺</div>
+      </button>
     </div>
   );
 }

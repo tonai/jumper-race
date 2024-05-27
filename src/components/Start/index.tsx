@@ -18,14 +18,14 @@ export default function Start() {
 
   return (
     <div className="start">
-      <div
+      <h1
         className={classNames("start__title", {
           "start__title--squish": squish,
         })}
         onClick={handleSquish}
       >
         Jumper racer
-      </div>
+      </h1>
       <button
         className="start__button"
         type="button"

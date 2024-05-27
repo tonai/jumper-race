@@ -6,12 +6,15 @@ html {
   color: #e6e6e6;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  overflow: hidden;
 }
 
 main {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
+  overflow: hidden;
   align-items: center;
   justify-content: space-around;
   background: center / cover no-repeat url("/background01.png");
@@ -182,5 +185,17 @@ button {
   }
   100% {
     rotate: -360deg;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    scale: 0.8;
+  }
+  50% {
+    scale: 1.2;
+  }
+  100% {
+    scale: 0.8;
   }
 }
