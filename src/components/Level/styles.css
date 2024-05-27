@@ -9,13 +9,15 @@
 
 .level {
   position: absolute;
-  animation: 1.5s ease-in both opening-translate,
-    0.2s ease-in both opening-opacity;
-  opacity: 0;
+  transition: 1.5s ease-in scale;
 }
 
 .level__map {
   position: absolute;
+}
+
+.level__map--init {
+  transition: 1.5s ease-out translate;
 }
 
 .level__background {

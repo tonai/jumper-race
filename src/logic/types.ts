@@ -66,12 +66,14 @@ export interface IScore {
   rank?: number;
 }
 
+export type Stage = "gettingReady" | "countdown" | "playing" | "endOfRound";
+
 export interface GameState {
   countdownTimer: number;
   levelIndex: number;
   playerIds: PlayerId[];
   scores?: Record<string, Record<number, IScore>>;
-  stage: "gettingReady" | "countdown" | "playing" | "endOfRound";
+  stage: Stage;
   timer: number;
   timerStartedAt: number;
   world?: World;

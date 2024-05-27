@@ -1,4 +1,4 @@
-import { MutableRefObject, memo, useMemo } from "react";
+import { MutableRefObject, memo, useEffect, useMemo, useState } from "react";
 
 import {
   assetSize,
@@ -6,31 +6,42 @@ import {
   playerHeight,
   playerWidth,
 } from "../../logic/config";
-import { ILevel } from "../../logic/types";
+import { ILevel, Stage } from "../../logic/types";
 import classNames from "classnames";
 import { getBackground } from "../../helpers/background";
 
 import "./styles.css";
 
 interface ILevelProps {
-  bounds?: DOMRect;
+  bounds: DOMRect;
   level: ILevel;
   playerRef: MutableRefObject<HTMLDivElement | null>;
+  stage: Stage;
   x: number;
   y: number;
   z: number;
 }
 
 function Level(props: ILevelProps) {
-  const { bounds, level, playerRef, x, y, z } = props;
-  const { width, height, blocks } = level;
+  const { bounds, level, playerRef, stage, x, y, z } = props;
+  const { blocks } = level;
+  const width = level.width + 4 * assetSize;
+  const height = level.height + 4 * assetSize;
+  const left = (bounds.width - width) / 2;
+  const top = (bounds.height - height) / 2;
   const translate = `${
-    (bounds?.width ?? 0) / 2 - x - playerWidth / 2 - 2 * assetSize
-  }px ${(bounds?.height ?? 0) / 2 - y - playerHeight / 2 - 2 * assetSize}px`;
+    level.width / 2 - x - playerWidth / 2
+  }px ${level.height / 2 - y - playerHeight / 2}px`;
   const parallaxTranslate = `${
-    (bounds?.width ?? 0) / 2 - x / parallax - playerWidth / 2 - 2 * assetSize
+    - x / parallax - playerWidth / 2 - 2 * assetSize
   }px 0px`;
   const background = useMemo(() => getBackground(level), [level]);
+  const scale = Math.min(bounds.width / width, bounds.height / height);
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setInit(true), 500);
+  }, []);
 
   return (
     <>
@@ -43,16 +54,19 @@ function Level(props: ILevelProps) {
       <div
         className="level"
         style={{
-          width: width + 4 * assetSize,
-          height: height + 4 * assetSize,
+          scale: init ? '1 1' : `${scale} ${scale}`,
+          width,
+          height,
+          left,
+          top,
         }}
       >
         <div
-          className="level__map"
+          className={classNames("level__map", { 'level__map--init': stage === 'countdown' })}
           style={{
-            width: width + 4 * assetSize,
-            height: height + 4 * assetSize,
-            translate,
+            width,
+            height,
+            translate: init ? translate: '0 0',
           }}
         >
           {blocks
@@ -76,8 +90,8 @@ function Level(props: ILevelProps) {
             className="level__background"
             style={{
               background,
-              width: width + 4 * assetSize,
-              height: height + 4 * assetSize,
+              width,
+              height,
             }}
           />
           {blocks

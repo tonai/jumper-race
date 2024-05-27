@@ -3,6 +3,7 @@ import type { World } from "@dimforge/rapier2d-compat";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
+  assetSize,
   countdownDurationSeconds,
   jumpForce,
   levels,
@@ -189,14 +190,17 @@ export default function Game(props: IGameProps) {
         onTouchEnd={endJump}
         ref={ref}
       >
-        <Level
-          bounds={bounds}
-          level={level}
-          playerRef={playerRef}
-          x={position.x}
-          y={position.y}
-          z={position.z}
-        />
+        {bounds && (
+          <Level
+            bounds={bounds}
+            level={level}
+            playerRef={playerRef}
+            stage={game.stage}
+            x={position.x}
+            y={position.y}
+            z={position.z}
+          />
+        )}
       </div>
       {countdown > 0 && <Countdown countdownTimer={countdown} />}
       <button className="game__restart" onClick={handleRestart} type="button">
