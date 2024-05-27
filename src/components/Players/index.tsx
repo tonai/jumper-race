@@ -16,10 +16,11 @@ export default function Players(props: IPlayersProps) {
   const { levelIndex, playerIds, scores } = game;
   const level = levels[levelIndex];
 
+  // 2vw
   return (
     <div
       className="players"
-      style={{ fontSize: `${(12 - playerIds.length) / 10}em` }}
+      style={{ fontSize: `${3 - 0.2 * playerIds.length}vw` }}
     >
       <ul className="players__list">
         {playerIds.map((playerId) => {

@@ -10,9 +10,10 @@
 .players__list {
   display: flex;
   margin: 0;
-  padding: 5px;
+  padding: 0.5em 0;
   list-style-type: none;
-  height: 50px;
+  max-height: 23vh;
+  box-sizing: border-box;
 }
 
 .players__player {

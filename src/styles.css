@@ -14,5 +14,155 @@ main {
   height: 100vh;
   align-items: center;
   justify-content: space-around;
-  background: center / contain no-repeat url("/background01.png");
+  background: center / cover no-repeat url("/background01.png");
+}
+
+button {
+  cursor: pointer;
+}
+
+@keyframes opening-translate {
+  0% {
+    translate: 0 100%;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes opening-opacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes reverser-right {
+  0% {
+    translate: -33.3% 0px;
+  }
+  100% {
+    translate: 33.3% 0px;
+  }
+}
+
+@keyframes reverser-left {
+  0% {
+    translate: 33.3% 0px;
+  }
+  100% {
+    translate: -33.3% 0px;
+  }
+}
+
+@keyframes wall-jump {
+  0% {
+    translate: 0 -10px;
+  }
+  100% {
+    translate: 0 10px;
+  }
+}
+
+@keyframes squish {
+  0% {
+    scale: 1 1;
+  }
+  10% {
+    scale: 1 0.5;
+  }
+  50% {
+    scale: 0.8 1.2;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes jump {
+  0% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -20vh;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes scaleup {
+  from {
+    scale: 0;
+  }
+  to {
+    scale: 1;
+  }
+}
+
+@keyframes movedown {
+  0% {
+    translate: 0 -100%;
+    opacity: 0;
+    scale: 1;
+  }
+  25% {
+    translate: 0 0;
+    opacity: 1;
+    scale: 1;
+  }
+  75% {
+    translate: 0 0;
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    translate: -100% 0;
+    opacity: 1;
+    scale: 0;
+  }
+}
+
+@keyframes disapear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 5;
+  }
+}
+
+@keyframes scale {
+  0% {
+    scale: 0;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes slide {
+  0% {
+    translate: -0.2em -50%;
+    scale: 0.9;
+  }
+  10% {
+    translate: 0.2em -50%;
+    scale: 1.1;
+  }
+  100% {
+    translate: -0.2em -50%;
+    scale: 0.9;
+  }
 }

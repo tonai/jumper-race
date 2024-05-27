@@ -24,15 +24,6 @@
   border: 2px solid black;
 }
 
-@keyframes scaleup {
-  from {
-    scale: 0;
-  }
-  to {
-    scale: 1;
-  }
-}
-
 .scores__player {
   flex: 1;
   margin: 0;
@@ -99,47 +90,6 @@
   animation: 0.5s ease-in 4s both appear;
 }
 
-@keyframes movedown {
-  0% {
-    translate: 0 -100%;
-    opacity: 0;
-    scale: 1;
-  }
-  25% {
-    translate: 0 0;
-    opacity: 1;
-    scale: 1;
-  }
-  75% {
-    translate: 0 0;
-    opacity: 1;
-    scale: 1;
-  }
-  100% {
-    translate: -100% 0;
-    opacity: 1;
-    scale: 0;
-  }
-}
-
-@keyframes disapear {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes appear {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 5;
-  }
-}
-
 .scores__button {
   position: absolute;
   top: 50%;
@@ -164,15 +114,6 @@
   animation: 1s ease-in 5s forwards scale;
 }
 
-@keyframes scale {
-  0% {
-    scale: 0;
-  }
-  100% {
-    scale: 1;
-  }
-}
-
 .scores__arrow {
   width: 0;
   height: 0;
@@ -180,19 +121,6 @@
   border-style: solid;
   border-color: transparent transparent transparent white;
   animation: 1s ease-in infinite slide;
-}
-
-@keyframes slide {
-  0% {
-    translate: -0.2em;
-    scale: 0.9;
-  }
-  10% {
-    translate: 0.2em;
-    scale: 1.1;
-  }
-  100% {
-    translate: -0.2em;
-    scale: 0.9;
-  }
+  position: absolute;
+  top: 50%;
 }

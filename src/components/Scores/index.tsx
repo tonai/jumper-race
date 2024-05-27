@@ -25,9 +25,9 @@ export default function Scores(props: IScores) {
           Object.entries(score)
             .filter(([id]) => Number(id) !== level.id)
             .reduce((acc, [, score]) => acc + (score.points ?? 0), 0),
-        ])
+        ]),
       ),
-    [level.id, scores]
+    [level.id, scores],
   );
   const players = useMemo(
     () =>
@@ -36,7 +36,7 @@ export default function Scores(props: IScores) {
         const totalB = totals?.[b];
         return (totalB ?? 0) - (totalA ?? 0);
       }),
-    [playerIds, totals]
+    [playerIds, totals],
   );
   const [finalTotals, setFinalTotal] = useState<string[] | null>(null);
   const sortedTotals = useMemo(
@@ -46,24 +46,25 @@ export default function Scores(props: IScores) {
           .map(
             ([playerId, total]) =>
               total +
-              (finalTotals ? scores?.[playerId][level.id].points ?? 0 : 0)
+              (finalTotals ? scores?.[playerId][level.id].points ?? 0 : 0),
           )
-          .sort((a, b) => b - a)
+          .sort((a, b) => b - a),
       ),
     ],
-    [finalTotals, level.id, scores, totals]
+    [finalTotals, level.id, scores, totals],
   );
   const ranks = useMemo(
     () =>
       Object.fromEntries(
         Object.entries(totals).map(([playerId, total]) => {
           const i = sortedTotals.indexOf(
-            total + (finalTotals ? scores?.[playerId][level.id].points ?? 0 : 0)
+            total +
+              (finalTotals ? scores?.[playerId][level.id].points ?? 0 : 0),
           );
           return [playerId, i + 1];
-        })
+        }),
       ),
-    [finalTotals, level.id, scores, sortedTotals, totals]
+    [finalTotals, level.id, scores, sortedTotals, totals],
   );
 
   useEffect(() => {
@@ -73,7 +74,7 @@ export default function Scores(props: IScores) {
           const totalA = totals?.[a] + (scores?.[a][level.id].points ?? 0);
           const totalB = totals?.[b] + (scores?.[b][level.id].points ?? 0);
           return (totalB ?? 0) - (totalA ?? 0);
-        })
+        }),
       );
     }, 5000);
   }, [level.id, playerIds, scores, totals]);
@@ -94,10 +95,10 @@ export default function Scores(props: IScores) {
           let translate = "0px 0px";
           if (finalTotals && ref.current) {
             const index = finalTotals.indexOf(playerId);
-            const prevOffset = (ref.current.childNodes[i] as HTMLLIElement)
-              .offsetTop;
-            const newOffset = (ref.current.childNodes[index] as HTMLLIElement)
-              .offsetTop;
+            const prevOffset =
+              (ref.current.childNodes[i] as HTMLLIElement)?.offsetTop ?? 0;
+            const newOffset =
+              (ref.current.childNodes[index] as HTMLLIElement)?.offsetTop ?? 0;
             translate = `0px ${newOffset - prevOffset}px`;
           }
 

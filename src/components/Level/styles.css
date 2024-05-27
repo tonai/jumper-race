@@ -4,7 +4,7 @@
   bottom: 0;
   left: -100%;
   width: 300%;
-  background: center / contain repeat url("/background02.png");
+  background: center / cover repeat url("/background02.png");
 }
 
 .level {
@@ -12,24 +12,6 @@
   animation: 1.5s ease-in both opening-translate,
     0.2s ease-in both opening-opacity;
   opacity: 0;
-}
-
-@keyframes opening-translate {
-  0% {
-    translate: 0 100%;
-  }
-  100% {
-    translate: 0 0;
-  }
-}
-
-@keyframes opening-opacity {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 .level__map {
@@ -73,15 +55,6 @@
   animation: 1s linear infinite reverser-right;
 }
 
-@keyframes reverser-right {
-  0% {
-    translate: -33.3% 0px;
-  }
-  100% {
-    translate: 33.3% 0px;
-  }
-}
-
 .level__block--0.level__block--left::before {
   background-image: radial-gradient(
     circle at 100% center,
@@ -92,15 +65,6 @@
     #00008e 75%
   );
   animation: 1s linear infinite reverser-left;
-}
-
-@keyframes reverser-left {
-  0% {
-    translate: 33.3% 0px;
-  }
-  100% {
-    translate: -33.3% 0px;
-  }
 }
 
 /* Jumper */
@@ -141,18 +105,10 @@
     orange 75%
   );
   background-size: 16px 20px;
-  animation: 1s linear infinite reverser-down;
+  animation: 1s linear infinite wall-jump;
 }
 
-@keyframes reverser-down {
-  0% {
-    translate: 0 -10px;
-  }
-  100% {
-    translate: 0 10px;
-  }
-}
-
+/* Player */
 .level__player {
   position: absolute;
   background: #b442df;
@@ -194,20 +150,5 @@
 }
 
 .level__player--jump {
-  animation: 0.5s ease-in jump;
-}
-
-@keyframes jump {
-  0% {
-    scale: 1 1;
-  }
-  10% {
-    scale: 1 0.5;
-  }
-  50% {
-    scale: 0.8 1.2;
-  }
-  100% {
-    scale: 1 1;
-  }
+  animation: 0.5s ease-in squish;
 }
