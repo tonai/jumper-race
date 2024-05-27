@@ -16,7 +16,7 @@ export const randomChance = 7;
 
 export const levels: ILevel[] = [
   {
-    id: 1,
+    id: '1',
     width: 1536,
     height: 320,
     start: { x: 16, y: 256 - playerHeight },
@@ -68,7 +68,7 @@ export const levels: ILevel[] = [
     totalTime: 90,
   },
   {
-    id: 2,
+    id: '2',
     width: 1600,
     height: 448,
     start: { x: 16, y: 416 - playerHeight },
@@ -129,7 +129,7 @@ export const levels: ILevel[] = [
     totalTime: 90,
   },
   {
-    id: 3,
+    id: '3',
     width: 896,
     height: 1280,
     start: { x: 16, y: 1184 - playerHeight },
@@ -220,7 +220,7 @@ export const levels: ILevel[] = [
     totalTime: 90,
   },
   {
-    id: 4,
+    id: '4',
     width: 1600,
     height: 640,
     start: { x: 16, y: 576 - playerHeight },

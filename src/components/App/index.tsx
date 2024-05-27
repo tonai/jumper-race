@@ -11,22 +11,14 @@ import Game from "../Game/index.tsx";
 import { loadImage } from "../../helpers/image.ts";
 import { allDetails, tiles } from "../../logic/assets.ts";
 import Help from "../Help/index.tsx";
+import Race from "../Races/index.tsx";
 
 function App() {
   const [game, setGame] = useState<GameState>();
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
   const [rapier, setRapier] =
     useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
-    const [init, setInit] = useState(false);
-
-  useEffect(() => {
-    Rune.initClient({
-      onChange: ({ game, yourPlayerId }) => {
-        setGame(game);
-        setYourPlayerId(yourPlayerId);
-      },
-    });
-  }, []);
+  const [init, setInit] = useState(false);
 
   useEffect(() => {
     import("@dimforge/rapier2d-compat").then((module) => {
@@ -36,15 +28,28 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const images = tiles.concat(allDetails.map(detail => detail.src));
+    const images = tiles.concat(allDetails.map((detail) => detail.src));
     const promises = images.map(loadImage);
-    Promise.allSettled(promises.concat([
-      loadImage('/background02.png'),
-      loadImage('/end.png'),
-      loadImage('/jumper.png'),
-      loadImage('/spikes.png'),
-    ])).then(() => setInit(true));
-  }, [])
+    Promise.allSettled(
+      promises.concat([
+        loadImage("/background02.png"),
+        loadImage("/end.png"),
+        loadImage("/jumper.png"),
+        loadImage("/spikes.png"),
+      ]),
+    ).then(() => setInit(true));
+  }, []);
+
+  useEffect(() => {
+    if (init && rapier) {
+      Rune.initClient({
+        onChange: ({ game, yourPlayerId }) => {
+          setGame(game);
+          setYourPlayerId(yourPlayerId);
+        },
+      });
+    }
+  }, [init, rapier]);
 
   if (!game || !yourPlayerId || !rapier || !init) {
     // Rune only shows your game after an onChange() so no need for loading screen
@@ -56,7 +61,15 @@ function App() {
       <Players game={game} yourPlayerId={yourPlayerId} />
       {game.stage === "gettingReady" && <Start />}
       {game.stage === "gettingReady" && <Help />}
-      {game.stage !== "gettingReady" && (
+      {game.stage === "raceSelect" && (
+        <Race
+          mode={game.mode}
+          playerIds={game.playerIds}
+          votes={game.raceVotes}
+          yourPlayerId={yourPlayerId}
+        />
+      )}
+      {game.stage !== "gettingReady" && game.stage !== "raceSelect" && (
         <Game
           key={game.levelIndex}
           game={game}

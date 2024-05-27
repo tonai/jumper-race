@@ -1,0 +1,88 @@
+.race {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  transition: scale 200ms ease-in, opacity 200ms ease-in;
+}
+
+.race--selected {
+  scale: 1.2;
+}
+
+.race--discard {
+  opacity: 0.7;
+  scale: 0.8;
+}
+
+.race__button {
+  font-size: 4vw;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  position: relative;
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.race--selected .race__button:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: white;
+  border-radius: 0.5rem;
+}
+
+.race__button-label {
+  padding: 0 1em;
+  border-radius: 0.5rem;
+  background: #b442df;
+  border: 3px solid #6c2994;
+  color: white;
+}
+
+.race--selected .race__button-label {
+  animation: 1.5s linear both blink;
+}
+
+.race__player {
+  margin-left: 0.5em;
+  max-width: 1.5em;
+  max-height: 1.5em;
+  position: absolute;
+  right: 0;
+  animation: 0.2s ease-in both slide-down;
+}
+
+.race__player:nth-child(3) {
+  right: -2em;
+}
+
+.race__player:nth-child(4) {
+  right: -4em;
+}
+
+.race__player:nth-child(5) {
+  right: -6em;
+}
+
+.race__player:nth-child(6) {
+  right: -8em;
+}
+
+.race__player:nth-child(7) {
+  right: -10em;
+}
+
+.race__player:nth-child(8) {
+  right: -12em;
+}

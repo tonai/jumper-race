@@ -52,7 +52,7 @@ export interface IPlayerPhysics {
 }
 
 export interface ILevel {
-  id: number;
+  id: string;
   width: number;
   height: number;
   start: IPosition;
@@ -66,13 +66,15 @@ export interface IScore {
   rank?: number;
 }
 
-export type Stage = "gettingReady" | "countdown" | "playing" | "endOfRound";
+export type Stage = "gettingReady" | "raceSelect" | "countdown" | "playing" | "endOfRound";
 
 export interface GameState {
   countdownTimer: number;
   levelIndex: number;
+  mode: string,
   playerIds: PlayerId[];
-  scores?: Record<string, Record<number, IScore>>;
+  raceVotes: Record<string, string>;
+  scores?: Record<string, Record<string, IScore>>;
   stage: Stage;
   timer: number;
   timerStartedAt: number;
@@ -84,10 +86,17 @@ export interface ISendTimeData {
   playerId: string;
 }
 
+export interface IVoteRaceData {
+  race: string;
+  playerId: string;
+}
+
 export type GameActions = {
   nextRound: () => void;
   sendTime: (data: ISendTimeData) => void;
   setReady: () => void;
+  startRace: () => void
+  voteRace: (data: IVoteRaceData) => void;
 };
 
 declare module "@dimforge/rapier2d-compat" {

@@ -21,7 +21,7 @@ export function updatePlaying(game: GameState) {
         score[level.id].rank = i + 1;
         score[level.id].points = scores.length - i;
       });
-      if (game.levelIndex === levels.length - 1) {
+      if (game.mode !== 'championship' || game.levelIndex === levels.length - 1) {
         const totals = Object.fromEntries(
           Object.entries(game.scores).map(([playerId, score]) => [
             playerId,

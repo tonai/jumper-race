@@ -23,7 +23,7 @@ export default function Scores(props: IScores) {
         Object.entries(scores ?? {}).map(([playerId, score]) => [
           playerId,
           Object.entries(score)
-            .filter(([id]) => Number(id) !== level.id)
+            .filter(([id]) => id !== level.id)
             .reduce((acc, [, score]) => acc + (score.points ?? 0), 0),
         ]),
       ),
@@ -151,7 +151,7 @@ export default function Scores(props: IScores) {
           );
         })}
       </ul>
-      {levelIndex < levels.length - 1 && (
+      {levelIndex < levels.length - 1 && game.mode === 'championship' && (
         <button
           className="scores__button"
           onClick={() => Rune.actions.nextRound()}
