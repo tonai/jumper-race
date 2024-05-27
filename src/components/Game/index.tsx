@@ -3,7 +3,6 @@ import type { World } from "@dimforge/rapier2d-compat";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
-  assetSize,
   countdownDurationSeconds,
   jumpForce,
   levels,

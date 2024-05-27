@@ -14,6 +14,8 @@ export const assetSize = 32;
 export const parallax = 8;
 export const randomChance = 7;
 
+const totalTime = 90;
+
 export const levels: ILevel[] = [
   {
     id: '1',
@@ -65,7 +67,7 @@ export const levels: ILevel[] = [
       },
       { x: 1120, width: 32, y: 192, height: 64, type: BlockType.End },
     ],
-    totalTime: 90,
+    totalTime,
   },
   {
     id: '2',
@@ -126,7 +128,7 @@ export const levels: ILevel[] = [
       },
       { x: 1536, width: 32, y: 96, height: 64, type: BlockType.End },
     ],
-    totalTime: 90,
+    totalTime,
   },
   {
     id: '3',
@@ -217,7 +219,7 @@ export const levels: ILevel[] = [
       },
       { x: 304, width: 32, y: 0, height: 64, type: BlockType.End },
     ],
-    totalTime: 90,
+    totalTime,
   },
   {
     id: '4',
@@ -333,6 +335,6 @@ export const levels: ILevel[] = [
       },
       { x: 1296, width: 32, y: 128-64, height: 64, type: BlockType.End },
     ],
-    totalTime: 90,
+    totalTime,
   },
 ];

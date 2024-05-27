@@ -40,7 +40,8 @@ function Level(props: ILevelProps) {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setInit(true), 500);
+    const timeout = setTimeout(() => setInit(true), 500);
+    return () => clearTimeout(timeout);
   }, []);
 
   return (

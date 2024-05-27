@@ -68,7 +68,7 @@ export default function Scores(props: IScores) {
   );
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setFinalTotal(
         playerIds.slice().sort((a, b) => {
           const totalA = totals?.[a] + (scores?.[a][level.id].points ?? 0);
@@ -77,7 +77,15 @@ export default function Scores(props: IScores) {
         }),
       );
     }, 5000);
+    return () => clearTimeout(timeout);
   }, [level.id, playerIds, scores, totals]);
+
+  useEffect(() => {
+    if (finalTotals) {
+      const timeout = setTimeout(() => Rune.showGameOverPopUp(), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [finalTotals])
 
   return (
     <div className="scores">

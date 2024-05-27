@@ -18,7 +18,8 @@ export default function Races(props: IRacesProps) {
 
   useEffect(() => {
     if (mode) {
-      setTimeout(() => Rune.actions.startRace(), 1000);
+      const timeout = setTimeout(() => Rune.actions.startRace(), 2000);
+      return () => clearTimeout(timeout);
     }
   }, [mode]);
 
