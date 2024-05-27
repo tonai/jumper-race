@@ -49,6 +49,21 @@ export const groundRight = tile10;
 export const groundRightTopBottom = tile11;
 export const groundRightBottom = tile12;
 
+export const tiles = [
+  tile01,
+  tile02,
+  tile03,
+  tile04,
+  tile05,
+  tile06,
+  tile07,
+  tile08,
+  tile09,
+  tile10,
+  tile11,
+  tile12,
+];
+
 export const allDetails: IDetail[] = [
   { src: detail01, width: 2, height: 2, offset: 2 },
   { src: detail02, width: 2, height: 1, offset: 2 },

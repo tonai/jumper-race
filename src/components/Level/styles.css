@@ -4,7 +4,7 @@
   bottom: 0;
   left: -100%;
   width: 300%;
-  background: center / cover repeat url("/background02.png");
+  background: center / contain repeat url("/background02.png");
 }
 
 .level {

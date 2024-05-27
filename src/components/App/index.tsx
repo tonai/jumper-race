@@ -8,12 +8,15 @@ import Countdown from "../Countdown/index.tsx";
 import Timer from "../Timer/index.tsx";
 import Scores from "../Scores/index.tsx";
 import Game from "../Game/index.tsx";
+import { loadImage } from "../../helpers/image.ts";
+import { allDetails, tiles } from "../../logic/assets.ts";
 
 function App() {
   const [game, setGame] = useState<GameState>();
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
   const [rapier, setRapier] =
     useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
+    const [init, setInit] = useState(false);
 
   useEffect(() => {
     Rune.initClient({
@@ -31,7 +34,18 @@ function App() {
     });
   }, []);
 
-  if (!game || !yourPlayerId || !rapier) {
+  useEffect(() => {
+    const images = tiles.concat(allDetails.map(detail => detail.src));
+    const promises = images.map(loadImage);
+    Promise.allSettled(promises.concat([
+      loadImage('/background02.png'),
+      loadImage('/end.png'),
+      loadImage('/jumper.png'),
+      loadImage('/spikes.png'),
+    ])).then(() => setInit(true));
+  }, [])
+
+  if (!game || !yourPlayerId || !rapier || !init) {
     // Rune only shows your game after an onChange() so no need for loading screen
     return;
   }
