@@ -47,6 +47,7 @@
   background-size: contain;
   border: 2px solid transparent;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .scores__rank--gold {
