@@ -82,8 +82,7 @@ export default function Scores(props: IScores) {
 
   useEffect(() => {
     if (finalTotals) {
-      const timeout = setTimeout(() => Rune.showGameOverPopUp(), 1000);
-      return () => clearTimeout(timeout);
+      setTimeout(() => Rune.showGameOverPopUp(), 1000);
     }
   }, [finalTotals]);
 

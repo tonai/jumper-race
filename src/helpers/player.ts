@@ -98,7 +98,7 @@ export function getPlayerPosition(
     switch (block?.type) {
       case BlockType.Reverser:
         // Reverse speed
-        player.speed = (block?.direction === "right" ? 1 : -1) * player.speed;
+        player.speed = (block?.direction === "left" ? -1 : 1) * Math.abs(player.speed);
         if (player.speed < 0) {
           playerRef?.classList.add("level__player--reverse");
         } else {
