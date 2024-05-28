@@ -1,4 +1,12 @@
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type { World } from "@dimforge/rapier2d-compat";
 
 import { useBounds } from "../../hooks/useBounds";
@@ -20,7 +28,7 @@ import {
   IPositionWithRotation,
 } from "../../logic/types";
 import { getPlayerPosition } from "../../helpers/player";
-import { initWorld } from "../../helpers/world";
+import { initGhosts, initWorld } from "../../helpers/world";
 
 import Level from "../Level";
 import Countdown from "../Countdown";
@@ -32,17 +40,20 @@ import classNames from "classnames";
 
 interface IGameProps {
   game: GameState;
+  isGhostsEnabled: boolean;
   rapier: typeof import("@dimforge/rapier2d-compat/rapier");
+  setIsGhostsEnabled: Dispatch<SetStateAction<boolean>>;
   volume: RefObject<number>;
   volumeState: number;
   yourPlayerId: string;
 }
 
 export default function Game(props: IGameProps) {
-  const { game, rapier, volume, volumeState, yourPlayerId } = props;
+  const { game, isGhostsEnabled, rapier, setIsGhostsEnabled, volume, volumeState, yourPlayerId } = props;
   const { levelIndex, scores } = game;
   const level = levels[levelIndex];
   const { start } = level;
+
   const { bounds, ref } = useBounds();
   const music = useRef<HTMLAudioElement>();
   const world = useRef<World>();
@@ -60,6 +71,9 @@ export default function Game(props: IGameProps) {
   });
   const startCountdown = useRef(0);
   const startTime = useRef(0);
+  const ghostsPhysics = useRef<Record<string, IPlayerPhysics>>({});
+  const ghosts = useRef<Record<string, IPlayer>>({});
+
   const [play, setPlay] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const [position, setPosition] = useState<IPositionWithRotation>({
@@ -69,6 +83,9 @@ export default function Game(props: IGameProps) {
   const [groundedPos, setGroundedPos] = useState<IPosition>({ ...start });
   const [raceTime, setRaceTime] = useState(0);
   const playerBest = scores?.[yourPlayerId][level.id].bestTime ?? Infinity;
+  const [ghostsPosition, setGhostsPosition] = useState<
+    Record<string, IPositionWithRotation>
+  >({});
 
   const restart = useCallback(
     (time: number) => {
@@ -95,8 +112,9 @@ export default function Game(props: IGameProps) {
       setPlay(false);
       setCountdown(playCountdownDurationSeconds);
       startCountdown.current = time;
+      Rune.actions.ghostRestart(yourPlayerId);
     },
-    [start],
+    [start, yourPlayerId],
   );
 
   useEffect(() => {
@@ -118,8 +136,23 @@ export default function Game(props: IGameProps) {
 
   useEffect(() => {
     // Init physics
-    playerPhysics.current = initWorld(rapier, level, world);
-  }, [level, rapier, start]);
+    playerPhysics.current = initWorld(rapier, level, world, yourPlayerId);
+  }, [level, rapier, start, yourPlayerId]);
+
+  useEffect(() => {
+    // Init ghosts
+    const playerIds = game.playerIds.filter((id) => id !== yourPlayerId);
+    if (world.current) {
+      ghostsPhysics.current = initGhosts(
+        rapier,
+        world.current,
+        level,
+        playerIds,
+        ghostsPhysics.current,
+        ghosts,
+      );
+    }
+  }, [game.playerIds, level, rapier, yourPlayerId]);
 
   useEffect(() => {
     if (game.stage === "playing" && play) {
@@ -131,16 +164,16 @@ export default function Game(props: IGameProps) {
           const [nextPosition, shouldRestart] = getPlayerPosition(
             rapier,
             level,
-            yourPlayerId,
             time,
             lastTime.current,
             startTime.current,
             player.current,
             world.current,
             playerPhysics.current,
-            playerRef.current,
             volume.current,
             setRaceTime,
+            playerRef.current,
+            yourPlayerId,
           );
           if (player.current.grounded && !prevGrounded) {
             playerRef.current?.classList.remove("jump");
@@ -150,12 +183,31 @@ export default function Game(props: IGameProps) {
           if (shouldRestart) {
             restart(time);
           }
+          if (isGhostsEnabled) {
+            // Ghosts
+            const positions = Object.fromEntries(
+              Object.entries(ghosts.current).map(([playerId, ghost]) => {
+                const [nextPosition] = getPlayerPosition(
+                  rapier,
+                  level,
+                  time,
+                  lastTime.current,
+                  startTime.current,
+                  ghost,
+                  world.current!,
+                  ghostsPhysics.current[playerId],
+                );
+                return [playerId, nextPosition];
+              }),
+            );
+            setGhostsPosition(positions);
+          }
           lastTime.current = time;
         }
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);
     }
-  }, [game.stage, level, play, rapier, restart, volume, yourPlayerId]);
+  }, [game.stage, isGhostsEnabled, level, play, rapier, restart, volume, yourPlayerId]);
 
   useEffect(() => {
     if (countdown) {
@@ -173,12 +225,62 @@ export default function Game(props: IGameProps) {
     }
   }, [countdown]);
 
+  useEffect(() => {
+    Object.entries(game.ghosts)
+      .filter(([playerId]) => playerId !== yourPlayerId)
+      .forEach(([playerId, data]) => {
+        const { action, speed, time, velocity } = data;
+        switch (action) {
+          case "idle":
+            ghosts.current[playerId].jumpStartTime = false;
+            return;
+          case "jump":
+            ghosts.current[playerId].jumpStartTime = time as number;
+            ghosts.current[playerId].speed = speed as number;
+            ghosts.current[playerId].jumpVelocity = velocity as number;
+            return;
+          case "restart":
+            ghosts.current[playerId] = {
+              ...start,
+              isWallJumping: false,
+              jumpStartTime: false,
+              jumpVelocity: 0,
+              speed: playerSpeed,
+              grounded: true,
+              wallJump: false,
+            };
+            ghostsPhysics.current?.[playerId].rigidBody.setTranslation(
+              {
+                x: (start.x + playerWidth / 2) / physicsRatio,
+                y: (start.y + playerHeight / 2) / physicsRatio,
+              },
+              true,
+            );
+            setGhostsPosition((ghosts) =>
+              Object.fromEntries(
+                Object.entries(ghosts).map(([id, ghost]) => [
+                  id,
+                  playerId === id ? { ...start, z: 0 } :  ghost,
+                ]),
+              ),
+            );
+            return;
+        }
+      });
+  }, [game.ghosts, start, yourPlayerId]);
+
   function startJump() {
     if (player.current.grounded) {
       player.current.jumpStartTime = Rune.gameTime();
       player.current.jumpVelocity = -jumpForce;
       playerRef.current?.classList.add("jump");
       playSound("jump", volume.current);
+      Rune.actions.ghostJumpStart({
+        playerId: yourPlayerId,
+        speed: player.current.speed,
+        time: player.current.jumpStartTime,
+        velocity: player.current.jumpVelocity,
+      });
     } else if (player.current.wallJump) {
       player.current.jumpStartTime = Rune.gameTime();
       player.current.jumpVelocity = -jumpForce;
@@ -192,15 +294,26 @@ export default function Game(props: IGameProps) {
       }
       playerRef.current?.classList.add("jump");
       playSound("walljump", volume.current);
+      Rune.actions.ghostJumpStart({
+        playerId: yourPlayerId,
+        speed: player.current.speed,
+        time: player.current.jumpStartTime,
+        velocity: player.current.jumpVelocity,
+      });
     }
   }
 
   function endJump() {
     player.current.jumpStartTime = false;
+    Rune.actions.ghostJumpEnd(yourPlayerId);
   }
 
   function handleRestart() {
     restart(Rune.gameTime());
+  }
+
+  function handleGhosts() {
+    setIsGhostsEnabled((x) => !x);
   }
 
   return (
@@ -216,6 +329,7 @@ export default function Game(props: IGameProps) {
         {bounds && (
           <Level
             bounds={bounds}
+            ghosts={isGhostsEnabled ? ghostsPosition : undefined}
             groundedPos={groundedPos}
             level={level}
             playerRef={playerRef}
@@ -226,9 +340,16 @@ export default function Game(props: IGameProps) {
           />
         )}
       </div>
-      {countdown > 0 && (
-        <Countdown countdownTimer={countdown} volume={volume} />
-      )}
+      {countdown > 0 && <Countdown countdownTimer={countdown} volume={volume} />}
+      <button
+        className={classNames("game__ghosts", {
+          "game__ghosts--enabled": isGhostsEnabled,
+        })}
+        onClick={handleGhosts}
+        type="button"
+      >
+        {isGhostsEnabled ? "✓ Disable ghosts" : "❌ Enable ghosts"}
+      </button>
       <button className="game__restart" onClick={handleRestart} type="button">
         <div className="game__arrow">↺</div>
       </button>

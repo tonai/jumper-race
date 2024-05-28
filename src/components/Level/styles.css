@@ -120,3 +120,7 @@
   box-sizing: border-box;
   translate: 0 70%;
 }
+
+.level__player--ghost {
+  opacity: 0.5;
+}

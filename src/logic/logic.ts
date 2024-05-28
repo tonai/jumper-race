@@ -24,6 +24,7 @@ Rune.initLogic({
   maxPlayers: 6,
   setup: (allPlayerIds) => ({
     countdownTimer: startCountdownDurationSeconds,
+    ghosts: {},
     levelIndex: 0,
     mode: "",
     playerIds: allPlayerIds,
@@ -33,6 +34,15 @@ Rune.initLogic({
     timerStartedAt: 0,
   }),
   actions: {
+    ghostJumpEnd: (playerId, { game }) => {
+      game.ghosts[playerId] = { action: "idle" };
+    },
+    ghostJumpStart: ({ playerId, speed, time, velocity }, { game }) => {
+      game.ghosts[playerId] = { action: "jump", speed, time, velocity };
+    },
+    ghostRestart: (playerId, { game }) => {
+      game.ghosts[playerId] = { action: "restart" };
+    },
     nextRound: (_, { game }) => {
       if (game.stage !== "endOfRound") throw Rune.invalidAction();
       if (game.mode === "championship") {

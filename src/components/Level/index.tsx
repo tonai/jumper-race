@@ -7,7 +7,7 @@ import {
   playerWidth,
   startCountdownDurationSeconds,
 } from "../../logic/config";
-import { ILevel, IPosition, Stage } from "../../logic/types";
+import { ILevel, IPosition, IPositionWithRotation, Stage } from "../../logic/types";
 import classNames from "classnames";
 import { getBackground } from "../../helpers/background";
 
@@ -16,6 +16,7 @@ import Blob from "../Blob";
 
 interface ILevelProps {
   bounds: DOMRect;
+  ghosts?: Record<string, IPositionWithRotation>;
   groundedPos: IPosition;
   level: ILevel;
   playerRef: MutableRefObject<HTMLDivElement | null>;
@@ -26,7 +27,7 @@ interface ILevelProps {
 }
 
 function Level(props: ILevelProps) {
-  const { bounds, groundedPos, level, playerRef, stage, x, y, z } = props;
+  const { bounds, ghosts, groundedPos, level, playerRef, stage, x, y, z } = props;
   const { blocks } = level;
   const width = level.width + 4 * assetSize;
   const height = level.height + 4 * assetSize;
@@ -122,6 +123,23 @@ function Level(props: ILevelProps) {
               />
             ))}
           <Blob playerRef={playerRef} x={x} y={y} z={z} />
+          {ghosts &&
+            Object.entries(ghosts).map(([playerId, ghost]) => (
+              <div
+                key={playerId}
+                className="level__player level__player--ghost"
+                // ref={playerRef}
+                style={{
+                  left: ghost.x + 2 * assetSize,
+                  top: ghost.y + 2 * assetSize,
+                  width: playerWidth,
+                  height: playerHeight,
+                  rotate: `${ghost.z}deg`,
+                }}
+              >
+                <div className="level__player-eye" />
+              </div>
+            ))}
           <div
             className="level__grounded"
             key={`${groundedPos.x}-${groundedPos.y}`}

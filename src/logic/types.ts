@@ -71,8 +71,18 @@ export interface IScore {
 
 export type Stage = "gettingReady" | "raceSelect" | "countdown" | "playing" | "endOfRound";
 
+export type GhostAction = "jump" | "idle" | "restart";
+
+export interface IGhost {
+  action: GhostAction;
+  speed?: number;
+  time?: number;
+  velocity?: number;
+}
+
 export interface GameState {
   countdownTimer: number;
+  ghosts: Record<string, IGhost>
   levelIndex: number;
   mode: string,
   playerIds: PlayerId[];
@@ -94,7 +104,17 @@ export interface IVoteRaceData {
   playerId: string;
 }
 
+export interface IGhostJumpData {
+  speed: number;
+  velocity: number;
+  playerId: string;
+  time: number;
+}
+
 export type GameActions = {
+  ghostJumpEnd: (playerId: string) => void;
+  ghostJumpStart: (data: IGhostJumpData) => void;
+  ghostRestart: (playerId: string) => void;
   nextRound: () => void;
   sendTime: (data: ISendTimeData) => void;
   setReady: () => void;
@@ -113,7 +133,7 @@ export type SoundInstances = Record<string, ISoundInstances | ISoundInstances[]>
 
 declare module "@dimforge/rapier2d-compat" {
   export interface Collider {
-    userData?: IRectangle;
+    userData?: IRectangle | string;
   }
 }
 

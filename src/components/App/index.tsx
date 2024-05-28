@@ -27,6 +27,7 @@ function App() {
   const [init, setInit] = useState(false);
   const [volume, setVolume] = useState(1);
   const volumeRef = useRef(1);
+  const [isGhostsEnabled, setIsGhostsEnabled] = useState(true);
 
   useEffect(() => {
     import("@dimforge/rapier2d-compat").then((module) => {
@@ -103,7 +104,9 @@ function App() {
         <Game
           key={game.levelIndex}
           game={game}
+          isGhostsEnabled={isGhostsEnabled}
           rapier={rapier}
+          setIsGhostsEnabled={setIsGhostsEnabled}
           volume={volumeRef}
           volumeState={volume}
           yourPlayerId={yourPlayerId}

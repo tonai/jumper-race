@@ -18,7 +18,7 @@ export function initSounds(sources: SoundSources) {
 
 export function playSound(
   name: string,
-  volume: number | null,
+  volume?: number | null,
 ) {
   const list = soundInstances[name];
   if (!list) {

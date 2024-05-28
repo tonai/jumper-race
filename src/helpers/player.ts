@@ -22,23 +22,25 @@ export const radianOffset = (90 * Math.PI) / 180;
 export function getPlayerPosition(
   rapier: typeof import("@dimforge/rapier2d-compat/rapier"),
   level: ILevel,
-  playerId: string,
   time: number,
   lastTime: number,
   startTime: number,
   player: IPlayer,
   world: World,
   playerPhysics: IPlayerPhysics,
-  playerRef: HTMLDivElement | null,
-  volume: number | null,
-  setRaceTime: (time: number) => void
+  volume?: number | null,
+  setRaceTime?: (time: number) => void,
+  playerRef?: HTMLDivElement | null,
+  playerId?: string,
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;
-  let restart: false | 'dead' | 'finish' = false;
+  let restart: false | "dead" | "finish" = false;
   const { collider, controller, rigidBody } = playerPhysics;
 
   // Jump
-  const isJumping = Boolean(player.jumpStartTime && time - player.jumpStartTime < maxJumpTime);
+  const isJumping = Boolean(
+    player.jumpStartTime && time - player.jumpStartTime < maxJumpTime,
+  );
   if (!isJumping && player.grounded) {
     // Apply gravity
     player.jumpVelocity = jumpForce;
@@ -56,7 +58,7 @@ export function getPlayerPosition(
   const position = rigidBody.translation();
   const movement = new Vector2(
     player.grounded ? 0 : player.speed / physicsRatio,
-    player.jumpVelocity / physicsRatio
+    player.jumpVelocity / physicsRatio,
   );
   let isCollidingWallJump = false;
   controller.computeColliderMovement(
@@ -66,9 +68,14 @@ export function getPlayerPosition(
     undefined,
     (collider: Collider) => {
       isCollidingWallJump =
-        isCollidingWallJump || collider.userData?.type === BlockType.WallJump;
-      return collider.userData?.type !== BlockType.WallJump;
-    }
+        isCollidingWallJump ||
+        (typeof collider.userData !== "string" &&
+          collider.userData?.type === BlockType.WallJump);
+      return (
+        typeof collider.userData !== "string" &&
+        collider.userData?.type !== BlockType.WallJump
+      );
+    },
   );
   player.wallJump = isCollidingWallJump && !player.isWallJumping;
   player.isWallJumping = player.isWallJumping && isCollidingWallJump;
@@ -92,37 +99,46 @@ export function getPlayerPosition(
   for (let i = 0; i < controller.numComputedCollisions(); i++) {
     const collision = controller.computedCollision(i);
     const block = collision?.collider?.userData;
-    switch (block?.type) {
-      case BlockType.Reverser:
-        // Reverse speed
-        player.speed = (block?.direction === "left" ? -1 : 1) * Math.abs(player.speed);
-        if (player.speed < 0) {
-          playerRef?.classList.add("reverse");
-        } else {
-          playerRef?.classList.remove("reverse");
+    if (typeof block !== "string") {
+      switch (block?.type) {
+        case BlockType.Reverser:
+          // Reverse speed
+          player.speed =
+            (block?.direction === "left" ? -1 : 1) * Math.abs(player.speed);
+          if (player.speed < 0) {
+            playerRef?.classList.add("reverse");
+          } else {
+            playerRef?.classList.remove("reverse");
+          }
+          if (playerId) {
+            playSound("walljump", volume);
+          }
+          break;
+        case BlockType.Jumper:
+          // High jump
+          player.jumpStartTime = time;
+          player.jumpVelocity = -(block?.force ?? 10);
+          if (playerId) {
+            playSound("jumper", volume);
+          }
+          break;
+        case BlockType.Spikes:
+          // Dead
+          restart = "dead";
+          break;
+        case BlockType.End: {
+          // Finish
+          if (playerId) {
+            const raceTime = time - startTime;
+            Rune.actions.sendTime({
+              playerId: playerId,
+              time: raceTime,
+            });
+            setRaceTime?.(raceTime);
+          }
+          restart = "finish";
+          break;
         }
-        playSound("walljump", volume);
-        break;
-      case BlockType.Jumper:
-        // High jump
-        player.jumpStartTime = time;
-        player.jumpVelocity = -(block?.force ?? 10);
-        playSound("jumper", volume);
-        break;
-      case BlockType.Spikes:
-        // Dead
-        restart = 'dead';
-        break;
-      case BlockType.End: {
-        // Finish
-        const raceTime = time - startTime;
-        Rune.actions.sendTime({
-          playerId: playerId,
-          time: raceTime,
-        });
-        setRaceTime(raceTime);
-        restart = 'finish';
-        break;
       }
     }
     if (collision?.normal1.y === 1) {
@@ -139,15 +155,19 @@ export function getPlayerPosition(
   };
   // Fall
   if (playerPosition.y + playerHeight > level.height) {
-    restart = 'dead';
+    restart = "dead";
   }
 
-  if (restart ==='dead') {
-    document.body.classList.add('shake');
-    setTimeout(() => document.body.classList.remove('shake'), 500);
-    playSound("spikes", volume);
-  } else if (restart === 'finish') {
-    playSound("end", volume);
+  if (restart === "dead") {
+    document.body.classList.add("shake");
+    setTimeout(() => document.body.classList.remove("shake"), 500);
+    if (playerId) {
+      playSound("spikes", volume);
+    }
+  } else if (restart === "finish") {
+    if (playerId) {
+      playSound("end", volume);
+    }
   }
 
   return [playerPosition, Boolean(restart)];

@@ -59,3 +59,27 @@
   color: red;
   text-shadow: 0 0 3px black, 0 0 2px black, 0 0 1px black;
 }
+
+.game__ghosts {
+  position: absolute;
+  left: 2vw;
+  bottom: 2vw;
+  border-radius: 0.5rem;
+  font-size: 1em;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0.5em;
+  background: #b442df;
+  border: 3px solid #6c2994;
+  color: white;
+  box-shadow: 0px 0px 5px white;
+  animation: 0.5s ease-in 5s both slide-up;
+  opacity: 0.7;
+}
+
+.game__ghosts--enabled {
+  opacity: 1;
+}
