@@ -28,9 +28,9 @@ export function getPlayerPosition(
   player: IPlayer,
   world: World,
   playerPhysics: IPlayerPhysics,
+  playerRef?: HTMLDivElement | null,
   volume?: number | null,
   setRaceTime?: (time: number) => void,
-  playerRef?: HTMLDivElement | null,
   playerId?: string,
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;

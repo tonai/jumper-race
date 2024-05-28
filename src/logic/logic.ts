@@ -34,6 +34,9 @@ Rune.initLogic({
     timerStartedAt: 0,
   }),
   actions: {
+    ghostGrounded: ({ playerId, x, y }, { game }) => {
+      game.ghosts[playerId] = { action: "grounded", x, y };
+    },
     ghostJumpEnd: (playerId, { game }) => {
       game.ghosts[playerId] = { action: "idle" };
     },

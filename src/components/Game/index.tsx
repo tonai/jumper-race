@@ -73,6 +73,9 @@ export default function Game(props: IGameProps) {
   const startTime = useRef(0);
   const ghostsPhysics = useRef<Record<string, IPlayerPhysics>>({});
   const ghosts = useRef<Record<string, IPlayer>>({});
+  const ghostsRef = useRef<Record<string, { current: HTMLDivElement | null }>>(
+    Object.fromEntries(game.playerIds.map((id) => [id, { current: null }])),
+  );
 
   const [play, setPlay] = useState(true);
   const [countdown, setCountdown] = useState(0);
@@ -170,9 +173,9 @@ export default function Game(props: IGameProps) {
             player.current,
             world.current,
             playerPhysics.current,
+            playerRef.current,
             volume.current,
             setRaceTime,
-            playerRef.current,
             yourPlayerId,
           );
           if (player.current.grounded && !prevGrounded) {
@@ -182,6 +185,12 @@ export default function Game(props: IGameProps) {
           setPosition(nextPosition);
           if (shouldRestart) {
             restart(time);
+          } else if (!prevGrounded && player.current.grounded) {
+            Rune.actions.ghostGrounded({
+              playerId: yourPlayerId,
+              x: nextPosition.x,
+              y: nextPosition.y,
+            });
           }
           if (isGhostsEnabled) {
             // Ghosts
@@ -196,6 +205,7 @@ export default function Game(props: IGameProps) {
                   ghost,
                   world.current!,
                   ghostsPhysics.current[playerId],
+                  ghostsRef.current[playerId].current,
                 );
                 return [playerId, nextPosition];
               }),
@@ -229,10 +239,29 @@ export default function Game(props: IGameProps) {
     Object.entries(game.ghosts)
       .filter(([playerId]) => playerId !== yourPlayerId)
       .forEach(([playerId, data]) => {
-        const { action, speed, time, velocity } = data;
+        const { action, speed, time, velocity, x, y } = data;
         switch (action) {
           case "idle":
             ghosts.current[playerId].jumpStartTime = false;
+            return;
+          case "grounded":
+            ghostsPhysics.current?.[playerId].rigidBody.setTranslation(
+              {
+                x: ((x as number) + playerWidth / 2) / physicsRatio,
+                y: ((y as number) + playerHeight / 2) / physicsRatio,
+              },
+              true,
+            );
+            setGhostsPosition((ghosts) =>
+              Object.fromEntries(
+                Object.entries(ghosts).map(([id, ghost]) => [
+                  id,
+                  playerId === id
+                    ? { ...ghost, x: x as number, y: y as number }
+                    : ghost,
+                ]),
+              ),
+            );
             return;
           case "jump":
             ghosts.current[playerId].jumpStartTime = time as number;
@@ -240,6 +269,7 @@ export default function Game(props: IGameProps) {
             ghosts.current[playerId].jumpVelocity = velocity as number;
             return;
           case "restart":
+            ghostsRef.current?.[playerId].current?.classList.remove("level__player--reverse");
             ghosts.current[playerId] = {
               ...start,
               isWallJumping: false,
@@ -260,7 +290,7 @@ export default function Game(props: IGameProps) {
               Object.fromEntries(
                 Object.entries(ghosts).map(([id, ghost]) => [
                   id,
-                  playerId === id ? { ...start, z: 0 } :  ghost,
+                  playerId === id ? { ...start, z: 0 } : ghost,
                 ]),
               ),
             );
@@ -330,6 +360,7 @@ export default function Game(props: IGameProps) {
           <Level
             bounds={bounds}
             ghosts={isGhostsEnabled ? ghostsPosition : undefined}
+            ghostsRef={ghostsRef.current}
             groundedPos={groundedPos}
             level={level}
             playerRef={playerRef}

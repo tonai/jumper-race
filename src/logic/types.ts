@@ -71,13 +71,15 @@ export interface IScore {
 
 export type Stage = "gettingReady" | "raceSelect" | "countdown" | "playing" | "endOfRound";
 
-export type GhostAction = "jump" | "idle" | "restart";
+export type GhostAction = "jump" | "idle" | "restart" | "grounded";
 
 export interface IGhost {
   action: GhostAction;
   speed?: number;
   time?: number;
   velocity?: number;
+  x?: number;
+  y?: number;
 }
 
 export interface GameState {
@@ -104,6 +106,12 @@ export interface IVoteRaceData {
   playerId: string;
 }
 
+export interface IGhostGroundedData {
+  playerId: string;
+  x: number;
+  y: number;
+}
+
 export interface IGhostJumpData {
   speed: number;
   velocity: number;
@@ -112,6 +120,7 @@ export interface IGhostJumpData {
 }
 
 export type GameActions = {
+  ghostGrounded: (data: IGhostGroundedData) => void;
   ghostJumpEnd: (playerId: string) => void;
   ghostJumpStart: (data: IGhostJumpData) => void;
   ghostRestart: (playerId: string) => void;

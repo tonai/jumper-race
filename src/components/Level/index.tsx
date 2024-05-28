@@ -17,6 +17,7 @@ import Blob from "../Blob";
 interface ILevelProps {
   bounds: DOMRect;
   ghosts?: Record<string, IPositionWithRotation>;
+  ghostsRef: Record<string, { current: HTMLDivElement | null }>;
   groundedPos: IPosition;
   level: ILevel;
   playerRef: MutableRefObject<HTMLDivElement | null>;
@@ -27,7 +28,7 @@ interface ILevelProps {
 }
 
 function Level(props: ILevelProps) {
-  const { bounds, ghosts, groundedPos, level, playerRef, stage, x, y, z } = props;
+  const { bounds, ghosts, ghostsRef, groundedPos, level, playerRef, stage, x, y, z } = props;
   const { blocks } = level;
   const width = level.width + 4 * assetSize;
   const height = level.height + 4 * assetSize;
@@ -128,7 +129,7 @@ function Level(props: ILevelProps) {
               <div
                 key={playerId}
                 className="level__player level__player--ghost"
-                // ref={playerRef}
+                ref={ghostsRef[playerId]}
                 style={{
                   left: ghost.x + 2 * assetSize,
                   top: ghost.y + 2 * assetSize,
