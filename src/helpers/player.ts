@@ -35,7 +35,7 @@ export function getPlayerPosition(
   jumpVelocity: MutableRefObject<number>
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;
-  let restart = false;
+  let restart: false | 'dead' | 'finish' = false;
   const { collider, controller, rigidBody } = playerPhysics;
 
   // Jump
@@ -114,8 +114,7 @@ export function getPlayerPosition(
         break;
       case BlockType.Spikes:
         // Dead
-        restart = true;
-        playSound("spikes");
+        restart = 'dead';
         break;
       case BlockType.End:
         // Finish
@@ -123,8 +122,7 @@ export function getPlayerPosition(
           playerId: playerId,
           time: time - startTime,
         });
-        restart = true;
-        playSound("end");
+        restart = 'finish';
         break;
     }
     if (collision?.normal1.y === 1) {
@@ -141,8 +139,16 @@ export function getPlayerPosition(
   };
   // Fall
   if (playerPosition.y + playerHeight > level.height) {
-    restart = true;
+    restart = 'dead';
   }
 
-  return [playerPosition, restart];
+  if (restart ==='dead') {
+    document.body.classList.add('shake');
+    setTimeout(() => document.body.classList.remove('shake'), 500);
+    playSound("spikes");
+  } else if (restart === 'finish') {
+    playSound("end");
+  }
+
+  return [playerPosition, Boolean(restart)];
 }
