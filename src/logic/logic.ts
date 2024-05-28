@@ -1,6 +1,6 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 
-import { countdownDurationSeconds, levels, updatesPerSecond } from "./config";
+import { levels, startCountdownDurationSeconds, updatesPerSecond } from "./config";
 import { GameActions, GameState, IVoteRaceData, ISendTimeData } from "./types";
 import { updateCountdown } from "./updateCountdown";
 import { newRound } from "./newRound";
@@ -16,7 +16,7 @@ Rune.initLogic({
   minPlayers: 1,
   maxPlayers: 6,
   setup: (allPlayerIds) => ({
-    countdownTimer: countdownDurationSeconds,
+    countdownTimer: startCountdownDurationSeconds,
     levelIndex: 0,
     mode: "",
     playerIds: allPlayerIds,

@@ -5,6 +5,7 @@ import {
   parallax,
   playerHeight,
   playerWidth,
+  startCountdownDurationSeconds,
 } from "../../logic/config";
 import { ILevel, Stage } from "../../logic/types";
 import classNames from "classnames";
@@ -40,7 +41,7 @@ function Level(props: ILevelProps) {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setInit(true), 500);
+    const timeout = setTimeout(() => setInit(true), startCountdownDurationSeconds * 1000 - 2500);
     return () => clearTimeout(timeout);
   }, []);
 

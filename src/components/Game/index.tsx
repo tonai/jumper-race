@@ -3,7 +3,7 @@ import type { World } from "@dimforge/rapier2d-compat";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
-  countdownDurationSeconds,
+  playCountdownDurationSeconds,
   jumpForce,
   levels,
   physicsRatio,
@@ -79,7 +79,7 @@ export default function Game(props: IGameProps) {
       );
       setPosition({ ...start, z: 0 });
       setPlay(false);
-      setCountdown(countdownDurationSeconds);
+      setCountdown(playCountdownDurationSeconds);
       startCountdown.current = time;
     },
     [start],
@@ -140,11 +140,11 @@ export default function Game(props: IGameProps) {
       // Manage countdown when player restart level
       const interval = setInterval(() => {
         const timePassed = (Rune.gameTime() - startCountdown.current) / 1000;
-        if (timePassed > countdownDurationSeconds) {
+        if (timePassed > playCountdownDurationSeconds) {
           setCountdown(0);
           setPlay(true);
         } else {
-          setCountdown(Math.ceil(countdownDurationSeconds - timePassed));
+          setCountdown(Math.ceil(playCountdownDurationSeconds - timePassed));
         }
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);

@@ -2,7 +2,8 @@ import { BlockType, ILevel } from "./types";
 
 export const gravity = { x: 0.0, y: 20 };
 export const updatesPerSecond = 30;
-export const countdownDurationSeconds = 3;
+export const startCountdownDurationSeconds = 5;
+export const playCountdownDurationSeconds = 3;
 export const playerWidth = 32;
 export const playerHeight = 32;
 export const playerSpeed = 6;

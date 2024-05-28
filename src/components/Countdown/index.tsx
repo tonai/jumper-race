@@ -15,5 +15,9 @@ export default function Countdown(props: ICountdownProps) {
     playSound("countdown");
   }, [countdownTimer]);
 
-  return <div className="countdown">{countdownTimer}</div>;
+  return (
+    <div className="countdown">
+      <div className="countdown__timer" key={countdownTimer}>{countdownTimer}</div>
+    </div>
+  );
 }
