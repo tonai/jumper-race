@@ -16,7 +16,6 @@ export default function Players(props: IPlayersProps) {
   const { levelIndex, playerIds, scores } = game;
   const level = levels[levelIndex];
 
-  // 2vw
   return (
     <div
       className="players"

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { levels } from "../../logic/config";
+import { playSound } from "../../helpers/sounds";
 
 import Race from "../Race";
 
@@ -18,6 +19,7 @@ export default function Races(props: IRacesProps) {
 
   useEffect(() => {
     if (mode) {
+      playSound('select');
       const timeout = setTimeout(() => Rune.actions.startRace(), 2000);
       return () => clearTimeout(timeout);
     }

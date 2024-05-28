@@ -11,6 +11,7 @@ export const sounds = {
   ],
   jumper: new Audio("audio/jumper.ogg"),
   music: new Audio("audio/music.ogg"),
+  select: new Audio("audio/select.ogg"),
   spikes: new Audio("audio/spikes.ogg"),
   walljump: new Audio("audio/walljump.ogg"),
 };
