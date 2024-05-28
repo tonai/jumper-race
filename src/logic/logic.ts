@@ -1,6 +1,6 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 
-import { levels, startCountdownDurationSeconds, updatesPerSecond } from "./config";
+import { levels, startCountdownDurationSeconds } from "./config";
 import { GameActions, GameState, IVoteRaceData, ISendTimeData } from "./types";
 import { updateCountdown } from "./updateCountdown";
 import { newRound } from "./newRound";
@@ -96,7 +96,7 @@ Rune.initLogic({
     if (game.stage === "countdown") updateCountdown(game);
     if (game.stage === "playing") updatePlaying(game);
   },
-  updatesPerSecond,
+  updatesPerSecond: 30,
   events: {
     playerJoined: (playerId, { game }) => {
       game.playerIds.push(playerId);
