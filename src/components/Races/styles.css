@@ -1,6 +1,7 @@
 .races {
-  margin-top: 21vh;
   width: 100%;
+  overflow: auto;
+  padding: 24vh 0 3vh;
 }
 
 .races__title {
