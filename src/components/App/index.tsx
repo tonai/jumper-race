@@ -32,10 +32,10 @@ function App() {
     const promises = images.map(loadImage);
     Promise.allSettled(
       promises.concat([
-        loadImage("/background02.png"),
-        loadImage("/end.png"),
-        loadImage("/jumper.png"),
-        loadImage("/spikes.png"),
+        loadImage(import.meta.env.BASE_URL + "background02.png"),
+        loadImage(import.meta.env.BASE_URL + "end.png"),
+        loadImage(import.meta.env.BASE_URL + "jumper.png"),
+        loadImage(import.meta.env.BASE_URL + "spikes.png"),
       ]),
     ).then(() => setInit(true));
   }, []);
