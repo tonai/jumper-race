@@ -102,7 +102,7 @@ export default function Game(props: IGameProps) {
   useEffect(() => {
     // Init physics
     playerPhysics.current = initWorld(rapier, level, world);
-  }, [level, game.playerIds, rapier, start]);
+  }, [level, rapier, start]);
 
   useEffect(() => {
     if (game.stage === "playing" && play) {

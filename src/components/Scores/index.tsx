@@ -85,7 +85,7 @@ export default function Scores(props: IScores) {
       const timeout = setTimeout(() => Rune.showGameOverPopUp(), 1000);
       return () => clearTimeout(timeout);
     }
-  }, [finalTotals])
+  }, [finalTotals]);
 
   return (
     <div className="scores">
@@ -118,13 +118,24 @@ export default function Scores(props: IScores) {
               })}
               style={{ gap: `${players.length + 1}em`, translate }}
             >
-              <div className="scores__rank">{rank}</div>
+              <div
+                className={classNames("scores__rank", {
+                  "scores__rank--gold": rank === 1,
+                  "scores__rank--silver": rank === 2,
+                  "scores__rank--bronze": rank === 3,
+                })}
+              >
+                {rank}
+              </div>
               <div
                 className="scores__avatar"
                 style={{ backgroundImage: `url(${player.avatarUrl})` }}
               />
               <div className="scores__data">
-                <div className="scores__name">{player.displayName}</div>
+                <div className="scores__name">
+                  {player.displayName}{" "}
+                  {player.playerId === yourPlayerId && "(you)"}
+                </div>
                 {level && level.id && (
                   <>
                     <div className="scores__time">
@@ -159,7 +170,7 @@ export default function Scores(props: IScores) {
           );
         })}
       </ul>
-      {levelIndex < levels.length - 1 && game.mode === 'championship' && (
+      {levelIndex < levels.length - 1 && game.mode === "championship" && (
         <button
           className="scores__button"
           onClick={() => Rune.actions.nextRound()}

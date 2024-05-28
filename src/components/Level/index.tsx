@@ -38,7 +38,7 @@ function Level(props: ILevelProps) {
   }px 0px`;
   const background = useMemo(() => getBackground(level), [level]);
   const scale = Math.min(bounds.width / width, bounds.height / height);
-  const [init, setInit] = useState(false);
+  const [init, setInit] = useState(stage === "playing");
 
   useEffect(() => {
     const timeout = setTimeout(() => setInit(true), startCountdownDurationSeconds * 1000 - 2500);
