@@ -35,7 +35,10 @@ export default function Players(props: IPlayersProps) {
             >
               <img className="players__avatar" src={player.avatarUrl} />
               <div>
-                <div>{player.displayName}</div>
+                <div>
+                  {player.displayName}{" "}
+                  {player.playerId === yourPlayerId && "(you)"}
+                </div>
                 {level && level.id && (
                   <div className="players__time">
                     race best:{" "}

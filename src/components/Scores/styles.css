@@ -80,11 +80,12 @@
   background-size: contain;
   background-repeat: no-repeat;
   aspect-ratio: 1;
-  border: 0.2em solid transparent;
+  box-sizing: border-box;
+  border: 0.25em solid transparent;
 }
 
 .scores__player--you .scores__avatar {
-  border-color: yellow;
+  border-color: #b442df;
   border-radius: 50%;
 }
 

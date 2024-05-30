@@ -31,6 +31,13 @@ export default function Races(props: IRacesProps) {
         <li>
           <h2 className="races__title">Select race (votes {Object.keys(votes).length}/{playerIds.length})</h2>
         </li>
+        <Race
+          label="Championship"
+          levelId="championship"
+          mode={mode}
+          votes={votes}
+          yourPlayerId={yourPlayerId}
+        />
         {levels.map((level) => (
           <Race
             key={level.id}
@@ -41,13 +48,6 @@ export default function Races(props: IRacesProps) {
             yourPlayerId={yourPlayerId}
           />
         ))}
-        <Race
-          label="Championship"
-          levelId="championship"
-          mode={mode}
-          votes={votes}
-          yourPlayerId={yourPlayerId}
-        />
       </ul>
     </div>
   );

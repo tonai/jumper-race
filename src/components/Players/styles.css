@@ -29,10 +29,12 @@
   max-width: 3em;
   max-height: 3em;
   margin: 0 0.3125em;
+  box-sizing: border-box;
+  border: 0.25em solid transparent;
 }
 
 .players__player--you .players__avatar {
-  border: 0.2em solid yellow;
+  border-color: #b442df;
   border-radius: 50%;
 }
 
