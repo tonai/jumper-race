@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlayerId } from "rune-games-sdk/multiplayer";
 
 import { GameState } from "../../logic/types.ts";
@@ -13,12 +13,17 @@ import { allDetails, tiles } from "../../logic/assets.ts";
 import Help from "../Help/index.tsx";
 import Race from "../Races/index.tsx";
 
+import "./styles.css";
+import classNames from "classnames";
+
 function App() {
   const [game, setGame] = useState<GameState>();
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
   const [rapier, setRapier] =
     useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
   const [init, setInit] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const volumeRef = useRef(1);
 
   useEffect(() => {
     import("@dimforge/rapier2d-compat").then((module) => {
@@ -56,6 +61,22 @@ function App() {
     return;
   }
 
+  function handleSound() {
+    if (volume === 1) {
+      volumeRef.current = 0.66;
+      setVolume(0.66);
+    } else if (volume === 0.66) {
+      volumeRef.current = 0.33;
+      setVolume(0.33);
+    } else if (volume === 0.33) {
+      volumeRef.current = 0;
+      setVolume(0);
+    } else {
+      volumeRef.current = 1;
+      setVolume(1);
+    }
+  }
+
   return (
     <>
       <Players game={game} yourPlayerId={yourPlayerId} />
@@ -65,6 +86,7 @@ function App() {
         <Race
           mode={game.mode}
           playerIds={game.playerIds}
+          volume={volumeRef}
           votes={game.raceVotes}
           yourPlayerId={yourPlayerId}
         />
@@ -74,11 +96,13 @@ function App() {
           key={game.levelIndex}
           game={game}
           rapier={rapier}
+          volume={volumeRef}
+          volumeState={volume}
           yourPlayerId={yourPlayerId}
         />
       )}
       {game.stage === "countdown" && (
-        <Countdown countdownTimer={game.countdownTimer} />
+        <Countdown countdownTimer={game.countdownTimer} volume={volumeRef} />
       )}
       {game.stage === "playing" && (
         <Timer levelIndex={game.levelIndex} timer={game.timer} />
@@ -86,6 +110,16 @@ function App() {
       {game.stage === "endOfRound" && (
         <Scores game={game} yourPlayerId={yourPlayerId} />
       )}
+      <button className="app__sound" onClick={handleSound} type="button">
+        <div className="app__sound-icon" />
+        <div
+          className={classNames("app__sound-waves", {
+            "app__sound-waves--23": volume === 0.66,
+            "app__sound-waves--13": volume === 0.33,
+            "app__sound-waves--mute": volume === 0,
+          })}
+        >{volume === 0 && '✖'}</div>
+      </button>
     </>
   );
 }

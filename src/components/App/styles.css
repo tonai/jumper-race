@@ -1,0 +1,78 @@
+.app__sound {
+  position: absolute;
+  left: 2vw;
+  bottom: 2vw;
+  border-radius: 0.5rem;
+  font-size: 1.5em;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  background: #b442df;
+  border: 3px solid #6c2994;
+  color: white;
+  box-shadow: 0px 0px 5px white;
+  height: 3rem;
+  width: 3rem;
+}
+
+.app__sound-icon {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+}
+
+.app__sound-icon:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0em;
+  translate: -50% -50%;
+  display: block;
+  background-color: white;
+  width: 0.25em;
+  height: 0.5em;
+}
+
+.app__sound-icon:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0.3em;
+  translate: -50% -50%;
+  display: block;
+  width: 0;
+  height: 0.5em;
+  border-style: solid;
+  border-color: transparent white;
+  border-width: 0.3em 0.4em 0.3em 0;
+}
+
+.app__sound-waves {
+  position: absolute;
+  background-image: radial-gradient(circle at 0% 0%, transparent, transparent 33%, #fff 37%, #fff 38%, transparent 42%, transparent 48%, #fff 52%, #fff 54%, transparent 58%, transparent 65%, #fff 69%, #fff 71%, transparent 75%);
+  width: 0.7em;
+  height: 0.7em;
+  rotate: -45deg;
+  left: 1em;
+}
+
+.app__sound-waves--23 {
+  background-image: radial-gradient(circle at 0% 0%, transparent, transparent 33%, #fff 37%, #fff 38%, transparent 42%, transparent 48%, #fff 52%, #fff 54%, transparent 58%);
+}
+
+.app__sound-waves--13 {
+  background-image: radial-gradient(circle at 0% 0%, transparent, transparent 33%, #fff 37%, #fff 38%, transparent 42%);
+}
+
+.app__sound-waves--mute {
+  background-image: none;
+  rotate: 0deg;
+  width: 1em;
+  height: 1em;
+  left: 1.7em;
+  font-size: 0.6em;
+  /* translate: 100% -50%; */
+}

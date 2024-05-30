@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { RefObject, useEffect } from "react";
 
 import { levels } from "../../logic/config";
 import { playSound } from "../../helpers/sounds";
@@ -10,20 +10,21 @@ import "./styles.css";
 interface IRacesProps {
   mode: string;
   playerIds: string[];
+  volume: RefObject<number>;
   votes: Record<string, string>;
   yourPlayerId: string;
 }
 
 export default function Races(props: IRacesProps) {
-  const { mode, playerIds, yourPlayerId, votes } = props;
+  const { mode, playerIds, volume, votes, yourPlayerId } = props;
 
   useEffect(() => {
     if (mode) {
-      playSound('select');
+      playSound('select', volume.current);
       const timeout = setTimeout(() => Rune.actions.startRace(), 2000);
       return () => clearTimeout(timeout);
     }
-  }, [mode]);
+  }, [mode, volume]);
 
   return (
     <div className="races">

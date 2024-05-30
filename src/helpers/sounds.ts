@@ -16,14 +16,19 @@ export const sounds = {
   walljump: new Audio("audio/walljump.ogg"),
 };
 
-export function playSound(name: keyof typeof sounds) {
+export function playSound(name: keyof typeof sounds, volume: number | null) {
   const sound = sounds[name];
+  console.log(volume);
   try {
     if (sound instanceof Array) {
       const index = randomInt(sound.length - 1);
-      (sound[index].cloneNode(true) as HTMLAudioElement).play();
+      const audio = sound[index].cloneNode(true) as HTMLAudioElement;
+      audio.volume = volume ?? 1;
+      audio.play();
     } else {
-      (sound.cloneNode(true) as HTMLAudioElement).play();
+      const audio = sound.cloneNode(true) as HTMLAudioElement;
+      audio.volume = volume ?? 1;
+      audio.play();
     }
   } catch (_e) {
     // Sounds may be blocked by browser

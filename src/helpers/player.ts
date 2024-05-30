@@ -30,6 +30,7 @@ export function getPlayerPosition(
   world: World,
   playerPhysics: IPlayerPhysics,
   playerRef: HTMLDivElement | null,
+  volume: number | null,
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;
   let restart: false | 'dead' | 'finish' = false;
@@ -102,13 +103,13 @@ export function getPlayerPosition(
         } else {
           playerRef?.classList.remove("level__player--reverse");
         }
-        playSound("walljump");
+        playSound("walljump", volume);
         break;
       case BlockType.Jumper:
         // High jump
         player.jumpStartTime = time;
         player.jumpVelocity = -(block?.force ?? 10);
-        playSound("jumper");
+        playSound("jumper", volume);
         break;
       case BlockType.Spikes:
         // Dead
@@ -143,9 +144,9 @@ export function getPlayerPosition(
   if (restart ==='dead') {
     document.body.classList.add('shake');
     setTimeout(() => document.body.classList.remove('shake'), 500);
-    playSound("spikes");
+    playSound("spikes", volume);
   } else if (restart === 'finish') {
-    playSound("end");
+    playSound("end", volume);
   }
 
   return [playerPosition, Boolean(restart)];

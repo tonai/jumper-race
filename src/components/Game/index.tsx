@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import type { World } from "@dimforge/rapier2d-compat";
 
 import { useBounds } from "../../hooks/useBounds";
@@ -30,15 +30,18 @@ import "./styles.css";
 interface IGameProps {
   game: GameState;
   rapier: typeof import("@dimforge/rapier2d-compat/rapier");
+  volume: RefObject<number>;
+  volumeState: number;
   yourPlayerId: string;
 }
 
 export default function Game(props: IGameProps) {
-  const { game, rapier, yourPlayerId } = props;
+  const { game, rapier, volume, volumeState, yourPlayerId } = props;
   const { levelIndex } = game;
   const level = levels[levelIndex];
   const { start } = level;
   const { bounds, ref } = useBounds();
+  const music = useRef<HTMLAudioElement>();
   const world = useRef<World>();
   const playerPhysics = useRef<IPlayerPhysics>();
   const lastTime = useRef<number>(0);
@@ -90,18 +93,24 @@ export default function Game(props: IGameProps) {
   );
 
   useEffect(() => {
-    const audio = sounds.music;
-    audio.loop = true;
-    audio.volume = 0.5;
-    audio.play();
-    return () => audio.pause();
-  }, []);
+    music.current = sounds.music;
+    music.current.loop = true;
+    music.current.volume = 0.5 * (volume.current ?? 1);
+    music.current.play();
+    return () => music.current?.pause();
+  }, [music, volume]);
+
+  useEffect(() => {
+    if (music.current) {
+      music.current.volume = 0.5 * volumeState;
+    }
+  }, [volumeState])
 
   useEffect(() => {
     if (game.stage === "playing" && play) {
-      playSound("go");
+      playSound("go", volume.current);
     }
-  }, [game.stage, play]);
+  }, [game.stage, play, volume]);
 
   useEffect(() => {
     // Init physics
@@ -124,7 +133,8 @@ export default function Game(props: IGameProps) {
             player.current,
             world.current,
             playerPhysics.current,
-            playerRef.current
+            playerRef.current,
+            volume.current
           );
           setPosition(nextPosition);
           if (shouldRestart) {
@@ -135,7 +145,7 @@ export default function Game(props: IGameProps) {
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);
     }
-  }, [game.stage, level, play, rapier, restart, yourPlayerId]);
+  }, [game.stage, level, play, rapier, restart, volume, yourPlayerId]);
 
   useEffect(() => {
     if (countdown) {
@@ -158,7 +168,7 @@ export default function Game(props: IGameProps) {
       player.current.jumpStartTime = Rune.gameTime();
       player.current.jumpVelocity = -jumpForce;
       playerRef.current?.classList.add("level__player--jump");
-      playSound("jump");
+      playSound("jump", volume.current);
     } else if (player.current.wallJump) {
       player.current.jumpStartTime = Rune.gameTime();
       player.current.jumpVelocity = -jumpForce;
@@ -171,7 +181,7 @@ export default function Game(props: IGameProps) {
         playerRef.current?.classList.remove("level__player--reverse");
       }
       playerRef.current?.classList.add("level__player--jump");
-      playSound("walljump");
+      playSound("walljump", volume.current);
     }
   }
 
@@ -205,7 +215,7 @@ export default function Game(props: IGameProps) {
           />
         )}
       </div>
-      {countdown > 0 && <Countdown countdownTimer={countdown} />}
+      {countdown > 0 && <Countdown countdownTimer={countdown} volume={volume} />}
       <button className="game__restart" onClick={handleRestart} type="button">
         <div className="game__arrow">↺</div>
       </button>

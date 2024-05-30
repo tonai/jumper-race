@@ -27,12 +27,14 @@
   color: white;
   box-shadow: 0px 0px 5px white;
   animation: 0.5s ease-in 3s both slide-up;
+  height: 3rem;
+  width: 3rem;
 }
 
 .game__arrow {
-  height: 1.2em;
-  line-height: 1.2em;
-  width: 1.2em;
+  height: 1.5em;
+  line-height: 1.5em;
+  width: 1.5em;
 }
 
 .game__restart:focus .game__arrow {
