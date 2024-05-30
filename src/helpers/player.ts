@@ -15,7 +15,6 @@ import {
   playerHeight,
   playerWidth,
 } from "../logic/config.ts";
-import { MutableRefObject } from "react";
 import { playSound } from "./sounds.ts";
 
 export const radianOffset = (90 * Math.PI) / 180;
@@ -31,24 +30,22 @@ export function getPlayerPosition(
   world: World,
   playerPhysics: IPlayerPhysics,
   playerRef: HTMLDivElement | null,
-  jump: MutableRefObject<false | number>,
-  jumpVelocity: MutableRefObject<number>
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;
   let restart: false | 'dead' | 'finish' = false;
   const { collider, controller, rigidBody } = playerPhysics;
 
   // Jump
-  const isJumping = Boolean(jump.current && time - jump.current < maxJumpTime);
+  const isJumping = Boolean(player.jumpStartTime && time - player.jumpStartTime < maxJumpTime);
   if (!isJumping && player.grounded) {
     // Apply gravity
-    jumpVelocity.current = jumpForce;
+    player.jumpVelocity = jumpForce;
   } else if (!isJumping) {
     // After maxJumpTime add gravity to the velocity vector for smooth curve jump
-    if (player.wallJump && jumpVelocity.current > 0) {
-      jumpVelocity.current += ((gravity.y / 4) * (time - lastTime)) / 1000;
+    if (player.wallJump && player.jumpVelocity > 0) {
+      player.jumpVelocity += ((gravity.y / 4) * (time - lastTime)) / 1000;
     } else {
-      jumpVelocity.current += (gravity.y * (time - lastTime)) / 1000;
+      player.jumpVelocity += (gravity.y * (time - lastTime)) / 1000;
     }
   }
 
@@ -57,7 +54,7 @@ export function getPlayerPosition(
   const position = rigidBody.translation();
   const movement = new Vector2(
     player.grounded ? 0 : player.speed / physicsRatio,
-    jumpVelocity.current / physicsRatio
+    player.jumpVelocity / physicsRatio
   );
   let isCollidingWallJump = false;
   controller.computeColliderMovement(
@@ -109,8 +106,8 @@ export function getPlayerPosition(
         break;
       case BlockType.Jumper:
         // High jump
-        jump.current = time;
-        jumpVelocity.current = -(block?.force ?? 10);
+        player.jumpStartTime = time;
+        player.jumpVelocity = -(block?.force ?? 10);
         playSound("jumper");
         break;
       case BlockType.Spikes:
@@ -128,8 +125,8 @@ export function getPlayerPosition(
     }
     if (collision?.normal1.y === 1) {
       // Top collision: stop jumping
-      jump.current = false;
-      jumpVelocity.current = 0;
+      player.jumpStartTime = false;
+      player.jumpVelocity = 0;
     }
   }
 

@@ -41,6 +41,8 @@ export interface IRectangle extends IPosition {
 
 export interface IPlayer extends IPosition {
   grounded: boolean;
+  jumpStartTime: false | number;
+  jumpVelocity: number;
   speed: number;
   wallJump: boolean;
   isWallJumping: boolean;

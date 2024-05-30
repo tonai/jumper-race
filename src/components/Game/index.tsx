@@ -41,14 +41,14 @@ export default function Game(props: IGameProps) {
   const { bounds, ref } = useBounds();
   const world = useRef<World>();
   const playerPhysics = useRef<IPlayerPhysics>();
-  const jump = useRef<false | number>(false);
-  const jumpVelocity = useRef<number>(0);
   const lastTime = useRef<number>(0);
   const playerRef = useRef<HTMLDivElement>(null);
   const player = useRef<IPlayer>({
     ...start,
-    speed: playerSpeed,
     grounded: true,
+    jumpStartTime: false,
+    jumpVelocity: 0,
+    speed: playerSpeed,
     wallJump: false,
     isWallJumping: false,
   });
@@ -67,8 +67,10 @@ export default function Game(props: IGameProps) {
       playerRef.current?.classList.remove("level__player--reverse");
       player.current = {
         ...start,
-        speed: playerSpeed,
         grounded: true,
+        jumpStartTime: false,
+        jumpVelocity: 0,
+        speed: playerSpeed,
         wallJump: false,
         isWallJumping: false,
       };
@@ -122,9 +124,7 @@ export default function Game(props: IGameProps) {
             player.current,
             world.current,
             playerPhysics.current,
-            playerRef.current,
-            jump,
-            jumpVelocity,
+            playerRef.current
           );
           setPosition(nextPosition);
           if (shouldRestart) {
@@ -155,13 +155,13 @@ export default function Game(props: IGameProps) {
 
   function startJump() {
     if (player.current.grounded) {
-      jump.current = Rune.gameTime();
-      jumpVelocity.current = -jumpForce;
+      player.current.jumpStartTime = Rune.gameTime();
+      player.current.jumpVelocity = -jumpForce;
       playerRef.current?.classList.add("level__player--jump");
       playSound("jump");
     } else if (player.current.wallJump) {
-      jump.current = Rune.gameTime();
-      jumpVelocity.current = -jumpForce;
+      player.current.jumpStartTime = Rune.gameTime();
+      player.current.jumpVelocity = -jumpForce;
       player.current.speed = -player.current.speed;
       player.current.wallJump = false;
       player.current.isWallJumping = true;
@@ -176,7 +176,7 @@ export default function Game(props: IGameProps) {
   }
 
   function endJump() {
-    jump.current = false;
+    player.current.jumpStartTime = false;
   }
 
   function handleRestart() {
