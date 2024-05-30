@@ -50,6 +50,7 @@ export default function Game(props: IGameProps) {
     speed: playerSpeed,
     grounded: true,
     wallJump: false,
+    isWallJumping: false,
   });
   const startCountdown = useRef(0);
   const startTime = useRef(0);
@@ -69,6 +70,7 @@ export default function Game(props: IGameProps) {
         speed: playerSpeed,
         grounded: true,
         wallJump: false,
+        isWallJumping: false,
       };
       playerPhysics.current?.rigidBody.setTranslation(
         {
@@ -161,6 +163,8 @@ export default function Game(props: IGameProps) {
       jump.current = Rune.gameTime();
       jumpVelocity.current = -jumpForce;
       player.current.speed = -player.current.speed;
+      player.current.wallJump = false;
+      player.current.isWallJumping = true;
       if (player.current.speed < 0) {
         playerRef.current?.classList.add("level__player--reverse");
       } else {

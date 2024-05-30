@@ -43,6 +43,7 @@ export interface IPlayer extends IPosition {
   grounded: boolean;
   speed: number;
   wallJump: boolean;
+  isWallJumping: boolean;
 }
 
 export interface IPlayerPhysics {

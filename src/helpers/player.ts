@@ -71,7 +71,8 @@ export function getPlayerPosition(
       return collider.userData?.type !== BlockType.WallJump;
     }
   );
-  player.wallJump = isCollidingWallJump;
+  player.wallJump = isCollidingWallJump && !player.isWallJumping;
+  player.isWallJumping = player.isWallJumping && isCollidingWallJump;
   player.grounded = controller.computedGrounded();
   if (player.grounded) {
     playerRef?.classList.remove("level__player--jump");
