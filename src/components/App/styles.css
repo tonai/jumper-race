@@ -28,7 +28,7 @@
   content: '';
   position: absolute;
   top: 50%;
-  left: 0em;
+  left: -0.05em;
   translate: -50% -50%;
   display: block;
   background-color: white;
@@ -74,5 +74,4 @@
   height: 1em;
   left: 1.7em;
   font-size: 0.6em;
-  /* translate: 100% -50%; */
 }

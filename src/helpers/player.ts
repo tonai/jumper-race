@@ -72,9 +72,6 @@ export function getPlayerPosition(
   player.wallJump = isCollidingWallJump && !player.isWallJumping;
   player.isWallJumping = player.isWallJumping && isCollidingWallJump;
   player.grounded = controller.computedGrounded();
-  if (player.grounded) {
-    playerRef?.classList.remove("level__player--jump");
-  }
   const correctedMovement = controller.computedMovement();
   rigidBody.setNextKinematicTranslation({
     x: position.x + correctedMovement.x,
@@ -99,9 +96,9 @@ export function getPlayerPosition(
         // Reverse speed
         player.speed = (block?.direction === "left" ? -1 : 1) * Math.abs(player.speed);
         if (player.speed < 0) {
-          playerRef?.classList.add("level__player--reverse");
+          playerRef?.classList.add("reverse");
         } else {
-          playerRef?.classList.remove("level__player--reverse");
+          playerRef?.classList.remove("reverse");
         }
         playSound("walljump", volume);
         break;

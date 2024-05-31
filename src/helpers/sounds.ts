@@ -18,7 +18,6 @@ export const sounds = {
 
 export function playSound(name: keyof typeof sounds, volume: number | null) {
   const sound = sounds[name];
-  console.log(volume);
   try {
     if (sound instanceof Array) {
       const index = randomInt(sound.length - 1);

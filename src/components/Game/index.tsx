@@ -16,6 +16,7 @@ import {
   GameState,
   IPlayer,
   IPlayerPhysics,
+  IPosition,
   IPositionWithRotation,
 } from "../../logic/types";
 import { getPlayerPosition } from "../../helpers/player";
@@ -63,11 +64,13 @@ export default function Game(props: IGameProps) {
     ...start,
     z: 0,
   });
+  const [groundedPos, setGroundedPos] = useState<IPosition>({...start});
 
   const restart = useCallback(
     (time: number) => {
       // Reset player position...etc.
-      playerRef.current?.classList.remove("level__player--reverse");
+      playerRef.current?.classList.remove("reverse");
+      playerRef.current?.classList.remove("jump");
       player.current = {
         ...start,
         grounded: true,
@@ -104,7 +107,7 @@ export default function Game(props: IGameProps) {
     if (music.current) {
       music.current.volume = 0.5 * volumeState;
     }
-  }, [volumeState])
+  }, [volumeState]);
 
   useEffect(() => {
     if (game.stage === "playing" && play) {
@@ -123,6 +126,7 @@ export default function Game(props: IGameProps) {
       const interval = setInterval(() => {
         if (world.current && playerPhysics.current) {
           const time = Rune.gameTime();
+          const prevGrounded = player.current.grounded;
           const [nextPosition, shouldRestart] = getPlayerPosition(
             rapier,
             level,
@@ -134,8 +138,12 @@ export default function Game(props: IGameProps) {
             world.current,
             playerPhysics.current,
             playerRef.current,
-            volume.current
+            volume.current,
           );
+          if (player.current.grounded && !prevGrounded) {
+            playerRef.current?.classList.remove("jump");
+            setGroundedPos({ x: nextPosition.x, y: nextPosition.y });
+          }
           setPosition(nextPosition);
           if (shouldRestart) {
             restart(time);
@@ -167,7 +175,7 @@ export default function Game(props: IGameProps) {
     if (player.current.grounded) {
       player.current.jumpStartTime = Rune.gameTime();
       player.current.jumpVelocity = -jumpForce;
-      playerRef.current?.classList.add("level__player--jump");
+      playerRef.current?.classList.add("jump");
       playSound("jump", volume.current);
     } else if (player.current.wallJump) {
       player.current.jumpStartTime = Rune.gameTime();
@@ -176,11 +184,11 @@ export default function Game(props: IGameProps) {
       player.current.wallJump = false;
       player.current.isWallJumping = true;
       if (player.current.speed < 0) {
-        playerRef.current?.classList.add("level__player--reverse");
+        playerRef.current?.classList.add("reverse");
       } else {
-        playerRef.current?.classList.remove("level__player--reverse");
+        playerRef.current?.classList.remove("reverse");
       }
-      playerRef.current?.classList.add("level__player--jump");
+      playerRef.current?.classList.add("jump");
       playSound("walljump", volume.current);
     }
   }
@@ -206,6 +214,7 @@ export default function Game(props: IGameProps) {
         {bounds && (
           <Level
             bounds={bounds}
+            groundedPos={groundedPos}
             level={level}
             playerRef={playerRef}
             stage={game.stage}
@@ -215,7 +224,9 @@ export default function Game(props: IGameProps) {
           />
         )}
       </div>
-      {countdown > 0 && <Countdown countdownTimer={countdown} volume={volume} />}
+      {countdown > 0 && (
+        <Countdown countdownTimer={countdown} volume={volume} />
+      )}
       <button className="game__restart" onClick={handleRestart} type="button">
         <div className="game__arrow">↺</div>
       </button>
