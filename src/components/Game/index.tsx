@@ -11,6 +11,7 @@ import {
   playerSpeed,
   playerWidth,
   updatesPerSecond,
+  sounds,
 } from "../../logic/config";
 import {
   GameState,
@@ -24,7 +25,7 @@ import { initWorld } from "../../helpers/world";
 
 import Level from "../Level";
 import Countdown from "../Countdown";
-import { playSound, sounds } from "../../helpers/sounds";
+import { playMusic, playSound } from "../../helpers/sounds";
 
 import "./styles.css";
 
@@ -96,10 +97,7 @@ export default function Game(props: IGameProps) {
   );
 
   useEffect(() => {
-    music.current = sounds.music;
-    music.current.loop = true;
-    music.current.volume = 0.5 * (volume.current ?? 1);
-    music.current.play();
+    music.current = playMusic('music', volume.current ?? 1);
     return () => music.current?.pause();
   }, [music, volume]);
 

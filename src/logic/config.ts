@@ -15,6 +15,22 @@ export const assetSize = 32;
 export const parallax = 8;
 export const randomChance = 7;
 
+export const sounds = {
+  countdown: "audio/countdown.ogg",
+  end: "audio/end.ogg",
+  go: "audio/go.ogg",
+  jump: [
+    "audio/jump1.ogg",
+    "audio/jump2.ogg",
+    "audio/jump3.ogg",
+  ],
+  jumper: "audio/jumper.ogg",
+  music: "audio/music.ogg",
+  select: "audio/select.ogg",
+  spikes: "audio/spikes.ogg",
+  walljump: "audio/walljump.ogg",
+};
+
 const totalTime = 90;
 
 export const levels: ILevel[] = [

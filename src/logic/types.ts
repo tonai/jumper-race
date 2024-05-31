@@ -102,6 +102,15 @@ export type GameActions = {
   voteRace: (data: IVoteRaceData) => void;
 };
 
+export type SoundSources = Record<string, string | string[]>
+
+export interface ISoundInstances {
+  instances : HTMLAudioElement[];
+  source:string;
+}
+
+export type SoundInstances = Record<string, ISoundInstances | ISoundInstances[]>
+
 declare module "@dimforge/rapier2d-compat" {
   export interface Collider {
     userData?: IRectangle;

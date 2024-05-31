@@ -13,8 +13,11 @@ import { allDetails, tiles } from "../../logic/assets.ts";
 import Help from "../Help/index.tsx";
 import Race from "../Races/index.tsx";
 
-import "./styles.css";
 import classNames from "classnames";
+import { initSounds } from "../../helpers/sounds.ts";
+import { sounds } from "../../logic/config.ts";
+
+import "./styles.css";
 
 function App() {
   const [game, setGame] = useState<GameState>();
@@ -55,6 +58,10 @@ function App() {
       });
     }
   }, [init, rapier]);
+
+  useEffect(() => {
+    initSounds(sounds);
+  }, [])
 
   if (!game || !yourPlayerId || !rapier || !init) {
     // Rune only shows your game after an onChange() so no need for loading screen
