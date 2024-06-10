@@ -17,7 +17,7 @@ export default function Players(props: IPlayersProps) {
   const level = levels[levelIndex];
 
   const best = Object.values(scores ?? {}).reduce((acc, score) => {
-    const bestTime = formatTime(score[level.id].bestTime ?? Infinity);
+    const bestTime = score[level.id].bestTime ?? Infinity;
     return acc < bestTime ? acc : bestTime;
   }, Infinity);
 
@@ -30,7 +30,7 @@ export default function Players(props: IPlayersProps) {
         {playerIds.map((playerId) => {
           const player = Rune.getPlayerInfo(playerId);
           const score = scores?.[playerId][level.id];
-          const playerBest = score && score.bestTime ? formatTime(score.bestTime) : "-";
+          const playerBest = score && score.bestTime;
 
           return (
             <li
@@ -51,7 +51,7 @@ export default function Players(props: IPlayersProps) {
                 {level && level.id && (
                   <div className="players__time">
                     race best:{" "}
-                    {playerBest}
+                    {playerBest ? formatTime(playerBest) : "-"}
                   </div>
                 )}
               </div>

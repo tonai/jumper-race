@@ -116,3 +116,7 @@ declare module "@dimforge/rapier2d-compat" {
     userData?: IRectangle;
   }
 }
+
+export interface Persisted {
+  bestTimes?: Record<string, number>
+}

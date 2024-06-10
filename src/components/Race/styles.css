@@ -8,13 +8,15 @@
   transition: scale 200ms ease-in, opacity 200ms ease-in;
 }
 
-.race--selected {
-  scale: 1.2;
-}
-
 .race--discard {
   opacity: 0.7;
   scale: 0.8;
+}
+
+.race__group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .race__button {
@@ -32,6 +34,10 @@
   box-sizing: border-box;
   border-radius: 0.5rem;
   overflow: hidden;
+}
+
+.race--selected .race__button {
+  scale: 1.2;
 }
 
 .race--selected .race__button:before {
@@ -63,26 +69,36 @@
   animation: 0.2s ease-in both slide-down;
 }
 
-.race__player:nth-child(3) {
+.race__player:nth-child(2) {
   right: -2em;
 }
 
-.race__player:nth-child(4) {
+.race__player:nth-child(3) {
   right: -4em;
 }
 
-.race__player:nth-child(5) {
+.race__player:nth-child(4) {
   right: -6em;
 }
 
-.race__player:nth-child(6) {
+.race__player:nth-child(5) {
   right: -8em;
 }
 
-.race__player:nth-child(7) {
+.race__player:nth-child(6) {
   right: -10em;
 }
 
-.race__player:nth-child(8) {
+.race__player:nth-child(7) {
   right: -12em;
+}
+
+.race__player:nth-child(8) {
+  right: -14em;
+}
+
+.race__time {
+  font-family: monospace;
+  margin-left: 1em;
+  font-size: 1.2em;
 }

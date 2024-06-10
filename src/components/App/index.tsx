@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { PlayerId } from "rune-games-sdk/multiplayer";
+import { GameStateWithPersisted, PlayerId } from "rune-games-sdk/multiplayer";
 
-import { GameState } from "../../logic/types.ts";
+import { GameState, Persisted } from "../../logic/types.ts";
 import Players from "../Players/index.tsx";
 import Start from "../Start/index.tsx";
 import Countdown from "../Countdown/index.tsx";
@@ -11,7 +11,7 @@ import Game from "../Game/index.tsx";
 import { loadImage } from "../../helpers/image.ts";
 import { allDetails, tiles } from "../../logic/assets.ts";
 import Help from "../Help/index.tsx";
-import Race from "../Races/index.tsx";
+import Races from "../Races/index.tsx";
 
 import classNames from "classnames";
 import { initSounds } from "../../helpers/sounds.ts";
@@ -20,7 +20,7 @@ import { sounds } from "../../logic/config.ts";
 import "./styles.css";
 
 function App() {
-  const [game, setGame] = useState<GameState>();
+  const [game, setGame] = useState<GameStateWithPersisted<GameState, Persisted>>();
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
   const [rapier, setRapier] =
     useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
@@ -83,16 +83,17 @@ function App() {
       setVolume(1);
     }
   }
-
+  
   return (
     <>
       <Players game={game} yourPlayerId={yourPlayerId} />
       {game.stage === "gettingReady" && <Start />}
       {game.stage === "gettingReady" && <Help />}
       {game.stage === "raceSelect" && (
-        <Race
+        <Races
           mode={game.mode}
           playerIds={game.playerIds}
+          playerBestTimes={game.persisted[yourPlayerId].bestTimes}
           volume={volumeRef}
           votes={game.raceVotes}
           yourPlayerId={yourPlayerId}

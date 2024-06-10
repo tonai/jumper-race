@@ -9,6 +9,7 @@ import "./styles.css";
 
 interface IRacesProps {
   mode: string;
+  playerBestTimes?: Record<string, number>;
   playerIds: string[];
   volume: RefObject<number>;
   votes: Record<string, string>;
@@ -16,7 +17,7 @@ interface IRacesProps {
 }
 
 export default function Races(props: IRacesProps) {
-  const { mode, playerIds, volume, votes, yourPlayerId } = props;
+  const { mode, playerBestTimes, playerIds, volume, votes, yourPlayerId } = props;
 
   useEffect(() => {
     if (mode) {
@@ -33,7 +34,7 @@ export default function Races(props: IRacesProps) {
           <h2 className="races__title">Select race (votes {Object.keys(votes).length}/{playerIds.length})</h2>
         </li>
         <Race
-          label="Championship"
+          label="Championship 🏆"
           levelId="championship"
           mode={mode}
           votes={votes}
@@ -45,6 +46,7 @@ export default function Races(props: IRacesProps) {
             label={`Race ${level.id}`}
             levelId={level.id}
             mode={mode}
+            playerBestTime={playerBestTimes?.[level.id]}
             votes={votes}
             yourPlayerId={yourPlayerId}
           />

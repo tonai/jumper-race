@@ -1,18 +1,25 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 
 import { levels, startCountdownDurationSeconds } from "./config";
-import { GameActions, GameState, IVoteRaceData, ISendTimeData } from "./types";
+import {
+  GameActions,
+  GameState,
+  IVoteRaceData,
+  ISendTimeData,
+  Persisted,
+} from "./types";
 import { updateCountdown } from "./updateCountdown";
 import { newRound } from "./newRound";
 import { updatePlaying } from "./updatePlaying";
 import { randomInt } from "../helpers/utils";
 
 declare global {
-  const Rune: RuneClient<GameState, GameActions>;
+  const Rune: RuneClient<GameState, GameActions, Persisted>;
 }
 
 Rune.initLogic({
   landscape: true,
+  persistPlayerData: true,
   minPlayers: 1,
   maxPlayers: 6,
   setup: (allPlayerIds) => ({
@@ -38,6 +45,7 @@ Rune.initLogic({
       if (game.scores?.[playerId]) {
         const level = levels[game.levelIndex];
         const playerScore = game.scores[playerId][level.id];
+        // Current race best time
         if (playerScore && playerScore.bestTime) {
           if (time < playerScore.bestTime) {
             playerScore.bestTime = time;
@@ -46,6 +54,20 @@ Rune.initLogic({
           game.scores[playerId][level.id] = {
             bestTime: time,
           };
+        }
+        // Persisted best time
+        if (!game.persisted[playerId]) {
+          game.persisted[playerId] = {};
+        }
+        if (!game.persisted[playerId].bestTimes) {
+          game.persisted[playerId].bestTimes = {};
+        }
+        const playerBestTimes = game.persisted[playerId].bestTimes as Record<
+          string,
+          number
+        >;
+        if (!playerBestTimes[level.id] || time < playerBestTimes[level.id]) {
+          playerBestTimes[level.id] = time;
         }
       }
     },
