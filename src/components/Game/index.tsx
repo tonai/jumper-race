@@ -11,7 +11,6 @@ import {
   playerSpeed,
   playerWidth,
   updatesPerSecond,
-  sounds,
 } from "../../logic/config";
 import {
   GameState,

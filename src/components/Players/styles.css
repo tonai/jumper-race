@@ -26,18 +26,46 @@
 }
 
 .players__avatar {
+  margin: 0 0.3125em;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.players__player--best .players__avatar:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  left: 0;
+  transform-origin: center;
+  background: center / cover no-repeat url("/crown.png");
+  transform: translate(-0.7em, -1em) scale(1.2);
+}
+
+.players__image {
   max-width: 3em;
   max-height: 3em;
-  margin: 0 0.3125em;
+  margin: 0;
   box-sizing: border-box;
   border: 0.25em solid transparent;
 }
 
-.players__player--you .players__avatar {
+.players__player--you .players__image {
   border-color: #b442df;
   border-radius: 50%;
 }
 
+.players__player--you .players__name {
+  color: #b442df;
+  font-weight: bold;
+}
+
 .players__time {
   font-size: 0.8em;
+}
+
+.players__player--best .players__time {
+  color: gold;
 }
