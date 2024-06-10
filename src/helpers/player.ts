@@ -31,6 +31,7 @@ export function getPlayerPosition(
   playerPhysics: IPlayerPhysics,
   playerRef: HTMLDivElement | null,
   volume: number | null,
+  setRaceTime: (time: number) => void
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;
   let restart: false | 'dead' | 'finish' = false;
@@ -112,14 +113,17 @@ export function getPlayerPosition(
         // Dead
         restart = 'dead';
         break;
-      case BlockType.End:
+      case BlockType.End: {
         // Finish
+        const raceTime = time - startTime;
         Rune.actions.sendTime({
           playerId: playerId,
-          time: time - startTime,
+          time: raceTime,
         });
+        setRaceTime(raceTime);
         restart = 'finish';
         break;
+      }
     }
     if (collision?.normal1.y === 1) {
       // Top collision: stop jumping

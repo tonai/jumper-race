@@ -20,7 +20,6 @@ export default function Players(props: IPlayersProps) {
     const bestTime = formatTime(score[level.id].bestTime ?? Infinity);
     return acc < bestTime ? acc : bestTime;
   }, Infinity);
-  console.log(best);
 
   return (
     <div

@@ -27,6 +27,8 @@ import Countdown from "../Countdown";
 import { playMusic, playSound } from "../../helpers/sounds";
 
 import "./styles.css";
+import { formatTime } from "../../helpers/format";
+import classNames from "classnames";
 
 interface IGameProps {
   game: GameState;
@@ -38,7 +40,7 @@ interface IGameProps {
 
 export default function Game(props: IGameProps) {
   const { game, rapier, volume, volumeState, yourPlayerId } = props;
-  const { levelIndex } = game;
+  const { levelIndex, scores } = game;
   const level = levels[levelIndex];
   const { start } = level;
   const { bounds, ref } = useBounds();
@@ -64,7 +66,9 @@ export default function Game(props: IGameProps) {
     ...start,
     z: 0,
   });
-  const [groundedPos, setGroundedPos] = useState<IPosition>({...start});
+  const [groundedPos, setGroundedPos] = useState<IPosition>({ ...start });
+  const [raceTime, setRaceTime] = useState(0);
+  const playerBest = scores?.[yourPlayerId][level.id].bestTime ?? Infinity;
 
   const restart = useCallback(
     (time: number) => {
@@ -96,7 +100,7 @@ export default function Game(props: IGameProps) {
   );
 
   useEffect(() => {
-    music.current = playMusic('music', volume.current ?? 1);
+    music.current = playMusic("music", volume.current ?? 1);
     return () => music.current?.pause();
   }, [music, volume]);
 
@@ -136,6 +140,7 @@ export default function Game(props: IGameProps) {
             playerPhysics.current,
             playerRef.current,
             volume.current,
+            setRaceTime,
           );
           if (player.current.grounded && !prevGrounded) {
             playerRef.current?.classList.remove("jump");
@@ -227,6 +232,17 @@ export default function Game(props: IGameProps) {
       <button className="game__restart" onClick={handleRestart} type="button">
         <div className="game__arrow">↺</div>
       </button>
+      {raceTime && (
+        <div
+          className={classNames("game__raceTime", {
+            "game__raceTime--good": raceTime <= playerBest,
+            "game__raceTime--bad": raceTime > playerBest,
+          })}
+          key={raceTime}
+        >
+          {formatTime(raceTime)}
+        </div>
+      )}
     </div>
   );
 }

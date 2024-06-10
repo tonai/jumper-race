@@ -250,3 +250,14 @@ button {
     scale: 3;
   }
 }
+
+@keyframes moveright {
+  0% {
+    left: 50%;
+    translate: -50% -50%;
+  }
+  100% {
+    left: 98%;
+    translate: -100% -50%;
+  }
+}
