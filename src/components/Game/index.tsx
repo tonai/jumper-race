@@ -52,11 +52,13 @@ export default function Game(props: IGameProps) {
   const player = useRef<IPlayer>({
     ...start,
     grounded: true,
+    isWallJumping: false,
     jumpStartTime: false,
     jumpVelocity: 0,
+    movement: { x: 0, y: 0 },
     speed: playerSpeed,
     wallJump: false,
-    isWallJumping: false,
+    z: 0,
   });
   const startCountdown = useRef(0);
   const startTime = useRef(0);
@@ -68,6 +70,7 @@ export default function Game(props: IGameProps) {
   });
   const [groundedPos, setGroundedPos] = useState<IPosition>({ ...start });
   const [raceTime, setRaceTime] = useState(0);
+  const ghostUpdateCounter = useRef(0);
   const playerBest = scores?.[yourPlayerId][level.id].bestTime ?? Infinity;
 
   const restart = useCallback(
@@ -78,11 +81,13 @@ export default function Game(props: IGameProps) {
       player.current = {
         ...start,
         grounded: true,
+        isWallJumping: false,
         jumpStartTime: false,
         jumpVelocity: 0,
+        movement: { x: 0, y: 0 },
         speed: playerSpeed,
         wallJump: false,
-        isWallJumping: false,
+        z: 0,
       };
       playerPhysics.current?.rigidBody.setTranslation(
         {
@@ -95,8 +100,19 @@ export default function Game(props: IGameProps) {
       setPlay(false);
       setCountdown(playCountdownDurationSeconds);
       startCountdown.current = time;
+      Rune.actions.updatePosition({
+        grounded: true,
+        movement: player.current.movement,
+        playerId: yourPlayerId,
+        reverse: false,
+        time: Rune.gameTime(),
+        x: player.current.x,
+        y: player.current.y,
+        z: player.current.z,
+      });
+      ghostUpdateCounter.current = 0;
     },
-    [start],
+    [start, yourPlayerId],
   );
 
   useEffect(() => {
@@ -127,7 +143,7 @@ export default function Game(props: IGameProps) {
       const interval = setInterval(() => {
         if (world.current && playerPhysics.current) {
           const time = Rune.gameTime();
-          const prevGrounded = player.current.grounded;
+          const prevPlayer = { ...player.current };
           const [nextPosition, shouldRestart] = getPlayerPosition(
             rapier,
             level,
@@ -142,9 +158,22 @@ export default function Game(props: IGameProps) {
             volume.current,
             setRaceTime,
           );
-          if (player.current.grounded && !prevGrounded) {
+          if (player.current.grounded && !prevPlayer.grounded) {
             playerRef.current?.classList.remove("jump");
             setGroundedPos({ x: nextPosition.x, y: nextPosition.y });
+          }
+          // Update ghost position only 1 time per 5 frames
+          ghostUpdateCounter.current--;
+          if (ghostUpdateCounter.current < 0) {
+            Rune.actions.updatePosition({
+              ...nextPosition,
+              grounded: player.current.grounded,
+              movement: player.current.movement,
+              playerId: yourPlayerId,
+              time: Rune.gameTime(),
+              reverse: player.current.speed < 0,
+            });
+            ghostUpdateCounter.current = 4;
           }
           setPosition(nextPosition);
           if (shouldRestart) {
@@ -216,8 +245,11 @@ export default function Game(props: IGameProps) {
         {bounds && (
           <Level
             bounds={bounds}
+            ghosts={game.ghosts}
             groundedPos={groundedPos}
             level={level}
+            play={play}
+            playerId={yourPlayerId}
             playerRef={playerRef}
             stage={game.stage}
             x={position.x}

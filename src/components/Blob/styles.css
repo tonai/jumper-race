@@ -8,6 +8,10 @@
   height: 100%;
 }
 
+.blob.ghost {
+  opacity: 0.5;
+}
+
 .blob__eye {
   position: absolute;
   top: 50%;

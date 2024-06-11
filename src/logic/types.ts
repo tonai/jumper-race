@@ -15,6 +15,13 @@ export interface IPositionWithRotation extends IPosition {
   z: number;
 }
 
+export interface IGhost extends IPositionWithRotation {
+  grounded: boolean;
+  movement: IPosition;
+  reverse: boolean;
+  time: number;
+}
+
 export interface IDetail {
   src: string;
   width: number;
@@ -39,10 +46,11 @@ export interface IRectangle extends IPosition {
   force?: number;
 }
 
-export interface IPlayer extends IPosition {
+export interface IPlayer extends IPositionWithRotation {
   grounded: boolean;
   jumpStartTime: false | number;
   jumpVelocity: number;
+  movement: IPosition;
   speed: number;
   wallJump: boolean;
   isWallJumping: boolean;
@@ -73,6 +81,7 @@ export type Stage = "gettingReady" | "raceSelect" | "countdown" | "playing" | "e
 
 export interface GameState {
   countdownTimer: number;
+  ghosts: Record<string, IGhost>;
   levelIndex: number;
   mode: string,
   playerIds: PlayerId[];
@@ -94,11 +103,16 @@ export interface IVoteRaceData {
   playerId: string;
 }
 
+export interface IUpdatePositionData extends IGhost {
+  playerId: string;
+}
+
 export type GameActions = {
   nextRound: () => void;
   sendTime: (data: ISendTimeData) => void;
   setReady: () => void;
   startRace: () => void
+  updatePosition: (data: IUpdatePositionData) => void;
   voteRace: (data: IVoteRaceData) => void;
 };
 

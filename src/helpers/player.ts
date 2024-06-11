@@ -31,14 +31,16 @@ export function getPlayerPosition(
   playerPhysics: IPlayerPhysics,
   playerRef: HTMLDivElement | null,
   volume: number | null,
-  setRaceTime: (time: number) => void
+  setRaceTime: (time: number) => void,
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;
-  let restart: false | 'dead' | 'finish' = false;
+  let restart: false | "dead" | "finish" = false;
   const { collider, controller, rigidBody } = playerPhysics;
 
   // Jump
-  const isJumping = Boolean(player.jumpStartTime && time - player.jumpStartTime < maxJumpTime);
+  const isJumping = Boolean(
+    player.jumpStartTime && time - player.jumpStartTime < maxJumpTime,
+  );
   if (!isJumping && player.grounded) {
     // Apply gravity
     player.jumpVelocity = jumpForce;
@@ -56,7 +58,7 @@ export function getPlayerPosition(
   const position = rigidBody.translation();
   const movement = new Vector2(
     player.grounded ? 0 : player.speed / physicsRatio,
-    player.jumpVelocity / physicsRatio
+    player.jumpVelocity / physicsRatio,
   );
   let isCollidingWallJump = false;
   controller.computeColliderMovement(
@@ -68,7 +70,7 @@ export function getPlayerPosition(
       isCollidingWallJump =
         isCollidingWallJump || collider.userData?.type === BlockType.WallJump;
       return collider.userData?.type !== BlockType.WallJump;
-    }
+    },
   );
   player.wallJump = isCollidingWallJump && !player.isWallJumping;
   player.isWallJumping = player.isWallJumping && isCollidingWallJump;
@@ -95,7 +97,8 @@ export function getPlayerPosition(
     switch (block?.type) {
       case BlockType.Reverser:
         // Reverse speed
-        player.speed = (block?.direction === "left" ? -1 : 1) * Math.abs(player.speed);
+        player.speed =
+          (block?.direction === "left" ? -1 : 1) * Math.abs(player.speed);
         if (player.speed < 0) {
           playerRef?.classList.add("reverse");
         } else {
@@ -111,7 +114,7 @@ export function getPlayerPosition(
         break;
       case BlockType.Spikes:
         // Dead
-        restart = 'dead';
+        restart = "dead";
         break;
       case BlockType.End: {
         // Finish
@@ -121,7 +124,7 @@ export function getPlayerPosition(
           time: raceTime,
         });
         setRaceTime(raceTime);
-        restart = 'finish';
+        restart = "finish";
         break;
       }
     }
@@ -137,16 +140,23 @@ export function getPlayerPosition(
     y: newPosition.y * physicsRatio - playerHeight / 2,
     z,
   };
+  player.x = playerPosition.x;
+  player.y = playerPosition.y;
+  player.z = playerPosition.z;
+  player.movement = {
+    x: correctedMovement.x * physicsRatio,
+    y: correctedMovement.y * physicsRatio,
+  };
+
   // Fall
   if (playerPosition.y + playerHeight > level.height) {
-    restart = 'dead';
+    restart = "dead";
   }
-
-  if (restart ==='dead') {
-    document.body.classList.add('shake');
-    setTimeout(() => document.body.classList.remove('shake'), 500);
+  if (restart === "dead") {
+    document.body.classList.add("shake");
+    setTimeout(() => document.body.classList.remove("shake"), 500);
     playSound("spikes", volume);
-  } else if (restart === 'finish') {
+  } else if (restart === "finish") {
     playSound("end", volume);
   }
 

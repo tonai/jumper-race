@@ -4,6 +4,7 @@ import { levels, startCountdownDurationSeconds } from "./config";
 import {
   GameActions,
   GameState,
+  IUpdatePositionData,
   IVoteRaceData,
   ISendTimeData,
   Persisted,
@@ -24,6 +25,7 @@ Rune.initLogic({
   maxPlayers: 6,
   setup: (allPlayerIds) => ({
     countdownTimer: startCountdownDurationSeconds,
+    ghosts: {},
     levelIndex: 0,
     mode: "",
     playerIds: allPlayerIds,
@@ -81,6 +83,9 @@ Rune.initLogic({
     startRace(_, { game }) {
       if (game.stage !== "raceSelect") throw Rune.invalidAction();
       newRound(game);
+    },
+    updatePosition({ playerId, ...position }: IUpdatePositionData, { game }) {
+      game.ghosts[playerId] = position;
     },
     voteRace({ playerId, race }: IVoteRaceData, { game }) {
       if (game.stage !== "raceSelect") throw Rune.invalidAction();
