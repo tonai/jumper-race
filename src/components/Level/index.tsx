@@ -1,4 +1,5 @@
 import { MutableRefObject, memo, useEffect, useMemo, useState } from "react";
+import classNames from "classnames";
 
 import {
   assetSize,
@@ -7,17 +8,21 @@ import {
   playerWidth,
   startCountdownDurationSeconds,
 } from "../../logic/config";
-import { ILevel, IPosition, Stage } from "../../logic/types";
-import classNames from "classnames";
+import { IGhost, ILevel, IPosition, Stage } from "../../logic/types";
 import { getBackground } from "../../helpers/background";
 
-import "./styles.css";
 import Blob from "../Blob";
+import Ghost from "../Ghost";
+
+import "./styles.css";
 
 interface ILevelProps {
   bounds: DOMRect;
+  ghosts: Record<string, IGhost>;
   groundedPos: IPosition;
   level: ILevel;
+  play: boolean;
+  playerId: string;
   playerRef: MutableRefObject<HTMLDivElement | null>;
   stage: Stage;
   x: number;
@@ -26,7 +31,19 @@ interface ILevelProps {
 }
 
 function Level(props: ILevelProps) {
-  const { bounds, groundedPos, level, playerRef, stage, x, y, z } = props;
+  const {
+    bounds,
+    ghosts,
+    groundedPos,
+    level,
+    play,
+    playerId,
+    playerRef,
+    stage,
+    x,
+    y,
+    z,
+  } = props;
   const { blocks } = level;
   const width = level.width + 4 * assetSize;
   const height = level.height + 4 * assetSize;
@@ -122,6 +139,22 @@ function Level(props: ILevelProps) {
               />
             ))}
           <Blob playerRef={playerRef} x={x} y={y} z={z} />
+          {Object.entries(ghosts)
+            .filter(([pId]) => pId !== playerId)
+            .map(([pId, { grounded, movement, reverse, x, y, z }]) => (
+              <Ghost
+                key={pId}
+                grounded={grounded}
+                movementX={movement.x}
+                movementY={movement.y}
+                play={play}
+                reverse={reverse}
+                stage={stage}
+                x={x}
+                y={y}
+                z={z}
+              />
+            ))}
           <div
             className="level__grounded"
             key={`${groundedPos.x}-${groundedPos.y}`}
