@@ -33,6 +33,7 @@ export function updatePlaying(game: GameState) {
         );
         Rune.gameOver({
           delayPopUp: true,
+          minimizePopUp: true,
           players: totals,
         });
       }
