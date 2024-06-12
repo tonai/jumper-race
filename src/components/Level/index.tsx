@@ -140,11 +140,12 @@ function Level(props: ILevelProps) {
             ))}
           <Blob playerRef={playerRef} x={x} y={y} z={z} />
           {Object.entries(ghosts)
-            .filter(([pId]) => pId !== playerId)
-            .map(([pId, { grounded, movement, reverse, x, y, z }]) => (
+            .filter(([id]) => id !== playerId)
+            .map(([id, { grounded, movement, reverse, x, y, z }]) => (
               <Ghost
-                key={pId}
+                key={id}
                 grounded={grounded}
+                id={id}
                 movementX={movement.x}
                 movementY={movement.y}
                 play={play}

@@ -8,6 +8,7 @@ import classNames from "classnames";
 interface IBlobProps {
   ghost?: boolean;
   grounded?: boolean;
+  name?: string;
   playerRef?: MutableRefObject<HTMLDivElement | null>;
   reverse?: boolean;
   x: number;
@@ -16,7 +17,7 @@ interface IBlobProps {
 }
 
 function Blob(props: IBlobProps) {
-  const { ghost, grounded, playerRef, reverse, x, y, z } = props;
+  const { ghost, grounded, name, playerRef, reverse, x, y, z } = props;
 
   return (
     <div
@@ -30,6 +31,7 @@ function Blob(props: IBlobProps) {
         rotate: `${z}deg`,
       }}
     >
+      {name && (<div className="blob__name">{name}</div>)}
       <div className="blob__eye" />
     </div>
   );

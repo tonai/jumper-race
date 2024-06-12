@@ -7,6 +7,7 @@ import { updatesPerSecond } from "../../logic/config";
 
 interface IBlobProps {
   grounded: boolean;
+  id: string;
   movementX: number;
   movementY: number;
   play: boolean;
@@ -18,18 +19,19 @@ interface IBlobProps {
 }
 
 function Ghost(props: IBlobProps) {
-  const { movementX, movementY, play, reverse, stage, x, y, z } = props;
+  const { id, movementX, movementY, play, reverse, stage, x, y, z } = props;
   const [position, setPosition] = useState<IPositionWithRotation>({ x, y, z });
+  const player = Rune.getPlayerInfo(id);
 
   useEffect(() => {
     if (stage === "playing" && play) {
       const interval = setInterval(() => {
         setPosition(({ x, y, z }) => {
-          return ({
+          return {
             x: x + movementX,
             y: y + movementY,
             z: z,
-          })
+          };
         });
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);
@@ -38,9 +40,17 @@ function Ghost(props: IBlobProps) {
 
   useEffect(() => {
     setPosition({ x, y, z });
-  }, [x, y, z])
+  }, [x, y, z]);
 
-  return <Blob grounded={true} ghost reverse={reverse} {...position} />;
+  return (
+    <Blob
+      grounded={true}
+      ghost
+      name={player.displayName}
+      reverse={reverse}
+      {...position}
+    />
+  );
 }
 
 export default memo(Ghost);
