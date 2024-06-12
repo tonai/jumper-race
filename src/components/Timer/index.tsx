@@ -1,4 +1,5 @@
-import { levels } from "../../logic/config";
+import { levels } from "../../constants/levels";
+
 import "./styles.css";
 
 interface ITimer {

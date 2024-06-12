@@ -1,6 +1,6 @@
 import { MutableRefObject } from "react";
 
-import { assetSize, playerHeight, playerWidth } from "../../logic/config";
+import { assetSize, playerHeight, playerWidth } from "../../constants/config";
 
 import "./styles.css";
 import classNames from "classnames";
@@ -22,7 +22,7 @@ interface IBlobProps {
 }
 
 function Blob(props: IBlobProps) {
-  const { className, ghost, grounded, name, playerRef, reverse, shadow = true, x, y, z } = props;
+  const { className, ghost, grounded, name, playerRef, reverse, shadow, x, y, z } = props;
 
   return (
     <div

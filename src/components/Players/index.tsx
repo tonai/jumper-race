@@ -4,7 +4,7 @@ import { GameState } from "../../logic/types";
 
 import "./styles.css";
 import { formatTime } from "../../helpers/format";
-import { levels } from "../../logic/config";
+import { levels } from "../../constants/levels";
 
 interface IPlayersProps {
   game: GameState;

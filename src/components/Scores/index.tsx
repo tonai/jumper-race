@@ -3,9 +3,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { formatTime } from "../../helpers/format";
 import { GameState } from "../../logic/types";
+import { levels } from "../../constants/levels";
 
 import "./styles.css";
-import { levels } from "../../logic/config";
 
 interface IScores {
   game: GameState;

@@ -261,3 +261,75 @@ button {
     translate: -100% -50%;
   }
 }
+
+@keyframes idle-squish {
+  0% {
+    scale: 1.8 1.8;
+  }
+  10% {
+    scale: 2 1.5;
+  }
+  50% {
+    scale: 1.5 2;
+  }
+  100% {
+    scale: 1.8 1.8;
+  }
+}
+
+@keyframes idle-jumpy {
+  0% {
+    translate: 0 0;
+  }
+  10% {
+    translate: 0 -10px;
+  }
+  20% {
+    translate: 0 0;
+  }
+  30% {
+    translate: 0 -10px;
+  }
+  40% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+  60% {
+    translate: 0 0;
+  }
+  70% {
+    translate: 0 -10px;
+  }
+  80% {
+    translate: 0 0;
+  }
+  90% {
+    translate: 0 -10px;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes idle-roll {
+  0% {
+    rotate: 0deg;
+  }
+  20% {
+    rotate: 110deg;
+  }
+  50% {
+    rotate: 110deg;
+  }
+  60% {
+    rotate: 60deg;
+  }
+  80% {
+    rotate: 60deg;
+  }
+  100% {
+    rotate: 0deg;
+  }
+}

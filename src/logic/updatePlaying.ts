@@ -1,4 +1,4 @@
-import { levels } from "./config.ts";
+import { levels } from "../constants/levels";
 import { GameState } from "./types.ts";
 
 export function updatePlaying(game: GameState) {

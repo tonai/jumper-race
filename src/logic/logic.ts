@@ -1,6 +1,7 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 
-import { levels, startCountdownDurationSeconds } from "./config";
+import { startCountdownDurationSeconds } from "../constants/config";
+import { levels } from "../constants/levels";
 import {
   GameActions,
   GameState,

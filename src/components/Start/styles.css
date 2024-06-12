@@ -54,6 +54,19 @@
   transform: translateX(-10px) translateZ(-8px);
 }
 
+.blob.squish .blob__body {
+  animation: 0.5s ease-in idle-squish;
+}
+
+.blob.jumpy .blob__body {
+  animation: 1s ease-in idle-jumpy;
+}
+
+.blob.roll .blob__eye {
+  animation: 2s ease-in idle-roll;
+}
+
+
 .start__screen {
   height: 100%;
   display: flex;

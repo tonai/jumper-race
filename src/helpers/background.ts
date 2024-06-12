@@ -14,7 +14,7 @@ import {
   groundTopBottom,
   randomDetails,
 } from "../logic/assets";
-import { assetSize, randomChance } from "../logic/config";
+import { assetSize, randomChance } from "../constants/config";
 import { IDetail, ILevel, IRectangle } from "../logic/types";
 import { randomInt } from "./utils";
 

@@ -1,4 +1,5 @@
-import { levels, startCountdownDurationSeconds } from "./config.ts";
+import { startCountdownDurationSeconds } from "../constants/config.ts";
+import { levels } from "../constants/levels";
 import { GameState } from "./types.ts";
 
 export function newRound(game: GameState) {

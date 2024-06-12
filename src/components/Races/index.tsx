@@ -1,6 +1,6 @@
 import { RefObject, useEffect } from "react";
 
-import { levels } from "../../logic/config";
+import { levels } from "../../constants/levels";
 import { playSound } from "../../helpers/sounds";
 
 import Race from "../Race";

@@ -5,13 +5,13 @@ import { useBounds } from "../../hooks/useBounds";
 import {
   playCountdownDurationSeconds,
   jumpForce,
-  levels,
   physicsRatio,
   playerHeight,
   playerSpeed,
   playerWidth,
   updatesPerSecond,
-} from "../../logic/config";
+} from "../../constants/config";
+import { levels } from "../../constants/levels";
 import {
   GameState,
   IPlayer,

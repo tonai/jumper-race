@@ -7,7 +7,7 @@ import {
   playerHeight,
   playerWidth,
   startCountdownDurationSeconds,
-} from "../../logic/config";
+} from "../../constants/config";
 import { IGhost, ILevel, IPosition, Stage } from "../../logic/types";
 import { getBackground } from "../../helpers/background";
 

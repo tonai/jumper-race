@@ -14,7 +14,7 @@ import {
   physicsRatio,
   playerHeight,
   playerWidth,
-} from "../logic/config.ts";
+} from "../constants/config.ts";
 import { playSound } from "./sounds.ts";
 
 export const radianOffset = (90 * Math.PI) / 180;

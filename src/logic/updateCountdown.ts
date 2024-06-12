@@ -1,4 +1,4 @@
-import { startCountdownDurationSeconds } from "./config.ts";
+import { startCountdownDurationSeconds } from "../constants/config.ts";
 import { GameState } from "./types.ts";
 
 export function updateCountdown(game: GameState) {

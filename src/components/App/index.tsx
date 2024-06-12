@@ -15,7 +15,7 @@ import Races from "../Races/index.tsx";
 
 import classNames from "classnames";
 import { initSounds } from "../../helpers/sounds.ts";
-import { sounds } from "../../logic/config.ts";
+import { sounds } from "../../constants/config.ts";
 
 import "./styles.css";
 

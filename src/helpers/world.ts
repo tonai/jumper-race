@@ -7,7 +7,7 @@ import {
   playerOffset,
   playerWidth,
   updatesPerSecond,
-} from "../logic/config";
+} from "../constants/config";
 import { BlockType, ILevel } from "../logic/types";
 import { MutableRefObject } from "react";
 

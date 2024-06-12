@@ -3,7 +3,7 @@ import { memo, useEffect, useState } from "react";
 import { IPositionWithRotation, Stage } from "../../logic/types";
 
 import Blob from "../Blob";
-import { updatesPerSecond } from "../../logic/config";
+import { updatesPerSecond } from "../../constants/config";
 
 interface IBlobProps {
   grounded: boolean;
