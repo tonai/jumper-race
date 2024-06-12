@@ -28,11 +28,17 @@ function Blob(props: IBlobProps) {
         top: y + 2 * assetSize,
         width: playerWidth,
         height: playerHeight,
-        rotate: `${z}deg`,
       }}
     >
-      {name && (<div className="blob__name">{name}</div>)}
-      <div className="blob__eye" />
+      <div
+        className="blob__body"
+        style={{
+          rotate: `${z}deg`,
+        }}
+      >
+        <div className="blob__eye" />
+      </div>
+      {name && <div className="blob__name">{name}</div>}
     </div>
   );
 }

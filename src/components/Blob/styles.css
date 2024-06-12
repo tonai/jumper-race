@@ -1,5 +1,15 @@
 .blob {
   position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.blob.ghost {
+  opacity: 0.5;
+}
+
+.blob__body {
+  position: absolute;
   background: #b442df;
   border-radius: 8px;
   border: 3px solid #6c2994;
@@ -8,8 +18,8 @@
   height: 100%;
 }
 
-.blob.ghost {
-  opacity: 0.5;
+.blob .blob__body.jump {
+  animation: 0.5s ease-in squish;
 }
 
 .blob__eye {
@@ -42,10 +52,6 @@
 
 .blob.reverse .blob__eye::before {
   left: 30%;
-}
-
-.blob.jump {
-  animation: 0.5s ease-in squish;
 }
 
 .blob__name {
