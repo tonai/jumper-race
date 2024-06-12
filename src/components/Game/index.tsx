@@ -238,10 +238,8 @@ export default function Game(props: IGameProps) {
     <div className="game">
       <div
         className="game__level"
-        onMouseDown={startJump}
-        onMouseUp={endJump}
-        onTouchStart={startJump}
-        onTouchEnd={endJump}
+        onPointerDown={startJump}
+        onPointerUp={endJump}
         ref={ref}
       >
         {bounds && (

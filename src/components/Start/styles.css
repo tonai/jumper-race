@@ -7,16 +7,16 @@
 
 .start__players {
   position: absolute;
-  top: 14vw;
+  top: 50%;
   left: 0;
   right: 0;
-  bottom: 4.3em;
   transform-style: preserve-3d;
   perspective-origin: bottom center;
   perspective: 10px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  translate: 0 -50%;
 }
 
 .start__player {
@@ -114,8 +114,8 @@
 }
 
 .start__button {
-  border-radius: 0.5rem;
-  font-size: 2em;
+  border-radius: 2vw;
+  font-size: 8vw;
   font-weight: bold;
   display: flex;
   justify-content: center;
@@ -123,9 +123,9 @@
   margin: 0;
   padding: 0 1em;
   background: #b442df;
-  border: 3px solid #6c2994;
+  border: 0.5vw solid #6c2994;
   color: white;
-  box-shadow: 0px 0px 5px white;
+  box-shadow: 0px 0px 1vw white;
   position: absolute;
   bottom: 2vw;
   left: 50%;

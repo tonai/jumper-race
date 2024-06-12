@@ -1,14 +1,16 @@
 import classNames from "classnames";
+import { GameStateWithPersisted } from "rune-games-sdk";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { formatTime } from "../../helpers/format";
-import { GameState } from "../../logic/types";
+import { GameState, Persisted } from "../../logic/types";
 import { levels } from "../../constants/levels";
+import { colors } from "../../constants/config";
 
 import "./styles.css";
 
 interface IScores {
-  game: GameState;
+  game: GameStateWithPersisted<GameState, Persisted>;
   yourPlayerId: string;
 }
 
@@ -16,6 +18,7 @@ export default function Scores(props: IScores) {
   const { game, yourPlayerId } = props;
   const { levelIndex, playerIds, scores } = game;
   const level = levels[levelIndex];
+  const [color] = colors[game.persisted[yourPlayerId].color ?? 0];
   const ref = useRef<HTMLUListElement>(null);
   const totals = useMemo(
     () =>
@@ -135,10 +138,16 @@ export default function Scores(props: IScores) {
               </div>
               <div
                 className="scores__avatar"
-                style={{ backgroundImage: `url(${player.avatarUrl})` }}
+                style={{
+                  backgroundImage: `url(${player.avatarUrl})`,
+                  borderColor: playerId === yourPlayerId ? color : undefined,
+                }}
               />
               <div className="scores__data">
-                <div className="scores__name">
+                <div
+                  className="scores__name"
+                  style={playerId === yourPlayerId ? { color } : {}}
+                >
                   {player.displayName}{" "}
                   {player.playerId === yourPlayerId && "(you)"}
                 </div>

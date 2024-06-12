@@ -2,8 +2,8 @@
   position: absolute;
   left: 2vw;
   bottom: 2vw;
-  border-radius: 0.5rem;
-  font-size: 1.5em;
+  border-radius: 1vw;
+  font-size: 4vw;
   font-weight: bold;
   display: flex;
   justify-content: center;
@@ -11,11 +11,11 @@
   margin: 0;
   padding: 0;
   background: #b442df;
-  border: 3px solid #6c2994;
+  border: 0.5vw solid #6c2994;
   color: white;
-  box-shadow: 0px 0px 5px white;
-  height: 3rem;
-  width: 3rem;
+  box-shadow: 0px 0px 0.5vw white;
+  height: 8vw;
+  width: 8vw;
   z-index: 1;
   transform: translateZ(10px);
 }
@@ -76,4 +76,5 @@
   height: 1em;
   left: 1.7em;
   font-size: 0.6em;
+  line-height: 1em;
 }

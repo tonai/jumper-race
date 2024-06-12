@@ -19,7 +19,7 @@
   height: 100%;
 }
 
-.blob .blob__body.jump {
+.blob.jump .blob__body {
   animation: 0.5s ease-in squish;
 }
 
