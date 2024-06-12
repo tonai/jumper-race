@@ -1,8 +1,18 @@
 import classNames from "classnames";
-import "./styles.css";
 import { useEffect, useState } from "react";
 
-export default function Start() {
+import Blob from "../Blob";
+
+import "./styles.css";
+import { assetSize } from "../../logic/config";
+
+interface IStartProps {
+  playerIds: string[];
+  yourPlayerId: string;
+}
+
+export default function Start(props: IStartProps) {
+  const { playerIds, yourPlayerId } = props;
   const [squish, setSquish] = useState(false);
 
   function handleSquish() {
@@ -18,24 +28,50 @@ export default function Start() {
 
   return (
     <div className="start">
-      <h1
-        className={classNames("start__title", {
-          "start__title--squish": squish,
-        })}
-        onClick={handleSquish}
-      >
-        Jumper racer
-      </h1>
-      <button
-        className="start__button"
-        type="button"
-        onClick={() => Rune.actions.setReady()}
-      >
-        <span>
-          Start race&nbsp;&nbsp;&nbsp;
-          <div className="start__arrow" />
-        </span>
-      </button>
+      <div className="start__players" style={{ gap: `${2.4 - playerIds.length / 5}em` }}>
+        <Blob
+          className={["start__player", "start__player--you"]}
+          grounded={true}
+          x={-assetSize * 2}
+          y={-assetSize * 2}
+          z={0}
+        />
+        {playerIds
+          .filter((id) => id !== yourPlayerId)
+          .map((id) => {
+            const player = Rune.getPlayerInfo(id);
+            return (
+              <Blob
+                className="start__player"
+                grounded={true}
+                name={player.displayName}
+                x={-assetSize * 2}
+                y={-assetSize * 2}
+                z={0}
+              />
+            );
+          })}
+      </div>
+      <div className="start__screen">
+        <h1
+          className={classNames("start__title", {
+            "start__title--squish": squish,
+          })}
+          onClick={handleSquish}
+        >
+          Jumper race
+        </h1>
+        <button
+          className="start__button"
+          type="button"
+          onClick={() => Rune.actions.setReady()}
+        >
+          <span>
+            Start race&nbsp;&nbsp;&nbsp;
+            <div className="start__arrow" />
+          </span>
+        </button>
+      </div>
     </div>
   );
 }

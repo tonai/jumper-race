@@ -87,7 +87,7 @@ function App() {
   return (
     <>
       <Players game={game} yourPlayerId={yourPlayerId} />
-      {game.stage === "gettingReady" && <Start />}
+      {game.stage === "gettingReady" && <Start playerIds={game.playerIds} yourPlayerId={yourPlayerId} />}
       {game.stage === "gettingReady" && <Help />}
       {game.stage === "raceSelect" && (
         <Races
