@@ -53,7 +53,10 @@ function App() {
   useEffect(() => {
     if (init && rapier) {
       Rune.initClient({
-        onChange: ({ game, yourPlayerId }) => {
+        onChange: ({ game, yourPlayerId, event }) => {
+          if (event?.name === 'stateSync' && game.mode === '') {
+            setScreen('start');
+          }
           setGame(game);
           setYourPlayerId(yourPlayerId);
         },
