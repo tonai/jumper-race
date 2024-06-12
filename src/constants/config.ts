@@ -15,7 +15,10 @@ export const randomChance = 7;
 
 export const sounds = {
   countdown: "audio/countdown.ogg",
-  end: "audio/end.ogg",
+  crown: "audio/crown.ogg",
+  endBad: "audio/endBad.ogg",
+  endBest: "audio/endBest.ogg",
+  endGood: "audio/endGood.ogg",
   go: "audio/go.ogg",
   jump: [
     "audio/jump1.ogg",

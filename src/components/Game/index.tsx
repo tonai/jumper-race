@@ -74,6 +74,10 @@ export default function Game(props: IGameProps) {
   const [raceTime, setRaceTime] = useState(0);
   const ghostUpdateCounter = useRef(0);
   const playerBest = scores?.[yourPlayerId][level.id].bestTime ?? Infinity;
+  const overallBest = Object.values(scores ?? {}).reduce((acc, score) => {
+    const bestTime = score[level.id].bestTime ?? Infinity;
+    return acc < bestTime ? acc : bestTime;
+  }, Infinity);
 
   const restart = useCallback(
     (time: number) => {
@@ -159,6 +163,8 @@ export default function Game(props: IGameProps) {
             playerRef.current,
             volume.current,
             setRaceTime,
+            playerBest,
+            overallBest,
           );
           if (player.current.grounded && !prevPlayer.grounded) {
             playerRef.current?.classList.remove("jump");
@@ -186,7 +192,17 @@ export default function Game(props: IGameProps) {
       }, 1000 / updatesPerSecond);
       return () => clearInterval(interval);
     }
-  }, [game.stage, level, play, rapier, restart, volume, yourPlayerId]);
+  }, [
+    game.stage,
+    level,
+    overallBest,
+    play,
+    playerBest,
+    rapier,
+    restart,
+    volume,
+    yourPlayerId,
+  ]);
 
   useEffect(() => {
     if (countdown) {

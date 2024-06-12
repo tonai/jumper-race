@@ -91,7 +91,7 @@ function App() {
 
   return (
     <>
-      <Players game={game} yourPlayerId={yourPlayerId} />
+      <Players game={game} volume={volumeRef} yourPlayerId={yourPlayerId} />
       {game.stage === "gettingReady" && screen !== "raceSelect" && (
         <Start
           persisted={game.persisted}

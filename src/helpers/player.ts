@@ -32,6 +32,8 @@ export function getPlayerPosition(
   playerRef: HTMLDivElement | null,
   volume: number | null,
   setRaceTime: (time: number) => void,
+  playerBest: number,
+  overallBest: number,
 ): [IPositionWithRotation, boolean] {
   const { Vector2 } = rapier;
   let restart: false | "dead" | "finish" = false;
@@ -125,6 +127,13 @@ export function getPlayerPosition(
         });
         setRaceTime(raceTime);
         restart = "finish";
+        if (raceTime <= overallBest) {
+          playSound("endBest", volume);
+        } else if (raceTime <= playerBest) {
+          playSound("endGood", volume);
+        } else {
+          playSound("endBad", volume); // TODO
+        }
         break;
       }
     }
@@ -156,8 +165,6 @@ export function getPlayerPosition(
     document.body.classList.add("shake");
     setTimeout(() => document.body.classList.remove("shake"), 500);
     playSound("spikes", volume);
-  } else if (restart === "finish") {
-    playSound("end", volume);
   }
 
   return [playerPosition, Boolean(restart)];

@@ -7,14 +7,17 @@ import { levels } from "../../constants/levels";
 import { colors } from "../../constants/config";
 
 import "./styles.css";
+import { RefObject, useEffect } from "react";
+import { playSound } from "../../helpers/sounds";
 
 interface IPlayersProps {
   game: GameStateWithPersisted<GameState, Persisted>;
+  volume: RefObject<number>;
   yourPlayerId: string;
 }
 
 export default function Players(props: IPlayersProps) {
-  const { game, yourPlayerId } = props;
+  const { game, volume, yourPlayerId } = props;
   const { levelIndex, playerIds, scores } = game;
   const level = levels[levelIndex];
   const [color] = colors[game.persisted[yourPlayerId].color ?? 0];
@@ -23,6 +26,13 @@ export default function Players(props: IPlayersProps) {
     const bestTime = score[level.id].bestTime ?? Infinity;
     return acc < bestTime ? acc : bestTime;
   }, Infinity);
+  const playerBest = scores?.[yourPlayerId][level.id].bestTime;
+
+  useEffect(() => {
+    if (playerBest !== best && best !== Infinity) {
+      playSound('crown', volume.current);
+    }
+  }, [best, playerBest, volume]);
 
   return (
     <div
