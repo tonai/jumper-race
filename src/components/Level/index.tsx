@@ -8,7 +8,7 @@ import {
   playerWidth,
   startCountdownDurationSeconds,
 } from "../../constants/config";
-import { IGhost, ILevel, IPosition, Stage } from "../../logic/types";
+import { IGhost, ILevel, IPosition, Persisted, Stage } from "../../logic/types";
 import { getBackground } from "../../helpers/background";
 
 import Blob from "../Blob";
@@ -21,6 +21,7 @@ interface ILevelProps {
   ghosts: Record<string, IGhost>;
   groundedPos: IPosition;
   level: ILevel;
+  persisted: Record<string, Persisted>;
   play: boolean;
   playerId: string;
   playerRef: MutableRefObject<HTMLDivElement | null>;
@@ -36,6 +37,7 @@ function Level(props: ILevelProps) {
     ghosts,
     groundedPos,
     level,
+    persisted,
     play,
     playerId,
     playerRef,
@@ -138,12 +140,13 @@ function Level(props: ILevelProps) {
                 }}
               />
             ))}
-          <Blob playerRef={playerRef} x={x} y={y} z={z} />
+          <Blob color={persisted[playerId].color} playerRef={playerRef} x={x} y={y} z={z} />
           {Object.entries(ghosts)
             .filter(([id]) => id !== playerId)
             .map(([id, { grounded, movement, reverse, x, y, z }]) => (
               <Ghost
                 key={id}
+                color={persisted[id].color}
                 grounded={grounded}
                 id={id}
                 movementX={movement.x}

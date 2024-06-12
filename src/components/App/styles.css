@@ -16,6 +16,8 @@
   box-shadow: 0px 0px 5px white;
   height: 3rem;
   width: 3rem;
+  z-index: 1;
+  transform: translateZ(10px);
 }
 
 .app__sound-icon {

@@ -77,7 +77,8 @@ export interface IScore {
   rank?: number;
 }
 
-export type Stage = "gettingReady" | "raceSelect" | "countdown" | "playing" | "endOfRound";
+export type Screen = "start" | "customize" | "raceSelect";
+export type Stage = "gettingReady" | "countdown" | "playing" | "endOfRound";
 
 export interface GameState {
   countdownTimer: number;
@@ -107,10 +108,15 @@ export interface IUpdatePositionData extends IGhost {
   playerId: string;
 }
 
+export interface ISetBlobColorData {
+  color: number;
+  playerId: string;
+}
+
 export type GameActions = {
   nextRound: () => void;
   sendTime: (data: ISendTimeData) => void;
-  setReady: () => void;
+  setBlobColor: (data: ISetBlobColorData) => void
   startRace: () => void
   updatePosition: (data: IUpdatePositionData) => void;
   voteRace: (data: IVoteRaceData) => void;
@@ -132,5 +138,6 @@ declare module "@dimforge/rapier2d-compat" {
 }
 
 export interface Persisted {
+  color?: number;
   bestTimes?: Record<string, number>
 }

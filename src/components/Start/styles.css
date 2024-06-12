@@ -1,7 +1,8 @@
 .start {
   flex: 1;
-  margin-top: 23vh;
+  margin-top: 17vh;
   position: relative;
+  width: 100%;
 }
 
 .start__players {
@@ -9,7 +10,7 @@
   top: 14vw;
   left: 0;
   right: 0;
-  bottom: 4.5em;
+  bottom: 4.3em;
   transform-style: preserve-3d;
   perspective-origin: bottom center;
   perspective: 10px;
@@ -20,6 +21,7 @@
 
 .start__player {
   position: relative;
+  transition: transform ease-in 1s, left ease-in 1s;
 }
 
 .start__player .blob__body {
@@ -66,16 +68,8 @@
   animation: 2s ease-in idle-roll;
 }
 
-
-.start__screen {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .start__title {
-  position: relative;
+  position: absolute;
   white-space: nowrap;
   font-family: system-ui;
   font-size: 14vw;
@@ -86,7 +80,9 @@
   line-height: 10vw;
   margin: 0;
   cursor: pointer;
-  top: -0.2em;
+  left: 50%;
+  translate: -50% 0;
+  view-transition-name: title;
 }
 
 .start__title--squish {
@@ -130,9 +126,14 @@
   border: 3px solid #6c2994;
   color: white;
   box-shadow: 0px 0px 5px white;
-  position: relative;
-  margin-top: auto;
-  margin-bottom: 2vw;
+  position: absolute;
+  bottom: 2vw;
+  left: 50%;
+  translate: -50% 0;
+  white-space: nowrap;
+  z-index: 1;
+  transform: translateZ(10px);
+  view-transition-name: button;
 }
 
 .start__arrow {
@@ -145,4 +146,60 @@
   position: absolute;
   right: 1em;
   top: 50%;
+}
+
+.start__back {
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 1.2em;
+  position: absolute;
+  top: 2em;
+  left: 1em;
+}
+
+.start__backArrow {
+  width: 0;
+  height: 0;
+  border-width: 1em 1em 1em 0;
+  border-style: solid;
+  border-color: transparent white transparent transparent;
+  animation: 1s ease-in infinite slide-left;
+  position: absolute;
+}
+
+.start__player--hide {
+  left: 200% !important;
+}
+
+::view-transition-old(title) {
+  animation: 1s both slide-title-out;
+}
+
+::view-transition-new(title) {
+  animation: 1s both slide-title-in;
+}
+
+@keyframes slide-title-in {
+  from { translate: 0 -400%; opacity: 0; scale: 0.5; }
+}
+
+@keyframes slide-title-out {
+  to { translate: 0 -400%; opacity: 0; scale: 0.5; }
+}
+
+::view-transition-old(button) {
+  animation: 1s both slide-button-out;
+}
+
+::view-transition-new(button) {
+  animation: 1s both slide-button-in;
+}
+
+@keyframes slide-button-in {
+  from { translate: 0 400%; opacity: 0; scale: 0.5; }
+}
+
+@keyframes slide-button-out {
+  to { translate: 0 400%; opacity: 0; scale: 0.5; }
 }

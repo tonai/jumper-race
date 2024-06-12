@@ -7,6 +7,7 @@ import { updatesPerSecond } from "../../constants/config";
 
 interface IBlobProps {
   grounded: boolean;
+  color?: number;
   id: string;
   movementX: number;
   movementY: number;
@@ -19,7 +20,7 @@ interface IBlobProps {
 }
 
 function Ghost(props: IBlobProps) {
-  const { id, movementX, movementY, play, reverse, stage, x, y, z } = props;
+  const { color, id, movementX, movementY, play, reverse, stage, x, y, z } = props;
   const [position, setPosition] = useState<IPositionWithRotation>({ x, y, z });
   const player = Rune.getPlayerInfo(id);
 
@@ -44,6 +45,7 @@ function Ghost(props: IBlobProps) {
 
   return (
     <Blob
+      color={color}
       grounded={true}
       ghost
       name={player.displayName}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GameStateWithPersisted, PlayerId } from "rune-games-sdk/multiplayer";
 
-import { GameState, Persisted } from "../../logic/types.ts";
+import { GameState, Persisted, Screen } from "../../logic/types.ts";
 import Players from "../Players/index.tsx";
 import Start from "../Start/index.tsx";
 import Countdown from "../Countdown/index.tsx";
@@ -20,11 +20,13 @@ import { sounds } from "../../constants/config.ts";
 import "./styles.css";
 
 function App() {
-  const [game, setGame] = useState<GameStateWithPersisted<GameState, Persisted>>();
+  const [game, setGame] =
+    useState<GameStateWithPersisted<GameState, Persisted>>();
   const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
   const [rapier, setRapier] =
     useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
   const [init, setInit] = useState(false);
+  const [screen, setScreen] = useState<Screen>("start");
   const [volume, setVolume] = useState(1);
   const volumeRef = useRef(1);
 
@@ -61,7 +63,7 @@ function App() {
 
   useEffect(() => {
     initSounds(sounds);
-  }, [])
+  }, []);
 
   if (!game || !yourPlayerId || !rapier || !init) {
     // Rune only shows your game after an onChange() so no need for loading screen
@@ -83,13 +85,21 @@ function App() {
       setVolume(1);
     }
   }
-  
+
   return (
     <>
       <Players game={game} yourPlayerId={yourPlayerId} />
-      {game.stage === "gettingReady" && <Start playerIds={game.playerIds} yourPlayerId={yourPlayerId} />}
+      {game.stage === "gettingReady" && screen !== "raceSelect" && (
+        <Start
+          persisted={game.persisted}
+          playerIds={game.playerIds}
+          screen={screen}
+          setScreen={setScreen}
+          yourPlayerId={yourPlayerId}
+        />
+      )}
       {game.stage === "gettingReady" && <Help />}
-      {game.stage === "raceSelect" && (
+      {game.stage === "gettingReady" && screen === "raceSelect" && (
         <Races
           mode={game.mode}
           playerIds={game.playerIds}
@@ -99,7 +109,7 @@ function App() {
           yourPlayerId={yourPlayerId}
         />
       )}
-      {game.stage !== "gettingReady" && game.stage !== "raceSelect" && (
+      {game.stage !== "gettingReady" && (
         <Game
           key={game.levelIndex}
           game={game}
@@ -126,7 +136,9 @@ function App() {
             "app__sound-waves--13": volume === 0.33,
             "app__sound-waves--mute": volume === 0,
           })}
-        >{volume === 0 && '✖'}</div>
+        >
+          {volume === 0 && "✖"}
+        </div>
       </button>
     </>
   );

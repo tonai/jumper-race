@@ -1,0 +1,41 @@
+.customize {
+  position: absolute;
+  right: 6vw;
+  top: 5vw;
+  height: 32vw;
+  width: 32vw;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 2vw;
+  padding: 2vw;
+  box-sizing: border-box;
+  view-transition-name: customize;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+}
+
+::view-transition-old(customize) {
+  animation: 500ms both slide-customize-out;
+}
+
+::view-transition-new(customize) {
+  animation: 500ms both slide-customize-in;
+}
+
+@keyframes slide-customize-in {
+  from { translate: 400% 0; opacity: 0; scale: 0.5; }
+}
+
+@keyframes slide-customize-out {
+  to { translate: 400% 0; opacity: 0; scale: 0.5; }
+}
+
+.customize__color {
+  width: 8vw;
+  height: 8vw;
+  border-radius: 2vw;
+  box-sizing: border-box;
+  border-width: 1vw;
+  border-style: solid;
+}
+

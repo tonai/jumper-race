@@ -8,6 +8,7 @@ import {
   IUpdatePositionData,
   IVoteRaceData,
   ISendTimeData,
+  ISetBlobColorData,
   Persisted,
 } from "./types";
 import { updateCountdown } from "./updateCountdown";
@@ -74,22 +75,19 @@ Rune.initLogic({
         }
       }
     },
-    setReady(_, { game }) {
-      if (game.stage !== "gettingReady") throw Rune.invalidAction();
-      // newRound(game);
-      game.mode = "";
-      game.raceVotes = {};
-      game.stage = "raceSelect";
+    setBlobColor: ({ color, playerId }: ISetBlobColorData, { game }) => {
+      game.persisted[playerId].color = color;
     },
     startRace(_, { game }) {
-      if (game.stage !== "raceSelect") throw Rune.invalidAction();
+      if (game.stage !== "gettingReady") throw Rune.invalidAction();
+      game.raceVotes = {};
       newRound(game);
     },
     updatePosition({ playerId, ...position }: IUpdatePositionData, { game }) {
       game.ghosts[playerId] = position;
     },
     voteRace({ playerId, race }: IVoteRaceData, { game }) {
-      if (game.stage !== "raceSelect") throw Rune.invalidAction();
+      if (game.stage !== "gettingReady") throw Rune.invalidAction();
       game.raceVotes[playerId] = race;
       // Select race
       if (Object.keys(game.raceVotes).length >= game.playerIds.length) {

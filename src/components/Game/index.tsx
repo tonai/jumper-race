@@ -1,5 +1,7 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import type { World } from "@dimforge/rapier2d-compat";
+import classNames from "classnames";
+import { GameStateWithPersisted } from "rune-games-sdk";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
@@ -18,6 +20,7 @@ import {
   IPlayerPhysics,
   IPosition,
   IPositionWithRotation,
+  Persisted,
 } from "../../logic/types";
 import { getPlayerPosition } from "../../helpers/player";
 import { initWorld } from "../../helpers/world";
@@ -28,10 +31,9 @@ import { playMusic, playSound } from "../../helpers/sounds";
 
 import "./styles.css";
 import { formatTime } from "../../helpers/format";
-import classNames from "classnames";
 
 interface IGameProps {
-  game: GameState;
+  game: GameStateWithPersisted<GameState, Persisted>;
   rapier: typeof import("@dimforge/rapier2d-compat/rapier");
   volume: RefObject<number>;
   volumeState: number;
@@ -248,6 +250,7 @@ export default function Game(props: IGameProps) {
             ghosts={game.ghosts}
             groundedPos={groundedPos}
             level={level}
+            persisted={game.persisted}
             play={play}
             playerId={yourPlayerId}
             playerRef={playerRef}
