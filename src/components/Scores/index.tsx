@@ -67,6 +67,11 @@ export default function Scores(props: IScores) {
     [finalTotals, level.id, scores, sortedTotals, totals],
   );
 
+  const best = Object.values(scores ?? {}).reduce((acc, score) => {
+    const bestTime = score[level.id].bestTime ?? Infinity;
+    return acc < bestTime ? acc : bestTime;
+  }, Infinity);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setFinalTotal(
@@ -98,6 +103,7 @@ export default function Scores(props: IScores) {
           const score = scores?.[playerId][level.id];
           const total = totals[playerId];
           const rank = ranks[playerId];
+          const playerBest = score && score.bestTime;
 
           let translate = "0px 0px";
           if (finalTotals && ref.current) {
@@ -114,8 +120,9 @@ export default function Scores(props: IScores) {
               key={playerId}
               className={classNames("scores__player", {
                 "scores__player--you": player.playerId === yourPlayerId,
+                "scores__player--best": best === playerBest,
               })}
-              style={{ gap: `${players.length + 1}em`, translate }}
+              style={{ gap: `${Math.max(1, players.length - 1)}em`, translate }}
             >
               <div
                 className={classNames("scores__rank", {
@@ -138,10 +145,7 @@ export default function Scores(props: IScores) {
                 {level && level.id && (
                   <>
                     <div className="scores__time">
-                      race best:{" "}
-                      {score && score.bestTime
-                        ? formatTime(score.bestTime)
-                        : "dnf"}
+                      race best: {playerBest ? formatTime(playerBest) : "dnf"}
                     </div>
                     <div className="scores__score">
                       race points: {score?.points ?? 0}

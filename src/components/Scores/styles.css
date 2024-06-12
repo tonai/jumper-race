@@ -29,19 +29,19 @@
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   transition: translate 400ms ease;
 }
 
 .scores__rank {
-  font-size: 2em;
+  font-size: 1.75em;
   font-family: monospace;
-  width: 2em;
-  height: 2em;
+  width: 1.75em;
+  height: 1.75em;
   border-radius: 50%;
   text-align: center;
-  line-height: 2em;
+  line-height: 1.75em;
   background-color: cadetblue;
   color: white;
   background-size: contain;
@@ -76,7 +76,8 @@
 
 .scores__avatar {
   height: 100%;
-  max-height: 80px;
+  max-width: 4em;
+  max-height: 4em;
   background-size: contain;
   background-repeat: no-repeat;
   aspect-ratio: 1;
@@ -98,8 +99,16 @@
   font-weight: bold;
 }
 
+.scores__player--you .scores__name {
+  color: #b442df;
+}
+
 .scores__time {
   font-size: 0.8em;
+}
+
+.scores__player--best .scores__time {
+  color: gold;
 }
 
 .scores__score {

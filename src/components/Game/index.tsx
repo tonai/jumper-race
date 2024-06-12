@@ -264,7 +264,7 @@ export default function Game(props: IGameProps) {
       <button className="game__restart" onClick={handleRestart} type="button">
         <div className="game__arrow">↺</div>
       </button>
-      {raceTime && (
+      {raceTime > 0 && (
         <div
           className={classNames("game__raceTime", {
             "game__raceTime--good": raceTime <= playerBest,
