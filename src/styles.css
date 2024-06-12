@@ -9,6 +9,10 @@ html {
   overflow: hidden;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -22,7 +26,6 @@ main {
 
 button {
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .shake {
