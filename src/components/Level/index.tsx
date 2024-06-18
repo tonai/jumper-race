@@ -146,7 +146,7 @@ function Level(props: ILevelProps) {
             .map(([id, { grounded, movement, reverse, x, y, z }]) => (
               <Ghost
                 key={id}
-                color={persisted[id].color}
+                color={persisted[id]?.color}
                 grounded={grounded}
                 id={id}
                 movementX={movement.x}

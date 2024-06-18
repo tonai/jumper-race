@@ -136,6 +136,7 @@ Rune.initLogic({
     },
     playerLeft: (playerId, { game }) => {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1);
+      delete game.ghosts[playerId];
       if (game.scores) {
         delete game.scores[playerId];
       }
