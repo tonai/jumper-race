@@ -146,7 +146,6 @@ export default function Game(props: IGameProps) {
   useEffect(() => {
     if (game.stage === "playing" && play) {
       startTime.current = Dusk.gameTime();
-      console.log('start', yourPlayerId, startTime.current);
     }
   }, [game.stage, play]);
 
