@@ -1,4 +1,4 @@
-import { GameStateWithPersisted } from "rune-games-sdk";
+import { GameStateWithPersisted } from "dusk-games-sdk";
 import classNames from "classnames";
 
 import { GameState, Persisted } from "../../logic/types";
@@ -41,7 +41,7 @@ export default function Players(props: IPlayersProps) {
     >
       <ul className="players__list">
         {playerIds.map((playerId) => {
-          const player = Rune.getPlayerInfo(playerId);
+          const player = Dusk.getPlayerInfo(playerId);
           const score = scores?.[playerId][level.id];
           const playerBest = score && score.bestTime;
 

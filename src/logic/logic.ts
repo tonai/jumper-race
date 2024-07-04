@@ -25,6 +25,7 @@ Dusk.initLogic({
   persistPlayerData: true,
   minPlayers: 1,
   maxPlayers: 6,
+  reactive: false,
   setup: (allPlayerIds) => ({
     countdownTimer: startCountdownDurationSeconds,
     ghosts: {},

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { GameStateWithPersisted } from "rune-games-sdk";
+import { GameStateWithPersisted } from "dusk-games-sdk";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { formatTime } from "../../helpers/format";
@@ -90,7 +90,7 @@ export default function Scores(props: IScores) {
 
   useEffect(() => {
     if (finalTotals) {
-      setTimeout(() => Rune.showGameOverPopUp(), 1000);
+      setTimeout(() => Dusk.showGameOverPopUp(), 1000);
     }
   }, [finalTotals]);
 
@@ -102,7 +102,7 @@ export default function Scores(props: IScores) {
         ref={ref}
       >
         {players.map((playerId, i) => {
-          const player = Rune.getPlayerInfo(playerId);
+          const player = Dusk.getPlayerInfo(playerId);
           const score = scores?.[playerId][level.id];
           const total = totals[playerId];
           const rank = ranks[playerId];
@@ -185,7 +185,7 @@ export default function Scores(props: IScores) {
       {levelIndex < levels.length - 1 && game.mode === "championship" && (
         <button
           className="scores__button"
-          onClick={() => Rune.actions.nextRound()}
+          onClick={() => Dusk.actions.nextRound()}
           type="button"
         >
           <div className="scores__arrow" />

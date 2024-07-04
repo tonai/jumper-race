@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { GameStateWithPersisted, PlayerId } from "rune-games-sdk/multiplayer";
+import { GameStateWithPersisted, PlayerId } from "dusk-games-sdk";
 
 import { GameState, Persisted, Screen } from "../../logic/types.ts";
 import Players from "../Players/index.tsx";
@@ -52,7 +52,7 @@ function App() {
 
   useEffect(() => {
     if (init && rapier) {
-      Rune.initClient({
+      Dusk.initClient({
         onChange: ({ game, yourPlayerId, event }) => {
           if (event?.name === 'stateSync' && game.mode === '') {
             setScreen('start');

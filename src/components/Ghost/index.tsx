@@ -22,7 +22,7 @@ interface IBlobProps {
 function Ghost(props: IBlobProps) {
   const { color, id, movementX, movementY, play, reverse, stage, x, y, z } = props;
   const [position, setPosition] = useState<IPositionWithRotation>({ x, y, z });
-  const player = Rune.getPlayerInfo(id);
+  const player = Dusk.getPlayerInfo(id);
 
   useEffect(() => {
     if (stage === "playing" && play) {

@@ -16,7 +16,7 @@ export default function Race(props: IRaceProps) {
 
   function handleClick(id: string) {
     return () => {
-      Rune.actions.voteRace({
+      Dusk.actions.voteRace({
         playerId: yourPlayerId,
         race: id,
       });
@@ -47,7 +47,7 @@ export default function Race(props: IRaceProps) {
       {Object.entries(votes)
         .filter(([, id]) => levelId === id)
         .map(([playerId]) => {
-          const player = Rune.getPlayerInfo(playerId);
+          const player = Dusk.getPlayerInfo(playerId);
           return (
             <img
               className="race__player"

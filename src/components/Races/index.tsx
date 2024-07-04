@@ -22,7 +22,7 @@ export default function Races(props: IRacesProps) {
   useEffect(() => {
     if (mode) {
       playSound('select', volume.current);
-      const timeout = setTimeout(() => Rune.actions.startRace(), 2000);
+      const timeout = setTimeout(() => Dusk.actions.startRace(), 2000);
       return () => clearTimeout(timeout);
     }
   }, [mode, volume]);

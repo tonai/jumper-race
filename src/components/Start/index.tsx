@@ -89,7 +89,7 @@ export default function Start(props: IStartProps) {
         {playerIds
           .filter((id) => id !== yourPlayerId)
           .map((id, i) => {
-            const player = Rune.getPlayerInfo(id);
+            const player = Dusk.getPlayerInfo(id);
             return (
               <Blob
                 key={id}

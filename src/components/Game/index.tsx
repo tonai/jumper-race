@@ -1,7 +1,7 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import type { World } from "@dimforge/rapier2d-compat";
 import classNames from "classnames";
-import { GameStateWithPersisted } from "rune-games-sdk";
+import { GameStateWithPersisted } from "dusk-games-sdk";
 
 import { useBounds } from "../../hooks/useBounds";
 import {
@@ -106,12 +106,12 @@ export default function Game(props: IGameProps) {
       setPlay(false);
       setCountdown(playCountdownDurationSeconds);
       startCountdown.current = time;
-      Rune.actions.updatePosition({
+      Dusk.actions.updatePosition({
         grounded: true,
         movement: player.current.movement,
         playerId: yourPlayerId,
         reverse: false,
-        time: Rune.gameTime(),
+        time: Dusk.gameTime(),
         x: player.current.x,
         y: player.current.y,
         z: player.current.z,
@@ -145,10 +145,16 @@ export default function Game(props: IGameProps) {
 
   useEffect(() => {
     if (game.stage === "playing" && play) {
-      startTime.current = Rune.gameTime();
+      startTime.current = Dusk.gameTime();
+      console.log('start', yourPlayerId, startTime.current);
+    }
+  }, [game.stage, play]);
+
+  useEffect(() => {
+    if (game.stage === "playing" && play) {
       const interval = setInterval(() => {
         if (world.current && playerPhysics.current) {
-          const time = Rune.gameTime();
+          const time = Dusk.gameTime();
           const prevPlayer = { ...player.current };
           const [nextPosition, shouldRestart] = getPlayerPosition(
             rapier,
@@ -173,12 +179,12 @@ export default function Game(props: IGameProps) {
           // Update ghost position only 1 time per 5 frames
           ghostUpdateCounter.current--;
           if (ghostUpdateCounter.current < 0) {
-            Rune.actions.updatePosition({
+            Dusk.actions.updatePosition({
               ...nextPosition,
               grounded: player.current.grounded,
               movement: player.current.movement,
               playerId: yourPlayerId,
-              time: Rune.gameTime(),
+              time: Dusk.gameTime(),
               reverse: player.current.speed < 0,
             });
             ghostUpdateCounter.current = 4;
@@ -208,7 +214,7 @@ export default function Game(props: IGameProps) {
     if (countdown) {
       // Manage countdown when player restart level
       const interval = setInterval(() => {
-        const timePassed = (Rune.gameTime() - startCountdown.current) / 1000;
+        const timePassed = (Dusk.gameTime() - startCountdown.current) / 1000;
         if (timePassed > playCountdownDurationSeconds) {
           setCountdown(0);
           setPlay(true);
@@ -222,12 +228,12 @@ export default function Game(props: IGameProps) {
 
   function startJump() {
     if (player.current.grounded) {
-      player.current.jumpStartTime = Rune.gameTime();
+      player.current.jumpStartTime = Dusk.gameTime();
       player.current.jumpVelocity = -jumpForce;
       playerRef.current?.classList.add("jump");
       playSound("jump", volume.current);
     } else if (player.current.wallJump) {
-      player.current.jumpStartTime = Rune.gameTime();
+      player.current.jumpStartTime = Dusk.gameTime();
       player.current.jumpVelocity = -jumpForce;
       player.current.speed = -player.current.speed;
       player.current.wallJump = false;
@@ -247,7 +253,7 @@ export default function Game(props: IGameProps) {
   }
 
   function handleRestart() {
-    restart(Rune.gameTime());
+    restart(Dusk.gameTime());
   }
 
   return (

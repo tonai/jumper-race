@@ -8,7 +8,7 @@ interface ICustomizeProps {
 export default function Customize(props: ICustomizeProps) {
   const { playerId } = props;
   function handleBlobColor(color: number) {
-    return () => Rune.actions.setBlobColor({ color, playerId })
+    return () => Dusk.actions.setBlobColor({ color, playerId })
   }
 
   return (

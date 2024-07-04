@@ -121,6 +121,7 @@ export function getPlayerPosition(
       case BlockType.End: {
         // Finish
         const raceTime = time - startTime;
+        console.log("finish", playerId, time, startTime, raceTime);
         Dusk.actions.sendTime({
           playerId: playerId,
           time: raceTime,
