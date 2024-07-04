@@ -1,4 +1,4 @@
-import type { RuneClient } from "rune-games-sdk/multiplayer";
+import type { DuskClient } from "dusk-games-sdk";
 
 import { startCountdownDurationSeconds } from "../constants/config";
 import { levels } from "../constants/levels";
@@ -17,10 +17,10 @@ import { updatePlaying } from "./updatePlaying";
 import { randomInt } from "../helpers/utils";
 
 declare global {
-  const Rune: RuneClient<GameState, GameActions, Persisted>;
+  const Dusk: DuskClient<GameState, GameActions, Persisted>;
 }
 
-Rune.initLogic({
+Dusk.initLogic({
   landscape: true,
   persistPlayerData: true,
   minPlayers: 1,
@@ -38,14 +38,14 @@ Rune.initLogic({
   }),
   actions: {
     nextRound: (_, { game }) => {
-      if (game.stage !== "endOfRound") throw Rune.invalidAction();
+      if (game.stage !== "endOfRound") throw Dusk.invalidAction();
       if (game.mode === "championship") {
         game.levelIndex++;
         newRound(game);
       }
     },
     sendTime({ playerId, time }: ISendTimeData, { game }) {
-      if (game.stage !== "playing") throw Rune.invalidAction();
+      if (game.stage !== "playing") throw Dusk.invalidAction();
       if (game.scores?.[playerId]) {
         const level = levels[game.levelIndex];
         const playerScore = game.scores[playerId][level.id];
@@ -79,7 +79,7 @@ Rune.initLogic({
       game.persisted[playerId].color = color;
     },
     startRace(_, { game }) {
-      if (game.stage !== "gettingReady") throw Rune.invalidAction();
+      if (game.stage !== "gettingReady") throw Dusk.invalidAction();
       game.raceVotes = {};
       newRound(game);
     },
@@ -87,7 +87,7 @@ Rune.initLogic({
       game.ghosts[playerId] = position;
     },
     voteRace({ playerId, race }: IVoteRaceData, { game }) {
-      if (game.stage !== "gettingReady") throw Rune.invalidAction();
+      if (game.stage !== "gettingReady") throw Dusk.invalidAction();
       game.raceVotes[playerId] = race;
       // Select race
       if (Object.keys(game.raceVotes).length >= game.playerIds.length) {

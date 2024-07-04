@@ -121,7 +121,7 @@ export function getPlayerPosition(
       case BlockType.End: {
         // Finish
         const raceTime = time - startTime;
-        Rune.actions.sendTime({
+        Dusk.actions.sendTime({
           playerId: playerId,
           time: raceTime,
         });

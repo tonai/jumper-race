@@ -3,7 +3,7 @@ import { GameState } from "./types.ts";
 
 export function updatePlaying(game: GameState) {
   const level = levels[game.levelIndex];
-  const timePassed = (Rune.gameTime() - game.timerStartedAt) / 1000;
+  const timePassed = (Dusk.gameTime() - game.timerStartedAt) / 1000;
 
   if (timePassed > level.totalTime) {
     game.stage = "endOfRound";
@@ -31,7 +31,7 @@ export function updatePlaying(game: GameState) {
             ),
           ]),
         );
-        Rune.gameOver({
+        Dusk.gameOver({
           delayPopUp: true,
           minimizePopUp: true,
           players: totals,

@@ -5,7 +5,7 @@ import { GameState } from "./types.ts";
 export function newRound(game: GameState) {
   game.stage = "countdown";
   game.countdownTimer = startCountdownDurationSeconds;
-  game.timerStartedAt = Rune.gameTime();
+  game.timerStartedAt = Dusk.gameTime();
   if (!game.scores) {
     game.scores = Object.fromEntries(
       game.playerIds.map((playerId) => [playerId, {}]),

@@ -1,4 +1,4 @@
-import type { PlayerId } from "rune-games-sdk";
+import type { PlayerId } from "dusk-games-sdk";
 import type {
   Collider,
   KinematicCharacterController,
