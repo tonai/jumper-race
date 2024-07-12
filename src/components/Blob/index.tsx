@@ -31,6 +31,7 @@ interface IBlobProps
 
 function Blob(props: IBlobProps) {
   const {
+    children,
     className,
     color,
     ghost,
@@ -84,6 +85,7 @@ function Blob(props: IBlobProps) {
           }}
         ></div>
       )}
+      {children}
     </div>
   );
 }

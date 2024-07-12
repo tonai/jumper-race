@@ -203,3 +203,31 @@
 @keyframes slide-button-out {
   to { translate: 0 400%; opacity: 0; scale: 0.5; }
 }
+
+.start__say {
+  position: absolute;
+  left: -100%;
+  top: 0;
+  white-space: nowrap;
+  font-size: 2vw;
+  translate: -100% 0;
+  background-color: white;
+  color: black;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  animation: 2s linear infinite pulse;
+}
+
+.start__say:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent white;
+  border-width: 0.5rem 0 0.5rem 0.5rem;
+  translate: 0 -50%;
+}

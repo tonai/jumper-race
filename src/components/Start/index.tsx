@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import Blob from "../Blob";
 
@@ -20,10 +20,11 @@ interface IStartProps {
 
 const animations = ["squish", "roll", "jumpy"];
 
-export default function Start(props: IStartProps) {
+function Start(props: IStartProps) {
   const { persisted, playerIds, screen, setScreen, yourPlayerId } = props;
   const [squish, setSquish] = useState(false);
   const [blobAnimation, setBlobAnimation] = useState<[number, string]>([0, ""]);
+  const [haveSeenCustomizeScreen, setHaveSeenCustomizeScreen] = useState(false);
   const [blobIndex, animation] = blobAnimation;
 
   function handleSquish() {
@@ -49,6 +50,7 @@ export default function Start(props: IStartProps) {
   }, [playerIds, screen]);
 
   function handleCustomize() {
+    setHaveSeenCustomizeScreen(true);
     if (screen !== "customize") {
       startViewTransition(() => setScreen("customize"));
     }
@@ -77,15 +79,20 @@ export default function Start(props: IStartProps) {
           style={
             screen === "customize"
               ? {
-                  transform:
-                    `translateX(${assetSize * (playerIds.length - 2)}px) translateY(0) translateZ(0) scale(1.8)`,
+                  transform: `translateX(${
+                    assetSize * (playerIds.length - 2)
+                  }px) translateY(0) translateZ(0) scale(1.8)`,
                 }
               : {}
           }
           x={-assetSize * 2}
           y={-assetSize * 2}
           z={0}
-        />
+        >
+          {(persisted[yourPlayerId]?.color === undefined && !haveSeenCustomizeScreen) && (
+            <div className="start__say">Customize me</div>
+          )}
+        </Blob>
         {playerIds
           .filter((id) => id !== yourPlayerId)
           .map((id, i) => {
@@ -144,3 +151,6 @@ export default function Start(props: IStartProps) {
     </div>
   );
 }
+
+const MemoStart = memo(Start);
+export default MemoStart;
