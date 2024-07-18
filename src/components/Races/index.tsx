@@ -17,11 +17,12 @@ interface IRacesProps {
 }
 
 export default function Races(props: IRacesProps) {
-  const { mode, playerBestTimes, playerIds, volume, votes, yourPlayerId } = props;
+  const { mode, playerBestTimes, playerIds, volume, votes, yourPlayerId } =
+    props;
 
   useEffect(() => {
     if (mode) {
-      playSound('select', volume.current);
+      playSound("select", volume.current);
       const timeout = setTimeout(() => Dusk.actions.startRace(), 2000);
       return () => clearTimeout(timeout);
     }
@@ -29,10 +30,7 @@ export default function Races(props: IRacesProps) {
 
   return (
     <div className="races">
-      <ul className="races__list">
-        <li>
-          <h2 className="races__title">Select race (votes {Object.keys(votes).length}/{playerIds.length})</h2>
-        </li>
+      <div className="races__group">
         <Race
           label="Championship 🏆"
           levelId="championship"
@@ -40,6 +38,11 @@ export default function Races(props: IRacesProps) {
           votes={votes}
           yourPlayerId={yourPlayerId}
         />
+        <h2 className="races__title">
+          Select race (votes {Object.keys(votes).length}/{playerIds.length})
+        </h2>
+      </div>
+      <div className="races__list">
         {levels.map((level) => (
           <Race
             key={level.id}
@@ -51,7 +54,7 @@ export default function Races(props: IRacesProps) {
             yourPlayerId={yourPlayerId}
           />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

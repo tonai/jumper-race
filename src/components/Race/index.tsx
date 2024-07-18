@@ -24,7 +24,7 @@ export default function Race(props: IRaceProps) {
   }
 
   return (
-    <li
+    <div
       className={classNames("race", {
         "race--selected": mode === levelId,
         "race--discard": mode !== "" && mode !== levelId,
@@ -56,6 +56,6 @@ export default function Race(props: IRaceProps) {
             />
           );
         })}
-    </li>
+    </div>
   );
 }

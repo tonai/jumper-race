@@ -13,7 +13,6 @@ import { allDetails, tiles } from "../../logic/assets.ts";
 import Help from "../Help/index.tsx";
 import Races from "../Races/index.tsx";
 
-import classNames from "classnames";
 import { initSounds } from "../../helpers/sounds.ts";
 import { sounds } from "../../constants/config.ts";
 
@@ -27,7 +26,7 @@ function App() {
     useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
   const [init, setInit] = useState(false);
   const [screen, setScreen] = useState<Screen>("start");
-  const [volume, setVolume] = useState(1);
+  const [volume] = useState(1);
   const volumeRef = useRef(1);
 
   useEffect(() => {
@@ -73,22 +72,6 @@ function App() {
     return;
   }
 
-  function handleSound() {
-    if (volume === 1) {
-      volumeRef.current = 0.66;
-      setVolume(0.66);
-    } else if (volume === 0.66) {
-      volumeRef.current = 0.33;
-      setVolume(0.33);
-    } else if (volume === 0.33) {
-      volumeRef.current = 0;
-      setVolume(0);
-    } else {
-      volumeRef.current = 1;
-      setVolume(1);
-    }
-  }
-
   return (
     <>
       <Players game={game} volume={volumeRef} yourPlayerId={yourPlayerId} />
@@ -131,18 +114,6 @@ function App() {
       {game.stage === "endOfRound" && (
         <Scores game={game} yourPlayerId={yourPlayerId} />
       )}
-      <button className="app__sound" onClick={handleSound} type="button">
-        <div className="app__sound-icon" />
-        <div
-          className={classNames("app__sound-waves", {
-            "app__sound-waves--23": volume === 0.66,
-            "app__sound-waves--13": volume === 0.33,
-            "app__sound-waves--mute": volume === 0,
-          })}
-        >
-          {volume === 0 && "✖"}
-        </div>
-      </button>
     </>
   );
 }

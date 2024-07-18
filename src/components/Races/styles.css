@@ -1,12 +1,20 @@
 .races {
   width: 100%;
   overflow: auto;
-  padding: 24vh 0 3vh;
+  padding: 18vh 0 0;
+}
+
+.races__group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vw;
 }
 
 .races__title {
   margin: 0;
   white-space: nowrap;
+  font-size: 4vw;
+  flex: 1;
 }
 
 .races__list {
