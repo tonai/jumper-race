@@ -1,26 +1,26 @@
-import classNames from "classnames";
-import "./styles.css";
-import { formatTime } from "../../helpers/format";
+import classNames from "classnames"
+import "./styles.css"
+import { formatTime } from "../../helpers/format"
 
 interface IRaceProps {
-  label: string;
-  levelId: string;
-  mode: string;
-  playerBestTime?: number;
-  votes: Record<string, string>;
-  yourPlayerId: string;
+  label: string
+  levelId: string
+  mode: string
+  playerBestTime?: number
+  votes: Record<string, string>
+  yourPlayerId: string
 }
 
 export default function Race(props: IRaceProps) {
-  const { label, levelId, mode, playerBestTime, votes, yourPlayerId } = props;
+  const { label, levelId, mode, playerBestTime, votes, yourPlayerId } = props
 
   function handleClick(id: string) {
     return () => {
-      Dusk.actions.voteRace({
+      Rune.actions.voteRace({
         playerId: yourPlayerId,
         race: id,
-      });
-    };
+      })
+    }
   }
 
   return (
@@ -47,15 +47,15 @@ export default function Race(props: IRaceProps) {
       {Object.entries(votes)
         .filter(([, id]) => levelId === id)
         .map(([playerId]) => {
-          const player = Dusk.getPlayerInfo(playerId);
+          const player = Rune.getPlayerInfo(playerId)
           return (
             <img
               className="race__player"
               key={playerId}
               src={player.avatarUrl}
             />
-          );
+          )
         })}
     </div>
-  );
+  )
 }

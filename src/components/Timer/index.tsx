@@ -1,15 +1,15 @@
-import { levels } from "../../constants/levels";
+import { levels } from "../../constants/levels"
 
-import "./styles.css";
+import "./styles.css"
 
 interface ITimer {
-  levelIndex: number;
-  timer: number;
+  levelIndex: number
+  timer: number
 }
 
 export default function Timer(props: ITimer) {
-  const { levelIndex, timer } = props;
-  const level = levels[levelIndex];
+  const { levelIndex, timer } = props
+  const level = levels[levelIndex]
 
-  return <div className="timer">{level.totalTime - timer}</div>;
+  return <div className="timer">{level.totalTime - timer}</div>
 }

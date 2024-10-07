@@ -1,7 +1,7 @@
-import type { DuskClient } from "dusk-games-sdk";
+import type { RuneClient } from "rune-sdk"
 
-import { startCountdownDurationSeconds } from "../constants/config";
-import { levels } from "../constants/levels";
+import { startCountdownDurationSeconds } from "../constants/config"
+import { levels } from "../constants/levels"
 import {
   GameActions,
   GameState,
@@ -10,17 +10,17 @@ import {
   ISendTimeData,
   ISetBlobColorData,
   Persisted,
-} from "./types";
-import { updateCountdown } from "./updateCountdown";
-import { newRound } from "./newRound";
-import { updatePlaying } from "./updatePlaying";
-import { randomInt } from "../helpers/utils";
+} from "./types"
+import { updateCountdown } from "./updateCountdown"
+import { newRound } from "./newRound"
+import { updatePlaying } from "./updatePlaying"
+import { randomInt } from "../helpers/utils"
 
 declare global {
-  const Dusk: DuskClient<GameState, GameActions, Persisted>;
+  const Rune: RuneClient<GameState, GameActions, Persisted>
 }
 
-Dusk.initLogic({
+Rune.initLogic({
   landscape: true,
   persistPlayerData: true,
   minPlayers: 1,
@@ -39,108 +39,108 @@ Dusk.initLogic({
   }),
   actions: {
     nextRound: (_, { game }) => {
-      if (game.stage !== "endOfRound") throw Dusk.invalidAction();
+      if (game.stage !== "endOfRound") throw Rune.invalidAction()
       if (game.mode === "championship") {
-        game.levelIndex++;
-        newRound(game);
+        game.levelIndex++
+        newRound(game)
       }
     },
     sendTime({ playerId, time }: ISendTimeData, { game }) {
-      if (game.stage !== "playing") throw Dusk.invalidAction();
+      if (game.stage !== "playing") throw Rune.invalidAction()
       if (game.scores?.[playerId]) {
-        const level = levels[game.levelIndex];
-        const playerScore = game.scores[playerId][level.id];
+        const level = levels[game.levelIndex]
+        const playerScore = game.scores[playerId][level.id]
         // Current race best time
         if (playerScore && playerScore.bestTime) {
           if (time < playerScore.bestTime) {
-            playerScore.bestTime = time;
+            playerScore.bestTime = time
           }
         } else {
           game.scores[playerId][level.id] = {
             bestTime: time,
-          };
+          }
         }
         // Persisted best time
         if (!game.persisted[playerId]) {
-          game.persisted[playerId] = {};
+          game.persisted[playerId] = {}
         }
         if (!game.persisted[playerId].bestTimes) {
-          game.persisted[playerId].bestTimes = {};
+          game.persisted[playerId].bestTimes = {}
         }
         const playerBestTimes = game.persisted[playerId].bestTimes as Record<
           string,
           number
-        >;
+        >
         if (!playerBestTimes[level.id] || time < playerBestTimes[level.id]) {
-          playerBestTimes[level.id] = time;
+          playerBestTimes[level.id] = time
         }
       }
     },
     setBlobColor: ({ color, playerId }: ISetBlobColorData, { game }) => {
-      game.persisted[playerId].color = color;
+      game.persisted[playerId].color = color
     },
     startRace(_, { game }) {
-      if (game.stage !== "gettingReady") throw Dusk.invalidAction();
-      game.raceVotes = {};
-      newRound(game);
+      if (game.stage !== "gettingReady") throw Rune.invalidAction()
+      game.raceVotes = {}
+      newRound(game)
     },
     updatePosition({ playerId, ...position }: IUpdatePositionData, { game }) {
-      game.ghosts[playerId] = position;
+      game.ghosts[playerId] = position
     },
     voteRace({ playerId, race }: IVoteRaceData, { game }) {
-      if (game.stage !== "gettingReady") throw Dusk.invalidAction();
-      game.raceVotes[playerId] = race;
+      if (game.stage !== "gettingReady") throw Rune.invalidAction()
+      game.raceVotes[playerId] = race
       // Select race
       if (Object.keys(game.raceVotes).length >= game.playerIds.length) {
         const votesById = Object.values(game.raceVotes).reduce<
           Record<string, number>
         >((acc, id) => {
           if (acc[id]) {
-            acc[id]++;
+            acc[id]++
           } else {
-            acc[id] = 1;
+            acc[id] = 1
           }
-          return acc;
-        }, {});
-        const maxVotes = Math.max(...Object.values(votesById));
+          return acc
+        }, {})
+        const maxVotes = Math.max(...Object.values(votesById))
         const maxVoteIds = Object.entries(votesById)
           .filter(([, votes]) => votes === maxVotes)
-          .map(([id]) => id);
+          .map(([id]) => id)
         const id =
           maxVoteIds.length === 1
             ? maxVoteIds[0]
-            : maxVoteIds[randomInt(maxVoteIds.length - 1)];
-        game.mode = id;
+            : maxVoteIds[randomInt(maxVoteIds.length - 1)]
+        game.mode = id
         if (id === "championship") {
-          game.levelIndex = 0;
+          game.levelIndex = 0
         } else {
-          game.levelIndex = levels.findIndex((level) => level.id === id);
+          game.levelIndex = levels.findIndex((level) => level.id === id)
         }
       }
     },
   },
   update: ({ game }) => {
-    if (game.stage === "countdown") updateCountdown(game);
-    if (game.stage === "playing") updatePlaying(game);
+    if (game.stage === "countdown") updateCountdown(game)
+    if (game.stage === "playing") updatePlaying(game)
   },
   updatesPerSecond: 30,
   events: {
     playerJoined: (playerId, { game }) => {
-      game.playerIds.push(playerId);
+      game.playerIds.push(playerId)
       if (game.scores) {
-        game.scores[playerId] = {};
-        const level = levels[game.levelIndex];
+        game.scores[playerId] = {}
+        const level = levels[game.levelIndex]
         if (level.id) {
-          game.scores[playerId][level.id] = {};
+          game.scores[playerId][level.id] = {}
         }
       }
     },
     playerLeft: (playerId, { game }) => {
-      game.playerIds.splice(game.playerIds.indexOf(playerId), 1);
-      delete game.ghosts[playerId];
+      game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
+      delete game.ghosts[playerId]
       if (game.scores) {
-        delete game.scores[playerId];
+        delete game.scores[playerId]
       }
     },
   },
-});
+})

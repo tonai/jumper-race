@@ -1,75 +1,75 @@
-import { useEffect, useRef, useState } from "react";
-import { GameStateWithPersisted, PlayerId } from "dusk-games-sdk";
+import { useEffect, useRef, useState } from "react"
+import { GameStateWithPersisted, PlayerId } from "rune-sdk"
 
-import { GameState, Persisted, Screen } from "../../logic/types.ts";
-import Players from "../Players/index.tsx";
-import Start from "../Start/index.tsx";
-import Countdown from "../Countdown/index.tsx";
-import Timer from "../Timer/index.tsx";
-import Scores from "../Scores/index.tsx";
-import Game from "../Game/index.tsx";
-import { loadImage } from "../../helpers/image.ts";
-import { allDetails, tiles } from "../../logic/assets.ts";
-import Help from "../Help/index.tsx";
-import Races from "../Races/index.tsx";
+import { GameState, Persisted, Screen } from "../../logic/types.ts"
+import Players from "../Players/index.tsx"
+import Start from "../Start/index.tsx"
+import Countdown from "../Countdown/index.tsx"
+import Timer from "../Timer/index.tsx"
+import Scores from "../Scores/index.tsx"
+import Game from "../Game/index.tsx"
+import { loadImage } from "../../helpers/image.ts"
+import { allDetails, tiles } from "../../logic/assets.ts"
+import Help from "../Help/index.tsx"
+import Races from "../Races/index.tsx"
 
-import { initSounds } from "../../helpers/sounds.ts";
-import { sounds } from "../../constants/config.ts";
+import { initSounds } from "../../helpers/sounds.ts"
+import { sounds } from "../../constants/config.ts"
 
-import "./styles.css";
+import "./styles.css"
 
 function App() {
   const [game, setGame] =
-    useState<GameStateWithPersisted<GameState, Persisted>>();
-  const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>();
+    useState<GameStateWithPersisted<GameState, Persisted>>()
+  const [yourPlayerId, setYourPlayerId] = useState<PlayerId | undefined>()
   const [rapier, setRapier] =
-    useState<typeof import("@dimforge/rapier2d-compat/rapier")>();
-  const [init, setInit] = useState(false);
-  const [screen, setScreen] = useState<Screen>("start");
-  const [volume] = useState(1);
-  const volumeRef = useRef(1);
+    useState<typeof import("@dimforge/rapier2d-compat/rapier")>()
+  const [init, setInit] = useState(false)
+  const [screen, setScreen] = useState<Screen>("start")
+  const [volume] = useState(1)
+  const volumeRef = useRef(1)
 
   useEffect(() => {
     import("@dimforge/rapier2d-compat").then((module) => {
-      module.init();
-      setRapier(module);
-    });
-  }, []);
+      module.init()
+      setRapier(module)
+    })
+  }, [])
 
   useEffect(() => {
-    const images = tiles.concat(allDetails.map((detail) => detail.src));
-    const promises = images.map(loadImage);
+    const images = tiles.concat(allDetails.map((detail) => detail.src))
+    const promises = images.map(loadImage)
     Promise.allSettled(
       promises.concat([
         loadImage(import.meta.env.BASE_URL + "background02.png"),
         loadImage(import.meta.env.BASE_URL + "end.png"),
         loadImage(import.meta.env.BASE_URL + "jumper.png"),
         loadImage(import.meta.env.BASE_URL + "spikes.png"),
-      ]),
-    ).then(() => setInit(true));
-  }, []);
+      ])
+    ).then(() => setInit(true))
+  }, [])
 
   useEffect(() => {
     if (init && rapier) {
-      Dusk.initClient({
+      Rune.initClient({
         onChange: ({ game, yourPlayerId, event }) => {
-          if (event?.name === 'stateSync' && game.mode === '') {
-            setScreen('start');
+          if (event?.name === "stateSync" && game.mode === "") {
+            setScreen("start")
           }
-          setGame(game);
-          setYourPlayerId(yourPlayerId);
+          setGame(game)
+          setYourPlayerId(yourPlayerId)
         },
-      });
+      })
     }
-  }, [init, rapier]);
+  }, [init, rapier])
 
   useEffect(() => {
-    initSounds(sounds);
-  }, []);
+    initSounds(sounds)
+  }, [])
 
   if (!game || !yourPlayerId || !rapier || !init) {
     // Rune only shows your game after an onChange() so no need for loading screen
-    return;
+    return
   }
 
   return (
@@ -115,7 +115,7 @@ function App() {
         <Scores game={game} yourPlayerId={yourPlayerId} />
       )}
     </>
-  );
+  )
 }
 
-export default App;
+export default App

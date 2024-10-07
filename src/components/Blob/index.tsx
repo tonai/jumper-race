@@ -1,32 +1,32 @@
-import { HTMLAttributes, MutableRefObject } from "react";
+import { HTMLAttributes, MutableRefObject } from "react"
 
 import {
   assetSize,
   colors,
   playerHeight,
   playerWidth,
-} from "../../constants/config";
+} from "../../constants/config"
 
-import "./styles.css";
-import classNames from "classnames";
+import "./styles.css"
+import classNames from "classnames"
 
 interface IBlobProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "className" | "color"> {
   className?:
     | string
     | Record<string, boolean>
-    | (string | Record<string, boolean>)[];
-  color?: number;
-  ghost?: boolean;
-  grounded?: boolean;
-  name?: string;
-  onClick?: () => void;
-  playerRef?: MutableRefObject<HTMLDivElement | null>;
-  reverse?: boolean;
-  shadow?: boolean;
-  x: number;
-  y: number;
-  z: number;
+    | (string | Record<string, boolean>)[]
+  color?: number
+  ghost?: boolean
+  grounded?: boolean
+  name?: string
+  onClick?: () => void
+  playerRef?: MutableRefObject<HTMLDivElement | null>
+  reverse?: boolean
+  shadow?: boolean
+  x: number
+  y: number
+  z: number
 }
 
 function Blob(props: IBlobProps) {
@@ -45,15 +45,15 @@ function Blob(props: IBlobProps) {
     y,
     z,
     ...attrs
-  } = props;
-  const [backgroundColor, borderColor, shadowColor] = colors[color ?? 0];
+  } = props
+  const [backgroundColor, borderColor, shadowColor] = colors[color ?? 0]
 
   return (
     <div
       className={classNames(
         "blob",
         { ghost, jump: !grounded, reverse },
-        className,
+        className
       )}
       ref={playerRef}
       onClick={onClick}
@@ -87,7 +87,7 @@ function Blob(props: IBlobProps) {
       )}
       {children}
     </div>
-  );
+  )
 }
 
-export default Blob;
+export default Blob

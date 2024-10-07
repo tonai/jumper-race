@@ -13,43 +13,43 @@ import {
   groundTop,
   groundTopBottom,
   randomDetails,
-} from "../logic/assets";
-import { assetSize, randomChance } from "../constants/config";
-import { IDetail, ILevel, IRectangle } from "../logic/types";
-import { randomInt } from "./utils";
+} from "../logic/assets"
+import { assetSize, randomChance } from "../constants/config"
+import { IDetail, ILevel, IRectangle } from "../logic/types"
+import { randomInt } from "./utils"
 
 export function getDetailBackground(detail: IDetail, x: number, y: number) {
   return `url(${detail.src}) ${(x - detail.width + 3) * assetSize}px ${
     (y - detail.height + 2) * assetSize + (detail.offset ?? 0)
-  }px / ${assetSize * detail.width}px ${assetSize * detail.height}px no-repeat`;
+  }px / ${assetSize * detail.width}px ${assetSize * detail.height}px no-repeat`
 }
 
 export function getBackground(level: ILevel) {
-  const { blocks, width } = level;
-  const table: (null | IRectangle)[][] = [];
+  const { blocks, width } = level
+  const table: (null | IRectangle)[][] = []
   for (let i = 0; i < width / assetSize; i++) {
-    table[i] = new Array(level.height / assetSize).fill(null);
+    table[i] = new Array(level.height / assetSize).fill(null)
   }
 
   blocks.forEach((block) => {
-    const { height, type, x, y, width } = block;
+    const { height, type, x, y, width } = block
     if (type === undefined) {
       for (let i = x / assetSize; i < (x + width) / assetSize; i++) {
         for (let j = y / assetSize; j < (y + height) / assetSize; j++) {
           try {
-            table[i][j] = block;
-          } catch(_) {
-            console.error('error with block', block)
+            table[i][j] = block
+          } catch (_e) {
+            console.error("error with block", block)
           }
         }
       }
     }
-  });
+  })
 
-  const backgrounds: string[] = [];
+  const backgrounds: string[] = []
   for (let i = 0; i < table.length; i++) {
     for (let j = 0; j < table[0].length; j++) {
-      const block = table[i][j];
+      const block = table[i][j]
       if (block) {
         // Left side
         if (!table[i - 1] || !table[i - 1][j]) {
@@ -58,25 +58,25 @@ export function getBackground(level: ILevel) {
               `url(${groundLeft}) ${(i + 1) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           } else if (table[i][j + 1]) {
             backgrounds.push(
               `url(${groundLeftTop}) ${(i + 1) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           } else if (table[i][j - 1]) {
             backgrounds.push(
               `url(${groundLeftBottom}) ${(i + 1) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           } else {
             backgrounds.push(
               `url(${groundLeftTopBottom}) ${(i + 1) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           }
         }
         // Right side
@@ -86,25 +86,25 @@ export function getBackground(level: ILevel) {
               `url(${groundRight}) ${(i + 3) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           } else if (table[i][j + 1]) {
             backgrounds.push(
               `url(${groundRightTop}) ${(i + 3) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           } else if (table[i][j - 1]) {
             backgrounds.push(
               `url(${groundRightBottom}) ${(i + 3) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           } else {
             backgrounds.push(
               `url(${groundRightTopBottom}) ${(i + 3) * assetSize}px ${
                 (j + 2) * assetSize
               }px / ${assetSize}px ${assetSize}px no-repeat`
-            );
+            )
           }
         }
         // Ground
@@ -113,25 +113,25 @@ export function getBackground(level: ILevel) {
             `url(${ground}) ${(i + 2) * assetSize}px ${
               (j + 2) * assetSize
             }px / ${assetSize}px ${assetSize}px no-repeat` //  #8d4a23
-          );
+          )
         } else if (table[i][j + 1]) {
           backgrounds.push(
             `url(${groundTop}) ${(i + 2) * assetSize}px ${
               (j + 2) * assetSize
             }px / ${assetSize}px ${assetSize}px no-repeat`
-          );
+          )
         } else if (table[i][j - 1]) {
           backgrounds.push(
             `url(${groundBottom}) ${(i + 2) * assetSize}px ${
               (j + 2) * assetSize
             }px / ${assetSize}px ${assetSize}px no-repeat`
-          );
+          )
         } else {
           backgrounds.push(
             `url(${groundTopBottom}) ${(i + 2) * assetSize}px ${
               (j + 2) * assetSize
             }px / ${assetSize}px ${assetSize}px no-repeat`
-          );
+          )
         }
       }
     }
@@ -139,40 +139,40 @@ export function getBackground(level: ILevel) {
 
   // Details
   blocks.forEach((block) => {
-    const { details, x, y, width } = block;
+    const { details, x, y, width } = block
     if (details) {
       for (const { detail: index, x: offset } of details) {
-        const detail = allDetails[index];
+        const detail = allDetails[index]
         const background = getDetailBackground(
           detail,
           x / assetSize + offset,
           y / assetSize
-        );
-        backgrounds.push(background);
+        )
+        backgrounds.push(background)
       }
     } else {
-      const j = y / assetSize;
+      const j = y / assetSize
       for (let i = x / assetSize; i < (x + width) / assetSize; i++) {
         if (randomInt(randomChance) === 0) {
-          const index = randomInt(randomDetails.length - 1);
-          const detail = randomDetails[index];
-          let k = 0;
+          const index = randomInt(randomDetails.length - 1)
+          const detail = randomDetails[index]
+          let k = 0
           while (
             k < detail.width &&
             table[i - k] &&
             table[i - k][j] !== null &&
             table[i - k][j - 1] === null
           ) {
-            k++;
+            k++
           }
           if (k === detail.width) {
-            const background = getDetailBackground(detail, i, j);
-            backgrounds.push(background);
+            const background = getDetailBackground(detail, i, j)
+            backgrounds.push(background)
           }
         }
       }
     }
-  });
+  })
 
-  return backgrounds.join(",");
+  return backgrounds.join(",")
 }

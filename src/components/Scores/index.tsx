@@ -1,25 +1,25 @@
-import classNames from "classnames";
-import { GameStateWithPersisted } from "dusk-games-sdk";
-import { useEffect, useMemo, useRef, useState } from "react";
+import classNames from "classnames"
+import { GameStateWithPersisted } from "rune-sdk"
+import { useEffect, useMemo, useRef, useState } from "react"
 
-import { formatTime } from "../../helpers/format";
-import { GameState, Persisted } from "../../logic/types";
-import { levels } from "../../constants/levels";
-import { colors } from "../../constants/config";
+import { formatTime } from "../../helpers/format"
+import { GameState, Persisted } from "../../logic/types"
+import { levels } from "../../constants/levels"
+import { colors } from "../../constants/config"
 
-import "./styles.css";
+import "./styles.css"
 
 interface IScores {
-  game: GameStateWithPersisted<GameState, Persisted>;
-  yourPlayerId: string;
+  game: GameStateWithPersisted<GameState, Persisted>
+  yourPlayerId: string
 }
 
 export default function Scores(props: IScores) {
-  const { game, yourPlayerId } = props;
-  const { levelIndex, playerIds, scores } = game;
-  const level = levels[levelIndex];
-  const [color] = colors[game.persisted[yourPlayerId].color ?? 0];
-  const ref = useRef<HTMLUListElement>(null);
+  const { game, yourPlayerId } = props
+  const { levelIndex, playerIds, scores } = game
+  const level = levels[levelIndex]
+  const [color] = colors[game.persisted[yourPlayerId].color ?? 0]
+  const ref = useRef<HTMLUListElement>(null)
   const totals = useMemo(
     () =>
       Object.fromEntries(
@@ -28,20 +28,20 @@ export default function Scores(props: IScores) {
           Object.entries(score)
             .filter(([id]) => id !== level.id)
             .reduce((acc, [, score]) => acc + (score.points ?? 0), 0),
-        ]),
+        ])
       ),
-    [level.id, scores],
-  );
+    [level.id, scores]
+  )
   const players = useMemo(
     () =>
       playerIds.slice().sort((a, b) => {
-        const totalA = totals?.[a];
-        const totalB = totals?.[b];
-        return (totalB ?? 0) - (totalA ?? 0);
+        const totalA = totals?.[a]
+        const totalB = totals?.[b]
+        return (totalB ?? 0) - (totalA ?? 0)
       }),
-    [playerIds, totals],
-  );
-  const [finalTotals, setFinalTotal] = useState<string[] | null>(null);
+    [playerIds, totals]
+  )
+  const [finalTotals, setFinalTotal] = useState<string[] | null>(null)
   const sortedTotals = useMemo(
     () => [
       ...new Set(
@@ -49,50 +49,50 @@ export default function Scores(props: IScores) {
           .map(
             ([playerId, total]) =>
               total +
-              (finalTotals ? scores?.[playerId][level.id].points ?? 0 : 0),
+              (finalTotals ? (scores?.[playerId][level.id].points ?? 0) : 0)
           )
-          .sort((a, b) => b - a),
+          .sort((a, b) => b - a)
       ),
     ],
-    [finalTotals, level.id, scores, totals],
-  );
+    [finalTotals, level.id, scores, totals]
+  )
   const ranks = useMemo(
     () =>
       Object.fromEntries(
         Object.entries(totals).map(([playerId, total]) => {
           const i = sortedTotals.indexOf(
             total +
-              (finalTotals ? scores?.[playerId][level.id].points ?? 0 : 0),
-          );
-          return [playerId, i + 1];
-        }),
+              (finalTotals ? (scores?.[playerId][level.id].points ?? 0) : 0)
+          )
+          return [playerId, i + 1]
+        })
       ),
-    [finalTotals, level.id, scores, sortedTotals, totals],
-  );
+    [finalTotals, level.id, scores, sortedTotals, totals]
+  )
 
   const best = Object.values(scores ?? {}).reduce((acc, score) => {
-    const bestTime = score[level.id].bestTime ?? Infinity;
-    return acc < bestTime ? acc : bestTime;
-  }, Infinity);
+    const bestTime = score[level.id].bestTime ?? Infinity
+    return acc < bestTime ? acc : bestTime
+  }, Infinity)
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setFinalTotal(
         playerIds.slice().sort((a, b) => {
-          const totalA = totals?.[a] + (scores?.[a][level.id].points ?? 0);
-          const totalB = totals?.[b] + (scores?.[b][level.id].points ?? 0);
-          return (totalB ?? 0) - (totalA ?? 0);
-        }),
-      );
-    }, 5000);
-    return () => clearTimeout(timeout);
-  }, [level.id, playerIds, scores, totals]);
+          const totalA = totals?.[a] + (scores?.[a][level.id].points ?? 0)
+          const totalB = totals?.[b] + (scores?.[b][level.id].points ?? 0)
+          return (totalB ?? 0) - (totalA ?? 0)
+        })
+      )
+    }, 5000)
+    return () => clearTimeout(timeout)
+  }, [level.id, playerIds, scores, totals])
 
   useEffect(() => {
     if (finalTotals) {
-      setTimeout(() => Dusk.showGameOverPopUp(), 1000);
+      setTimeout(() => Rune.showGameOverPopUp(), 1000)
     }
-  }, [finalTotals]);
+  }, [finalTotals])
 
   return (
     <div className="scores">
@@ -102,20 +102,20 @@ export default function Scores(props: IScores) {
         ref={ref}
       >
         {players.map((playerId, i) => {
-          const player = Dusk.getPlayerInfo(playerId);
-          const score = scores?.[playerId][level.id];
-          const total = totals[playerId];
-          const rank = ranks[playerId];
-          const playerBest = score && score.bestTime;
+          const player = Rune.getPlayerInfo(playerId)
+          const score = scores?.[playerId][level.id]
+          const total = totals[playerId]
+          const rank = ranks[playerId]
+          const playerBest = score && score.bestTime
 
-          let translate = "0px 0px";
+          let translate = "0px 0px"
           if (finalTotals && ref.current) {
-            const index = finalTotals.indexOf(playerId);
+            const index = finalTotals.indexOf(playerId)
             const prevOffset =
-              (ref.current.childNodes[i] as HTMLLIElement)?.offsetTop ?? 0;
+              (ref.current.childNodes[i] as HTMLLIElement)?.offsetTop ?? 0
             const newOffset =
-              (ref.current.childNodes[index] as HTMLLIElement)?.offsetTop ?? 0;
-            translate = `0px ${newOffset - prevOffset}px`;
+              (ref.current.childNodes[index] as HTMLLIElement)?.offsetTop ?? 0
+            translate = `0px ${newOffset - prevOffset}px`
           }
 
           return (
@@ -179,18 +179,18 @@ export default function Scores(props: IScores) {
                 {finalTotals && total + (score?.points ?? 0)}
               </div>
             </li>
-          );
+          )
         })}
       </ul>
       {levelIndex < levels.length - 1 && game.mode === "championship" && (
         <button
           className="scores__button"
-          onClick={() => Dusk.actions.nextRound()}
+          onClick={() => Rune.actions.nextRound()}
           type="button"
         >
           <div className="scores__arrow" />
         </button>
       )}
     </div>
-  );
+  )
 }

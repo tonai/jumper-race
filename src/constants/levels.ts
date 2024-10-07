@@ -1,11 +1,11 @@
-import { BlockType, ILevel } from "../logic/types";
-import { playerHeight, playerWidth } from "./config";
+import { BlockType, ILevel } from "../logic/types"
+import { playerHeight, playerWidth } from "./config"
 
-const totalTime = 90;
+const totalTime = 90
 
 export const levels: ILevel[] = [
   {
-    id: '1',
+    id: "1",
     width: 1536,
     height: 320,
     start: { x: 16, y: 256 - playerHeight },
@@ -57,7 +57,7 @@ export const levels: ILevel[] = [
     totalTime,
   },
   {
-    id: '2',
+    id: "2",
     width: 1600,
     height: 448,
     start: { x: 16, y: 416 - playerHeight },
@@ -118,7 +118,7 @@ export const levels: ILevel[] = [
     totalTime,
   },
   {
-    id: '3',
+    id: "3",
     width: 896,
     height: 1280,
     start: { x: 16, y: 1184 - playerHeight },
@@ -209,7 +209,7 @@ export const levels: ILevel[] = [
     totalTime,
   },
   {
-    id: '4',
+    id: "4",
     width: 1600,
     height: 640,
     start: { x: 16, y: 576 - playerHeight },
@@ -291,7 +291,13 @@ export const levels: ILevel[] = [
         y: 416,
         height: 224,
       },
-      { x: 1440 - 12, width: 16, y: 416, height: 160, type: BlockType.WallJump },
+      {
+        x: 1440 - 12,
+        width: 16,
+        y: 416,
+        height: 160,
+        type: BlockType.WallJump,
+      },
       {
         x: 1312,
         width: 32,
@@ -320,13 +326,12 @@ export const levels: ILevel[] = [
         y: 128,
         height: 32,
       },
-      { x: 1296, width: 32, y: 128-64, height: 64, type: BlockType.End },
+      { x: 1296, width: 32, y: 128 - 64, height: 64, type: BlockType.End },
     ],
     totalTime,
   },
   {
-    
-    id: '5',
+    id: "5",
     width: 1440,
     height: 640,
     start: { x: 416 - playerWidth / 2, y: 416 - playerHeight },
@@ -502,8 +507,8 @@ export const levels: ILevel[] = [
         y: 224,
         height: 32,
       },
-      { x: 1088 - 16, width: 32, y: 224-64, height: 64, type: BlockType.End },
+      { x: 1088 - 16, width: 32, y: 224 - 64, height: 64, type: BlockType.End },
     ],
     totalTime,
-  }
-];
+  },
+]

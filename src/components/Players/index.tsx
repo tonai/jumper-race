@@ -1,38 +1,38 @@
-import { GameStateWithPersisted } from "dusk-games-sdk";
-import classNames from "classnames";
+import { GameStateWithPersisted } from "rune-sdk"
+import classNames from "classnames"
 
-import { GameState, Persisted } from "../../logic/types";
-import { formatTime } from "../../helpers/format";
-import { levels } from "../../constants/levels";
-import { colors } from "../../constants/config";
+import { GameState, Persisted } from "../../logic/types"
+import { formatTime } from "../../helpers/format"
+import { levels } from "../../constants/levels"
+import { colors } from "../../constants/config"
 
-import "./styles.css";
-import { RefObject, useEffect } from "react";
-import { playSound } from "../../helpers/sounds";
+import "./styles.css"
+import { RefObject, useEffect } from "react"
+import { playSound } from "../../helpers/sounds"
 
 interface IPlayersProps {
-  game: GameStateWithPersisted<GameState, Persisted>;
-  volume: RefObject<number>;
-  yourPlayerId: string;
+  game: GameStateWithPersisted<GameState, Persisted>
+  volume: RefObject<number>
+  yourPlayerId: string
 }
 
 export default function Players(props: IPlayersProps) {
-  const { game, volume, yourPlayerId } = props;
-  const { levelIndex, playerIds, scores } = game;
-  const level = levels[levelIndex];
-  const [color] = colors[game.persisted[yourPlayerId].color ?? 0];
+  const { game, volume, yourPlayerId } = props
+  const { levelIndex, playerIds, scores } = game
+  const level = levels[levelIndex]
+  const [color] = colors[game.persisted[yourPlayerId].color ?? 0]
 
   const best = Object.values(scores ?? {}).reduce((acc, score) => {
-    const bestTime = score[level.id].bestTime ?? Infinity;
-    return acc < bestTime ? acc : bestTime;
-  }, Infinity);
-  const playerBest = scores?.[yourPlayerId][level.id].bestTime;
+    const bestTime = score[level.id].bestTime ?? Infinity
+    return acc < bestTime ? acc : bestTime
+  }, Infinity)
+  const playerBest = scores?.[yourPlayerId][level.id].bestTime
 
   useEffect(() => {
     if (playerBest !== best && best !== Infinity) {
-      playSound('crown', volume.current);
+      playSound("crown", volume.current)
     }
-  }, [best, playerBest, volume]);
+  }, [best, playerBest, volume])
 
   return (
     <div
@@ -41,9 +41,9 @@ export default function Players(props: IPlayersProps) {
     >
       <ul className="players__list">
         {playerIds.map((playerId) => {
-          const player = Dusk.getPlayerInfo(playerId);
-          const score = scores?.[playerId][level.id];
-          const playerBest = score && score.bestTime;
+          const player = Rune.getPlayerInfo(playerId)
+          const score = scores?.[playerId][level.id]
+          const playerBest = score && score.bestTime
 
           return (
             <li
@@ -77,9 +77,9 @@ export default function Players(props: IPlayersProps) {
                 )}
               </div>
             </li>
-          );
+          )
         })}
       </ul>
     </div>
-  );
+  )
 }

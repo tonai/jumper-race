@@ -1,32 +1,32 @@
-import { RefObject, useEffect } from "react";
+import { RefObject, useEffect } from "react"
 
-import { levels } from "../../constants/levels";
-import { playSound } from "../../helpers/sounds";
+import { levels } from "../../constants/levels"
+import { playSound } from "../../helpers/sounds"
 
-import Race from "../Race";
+import Race from "../Race"
 
-import "./styles.css";
+import "./styles.css"
 
 interface IRacesProps {
-  mode: string;
-  playerBestTimes?: Record<string, number>;
-  playerIds: string[];
-  volume: RefObject<number>;
-  votes: Record<string, string>;
-  yourPlayerId: string;
+  mode: string
+  playerBestTimes?: Record<string, number>
+  playerIds: string[]
+  volume: RefObject<number>
+  votes: Record<string, string>
+  yourPlayerId: string
 }
 
 export default function Races(props: IRacesProps) {
   const { mode, playerBestTimes, playerIds, volume, votes, yourPlayerId } =
-    props;
+    props
 
   useEffect(() => {
     if (mode) {
-      playSound("select", volume.current);
-      const timeout = setTimeout(() => Dusk.actions.startRace(), 2000);
-      return () => clearTimeout(timeout);
+      playSound("select", volume.current)
+      const timeout = setTimeout(() => Rune.actions.startRace(), 2000)
+      return () => clearTimeout(timeout)
     }
-  }, [mode, volume]);
+  }, [mode, volume])
 
   return (
     <div className="races">
@@ -56,5 +56,5 @@ export default function Races(props: IRacesProps) {
         ))}
       </div>
     </div>
-  );
+  )
 }

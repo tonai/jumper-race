@@ -1,20 +1,20 @@
-import { RefObject, useEffect } from "react";
+import { RefObject, useEffect } from "react"
 
-import { playSound } from "../../helpers/sounds";
+import { playSound } from "../../helpers/sounds"
 
-import "./styles.css";
+import "./styles.css"
 
 interface ICountdownProps {
-  countdownTimer: number;
-  volume: RefObject<number>;
+  countdownTimer: number
+  volume: RefObject<number>
 }
 
 export default function Countdown(props: ICountdownProps) {
-  const { countdownTimer, volume } = props;
+  const { countdownTimer, volume } = props
 
   useEffect(() => {
-    playSound("countdown", volume.current);
-  }, [countdownTimer, volume]);
+    playSound("countdown", volume.current)
+  }, [countdownTimer, volume])
 
   return (
     <div className="countdown">
@@ -22,5 +22,5 @@ export default function Countdown(props: ICountdownProps) {
         {countdownTimer}
       </div>
     </div>
-  );
+  )
 }

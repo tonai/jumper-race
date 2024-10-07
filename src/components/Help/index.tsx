@@ -1,34 +1,34 @@
-import classNames from "classnames";
-import { useState } from "react";
+import classNames from "classnames"
+import { useState } from "react"
 
-import tap from "../../assets/htp/tap.png";
-import hold from "../../assets/htp/hold.png";
-import walljump from "../../assets/htp/walljump.png";
-import end from "../../assets/htp/end.png";
+import tap from "../../assets/htp/tap.png"
+import hold from "../../assets/htp/hold.png"
+import walljump from "../../assets/htp/walljump.png"
+import end from "../../assets/htp/end.png"
 
-import "./styles.css";
+import "./styles.css"
 
 const slides = [
   { text: "Tap to jump", img: tap },
   { text: "Hold to jump higher and further", img: hold },
   { text: "Tap to wall jump", img: walljump },
   { text: "Reach the end", img: end },
-];
+]
 
 export default function Help() {
-  const [open, setOpen] = useState(false);
-  const [slideIndex, setSlideIndex] = useState(0);
+  const [open, setOpen] = useState(false)
+  const [slideIndex, setSlideIndex] = useState(0)
 
   function handleClick() {
-    setOpen(!open);
+    setOpen(!open)
   }
 
   function handlePrev() {
-    setSlideIndex(x => x - 1);
+    setSlideIndex((x) => x - 1)
   }
 
   function handleNext() {
-    setSlideIndex(x => x + 1);
+    setSlideIndex((x) => x + 1)
   }
 
   return (
@@ -45,8 +45,20 @@ export default function Help() {
           <h2 className="help__title">How to play ?</h2>
         </div>
         <div className="help__carousel">
-          {slideIndex > 0 && (<button className="help__carousel-prev" onClick={handlePrev} type="button"></button>)}
-          {slideIndex < slides.length - 1 && (<button className="help__carousel-next" onClick={handleNext} type="button"></button>)}
+          {slideIndex > 0 && (
+            <button
+              className="help__carousel-prev"
+              onClick={handlePrev}
+              type="button"
+            ></button>
+          )}
+          {slideIndex < slides.length - 1 && (
+            <button
+              className="help__carousel-next"
+              onClick={handleNext}
+              type="button"
+            ></button>
+          )}
           <div className="help__slides">
             {slides.map((slide, i) => (
               <div
@@ -66,5 +78,5 @@ export default function Help() {
         </div>
       </div>
     </div>
-  );
+  )
 }

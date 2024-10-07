@@ -1,14 +1,14 @@
-import { colors } from "../../constants/config";
-import "./styles.css";
+import { colors } from "../../constants/config"
+import "./styles.css"
 
 interface ICustomizeProps {
-  playerId: string;
+  playerId: string
 }
 
 export default function Customize(props: ICustomizeProps) {
-  const { playerId } = props;
+  const { playerId } = props
   function handleBlobColor(color: number) {
-    return () => Dusk.actions.setBlobColor({ color, playerId })
+    return () => Rune.actions.setBlobColor({ color, playerId })
   }
 
   return (
@@ -22,5 +22,5 @@ export default function Customize(props: ICustomizeProps) {
         ></button>
       ))}
     </div>
-  );
+  )
 }

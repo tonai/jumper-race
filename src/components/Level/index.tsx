@@ -1,5 +1,5 @@
-import { MutableRefObject, memo, useEffect, useMemo, useState } from "react";
-import classNames from "classnames";
+import { MutableRefObject, memo, useEffect, useMemo, useState } from "react"
+import classNames from "classnames"
 
 import {
   assetSize,
@@ -7,28 +7,28 @@ import {
   playerHeight,
   playerWidth,
   startCountdownDurationSeconds,
-} from "../../constants/config";
-import { IGhost, ILevel, IPosition, Persisted, Stage } from "../../logic/types";
-import { getBackground } from "../../helpers/background";
+} from "../../constants/config"
+import { IGhost, ILevel, IPosition, Persisted, Stage } from "../../logic/types"
+import { getBackground } from "../../helpers/background"
 
-import Blob from "../Blob";
-import Ghost from "../Ghost";
+import Blob from "../Blob"
+import Ghost from "../Ghost"
 
-import "./styles.css";
+import "./styles.css"
 
 interface ILevelProps {
-  bounds: DOMRect;
-  ghosts: Record<string, IGhost>;
-  groundedPos: IPosition;
-  level: ILevel;
-  persisted: Record<string, Persisted>;
-  play: boolean;
-  playerId: string;
-  playerRef: MutableRefObject<HTMLDivElement | null>;
-  stage: Stage;
-  x: number;
-  y: number;
-  z: number;
+  bounds: DOMRect
+  ghosts: Record<string, IGhost>
+  groundedPos: IPosition
+  level: ILevel
+  persisted: Record<string, Persisted>
+  play: boolean
+  playerId: string
+  playerRef: MutableRefObject<HTMLDivElement | null>
+  stage: Stage
+  x: number
+  y: number
+  z: number
 }
 
 function Level(props: ILevelProps) {
@@ -45,29 +45,29 @@ function Level(props: ILevelProps) {
     x,
     y,
     z,
-  } = props;
-  const { blocks } = level;
-  const width = level.width + 4 * assetSize;
-  const height = level.height + 4 * assetSize;
-  const left = (bounds.width - width) / 2;
-  const top = (bounds.height - height) / 2;
+  } = props
+  const { blocks } = level
+  const width = level.width + 4 * assetSize
+  const height = level.height + 4 * assetSize
+  const left = (bounds.width - width) / 2
+  const top = (bounds.height - height) / 2
   const translate = `${level.width / 2 - x - playerWidth / 2}px ${
     level.height / 2 - y - playerHeight / 2
-  }px`;
+  }px`
   const parallaxTranslate = `${
     -x / parallax - playerWidth / 2 - 2 * assetSize
-  }px 0px`;
-  const background = useMemo(() => getBackground(level), [level]);
-  const scale = Math.min(bounds.width / width, bounds.height / height);
-  const [init, setInit] = useState(stage === "playing");
+  }px 0px`
+  const background = useMemo(() => getBackground(level), [level])
+  const scale = Math.min(bounds.width / width, bounds.height / height)
+  const [init, setInit] = useState(stage === "playing")
 
   useEffect(() => {
     const timeout = setTimeout(
       () => setInit(true),
-      startCountdownDurationSeconds * 1000 - 2500,
-    );
-    return () => clearTimeout(timeout);
-  }, []);
+      startCountdownDurationSeconds * 1000 - 2500
+    )
+    return () => clearTimeout(timeout)
+  }, [])
 
   return (
     <>
@@ -104,7 +104,7 @@ function Level(props: ILevelProps) {
                 key={i}
                 className={classNames(
                   "level__block",
-                  `level__block--${block.type ?? "ground"}`,
+                  `level__block--${block.type ?? "ground"}`
                 )}
                 style={{
                   left: block.x + 2 * assetSize - 1,
@@ -130,7 +130,7 @@ function Level(props: ILevelProps) {
                 className={classNames(
                   "level__block",
                   `level__block--${block.type ?? "ground"}`,
-                  { [`level__block--${block.direction}`]: block.direction },
+                  { [`level__block--${block.direction}`]: block.direction }
                 )}
                 style={{
                   left: block.x + 2 * assetSize,
@@ -140,7 +140,13 @@ function Level(props: ILevelProps) {
                 }}
               />
             ))}
-          <Blob color={persisted[playerId].color} playerRef={playerRef} x={x} y={y} z={z} />
+          <Blob
+            color={persisted[playerId].color}
+            playerRef={playerRef}
+            x={x}
+            y={y}
+            z={z}
+          />
           {Object.entries(ghosts)
             .filter(([id]) => id !== playerId)
             .map(([id, { grounded, movement, reverse, x, y, z }]) => (
@@ -172,8 +178,8 @@ function Level(props: ILevelProps) {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-const MemoLevel = memo(Level);
-export default MemoLevel;
+const MemoLevel = memo(Level)
+export default MemoLevel

@@ -1,63 +1,63 @@
-import classNames from "classnames";
-import { memo, useEffect, useState } from "react";
+import classNames from "classnames"
+import { memo, useEffect, useState } from "react"
 
-import Blob from "../Blob";
+import Blob from "../Blob"
 
-import "./styles.css";
-import { assetSize } from "../../constants/config";
-import { randomInt } from "../../helpers/utils";
-import { Persisted, Screen } from "../../logic/types";
-import { startViewTransition } from "../../helpers/transition";
-import Customize from "../Customize";
+import "./styles.css"
+import { assetSize } from "../../constants/config"
+import { randomInt } from "../../helpers/utils"
+import { Persisted, Screen } from "../../logic/types"
+import { startViewTransition } from "../../helpers/transition"
+import Customize from "../Customize"
 
 interface IStartProps {
-  persisted: Record<string, Persisted>;
-  playerIds: string[];
-  screen: Screen;
-  setScreen: (screen: Screen) => void;
-  yourPlayerId: string;
+  persisted: Record<string, Persisted>
+  playerIds: string[]
+  screen: Screen
+  setScreen: (screen: Screen) => void
+  yourPlayerId: string
 }
 
-const animations = ["squish", "roll", "jumpy"];
+const animations = ["squish", "roll", "jumpy"]
 
 function Start(props: IStartProps) {
-  const { persisted, playerIds, screen, setScreen, yourPlayerId } = props;
-  const [squish, setSquish] = useState(false);
-  const [blobAnimation, setBlobAnimation] = useState<[number, string]>([0, ""]);
-  const [haveSeenCustomizeScreen, setHaveSeenCustomizeScreen] = useState(false);
-  const [blobIndex, animation] = blobAnimation;
+  const { persisted, playerIds, screen, setScreen, yourPlayerId } = props
+  const [squish, setSquish] = useState(false)
+  const [blobAnimation, setBlobAnimation] = useState<[number, string]>([0, ""])
+  const [haveSeenCustomizeScreen, setHaveSeenCustomizeScreen] = useState(false)
+  const [blobIndex, animation] = blobAnimation
 
   function handleSquish() {
-    setSquish(true);
+    setSquish(true)
   }
 
   useEffect(() => {
     if (squish) {
-      const timeout = setTimeout(() => setSquish(false), 500);
-      return () => clearTimeout(timeout);
+      const timeout = setTimeout(() => setSquish(false), 500)
+      return () => clearTimeout(timeout)
     }
-  }, [squish]);
+  }, [squish])
 
   useEffect(() => {
     if (screen === "start") {
       const interval = setInterval(() => {
-        const blobIndex = randomInt(playerIds.length - 1);
-        const animationIndex = randomInt(animations.length - 1);
-        setBlobAnimation([blobIndex, animations[animationIndex]]);
-      }, 5000);
-      return () => clearInterval(interval);
+        const blobIndex = randomInt(playerIds.length - 1)
+        const animationIndex = randomInt(animations.length - 1)
+        setBlobAnimation([blobIndex, animations[animationIndex]])
+      }, 5000)
+      return () => clearInterval(interval)
     }
-  }, [playerIds, screen]);
+  }, [playerIds, screen])
 
   function handleCustomize() {
-    setHaveSeenCustomizeScreen(true);
+    setHaveSeenCustomizeScreen(true)
     if (screen !== "customize") {
-      startViewTransition(() => setScreen("customize"));
+      startViewTransition(() => setScreen("customize"))
     }
   }
 
   function handleBack() {
-    startViewTransition(() => setScreen("start"));
+    startViewTransition(() => setScreen("start"))
   }
 
   return (
@@ -89,14 +89,15 @@ function Start(props: IStartProps) {
           y={-assetSize * 2}
           z={0}
         >
-          {(persisted[yourPlayerId]?.color === undefined && !haveSeenCustomizeScreen) && (
-            <div className="start__say">Customize me</div>
-          )}
+          {persisted[yourPlayerId]?.color === undefined &&
+            !haveSeenCustomizeScreen && (
+              <div className="start__say">Customize me</div>
+            )}
         </Blob>
         {playerIds
           .filter((id) => id !== yourPlayerId)
           .map((id, i) => {
-            const player = Dusk.getPlayerInfo(id);
+            const player = Rune.getPlayerInfo(id)
             return (
               <Blob
                 key={id}
@@ -113,7 +114,7 @@ function Start(props: IStartProps) {
                 y={-assetSize * 2}
                 z={0}
               />
-            );
+            )
           })}
       </div>
       {screen === "start" && (
@@ -149,8 +150,8 @@ function Start(props: IStartProps) {
         </>
       )}
     </div>
-  );
+  )
 }
 
-const MemoStart = memo(Start);
-export default MemoStart;
+const MemoStart = memo(Start)
+export default MemoStart
